@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create *)",
+      "Bash(cd \"/c/Users/User/Documents/SolarVertex\" && npm create -y vite@latest tmp-scaffold -- --template react-ts 2>&1 | tail -3 && mv tmp-scaffold/* tmp-scaffold/.gitignore . && rmdir tmp-scaffold && ls)",
+      "Bash(npm install *)"
+    ]
+  }
+}
