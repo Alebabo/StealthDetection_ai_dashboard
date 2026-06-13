@@ -63,6 +63,19 @@ Telegram webhook endpoint:
 POST /api/telegram/webhook
 ```
 
+For local development without a public webhook URL, run polling instead:
+
+```powershell
+$env:TELEGRAM_BOT_TOKEN = Read-Host "Telegram bot token"
+python src/agent/telegram_poll.py
+```
+
+Or start backend and Telegram polling together:
+
+```powershell
+.\scripts\start-agent-and-telegram.ps1
+```
+
 Telegram behavior:
 
 - Any normal message is treated as a StealthDetection prompt.

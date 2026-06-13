@@ -168,7 +168,7 @@ def answer_question(question: str) -> str:
 def telegram_send_message(chat_id: int | str, text: str) -> None:
     token = os.getenv("TELEGRAM_BOT_TOKEN")
     if not token:
-        return
+        raise RuntimeError("TELEGRAM_BOT_TOKEN is not set.")
     payload = {
         "chat_id": chat_id,
         "text": text[:3900],
@@ -221,6 +221,8 @@ async def telegram_webhook(request: Request) -> JSONResponse:
 
     try:
         telegram_send_message(chat_id, answer)
+    except RuntimeError as exc:
+        return JSONResponse({"ok": False, "error": str(exc)}, status_code=503)
     except urllib.error.URLError as exc:
         return JSONResponse({"ok": False, "error": str(exc)}, status_code=502)
 
@@ -230,3 +232,13 @@ async def telegram_webhook(request: Request) -> JSONResponse:
 @app.get("/api/telegram/report")
 def telegram_report_preview() -> PlainTextResponse:
     return PlainTextResponse(health_report(read_dashboard()))
+
+
+@app.get("/api/telegram/status")
+def telegram_status() -> dict[str, Any]:
+    return {
+        "configured": bool(os.getenv("TELEGRAM_BOT_TOKEN")),
+        "webhookEndpoint": "/api/telegram/webhook",
+        "pollingRunner": "python src/agent/telegram_poll.py",
+        "commands": ["/start", "/report"],
+    }
