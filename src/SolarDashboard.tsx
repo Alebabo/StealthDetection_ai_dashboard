@@ -1,38 +1,29 @@
-import { useMemo, useState } from "react"
+import { useMemo, useState, type ElementType } from "react"
 import {
+  Activity,
   AlertTriangle,
   BellRing,
-  BookOpen,
-  Bot,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  FileSpreadsheet,
-  FileText,
-  Globe,
+  Gauge,
+  Grid3X3,
   LayoutDashboard,
+  LineChart as LineChartIcon,
   Loader2,
-  MoreHorizontal,
-  Plug,
-  Plus,
+  MessageSquare,
   ScrollText,
+  Send,
   Settings,
+  ShieldAlert,
   Sun,
-  TrendingDown,
-  TrendingUp,
-  UploadCloud,
-  X,
+  Wrench,
   Zap,
 } from "lucide-react"
-import { FaSlack, FaTelegram, FaWhatsapp } from "react-icons/fa"
-import { SiGmail, SiOpenai } from "react-icons/si"
 import {
   Area,
   AreaChart,
   CartesianGrid,
-  Legend,
-  Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip as RechartsTooltip,
   XAxis,
@@ -42,1245 +33,594 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import dashboardData from "@/data/inverter-dashboard.json"
 
-/* ------------------------------------------------------------------ */
-/* Brand icon: Claude / Anthropic                                      */
-/* ------------------------------------------------------------------ */
+type Page = "Overview" | "Inverter Grid" | "Alerts" | "Analytics" | "Chat" | "Logs" | "Settings"
+type InverterStatus = "Healthy" | "Watch" | "Maintenance Required"
+type AlertSeverity = "Critical" | "Warning"
+type GridFilter = "All" | InverterStatus
+type AlertFilter = "All" | AlertSeverity
 
-function ClaudeIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 28 28" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M14 5 L24 21.5 H4 Z"
-        fill="#f97316"
-        stroke="#f97316"
-        strokeWidth="4"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
-/* ------------------------------------------------------------------ */
-/* Types & static data                                                 */
-/* ------------------------------------------------------------------ */
-
-type Page = "Overview" | "Agents" | "Connectors" | "Knowledge" | "Logs" | "Settings"
-type AgentStatus = "Active" | "Idle" | "Error" | "Maintenance"
-type AgentFilter = "All" | AgentStatus
-
-const AGENT_ROLES = [
-  "Grid Optimizer",
-  "Fault Detector",
-  "Forecast Agent",
-  "Storage Manager",
-  "Report Agent",
-  "Maintenance Scheduler",
-  "Feed-in Monitor",
-  "Consumption Analyst",
-] as const
-
-interface SolarAgent {
+interface InverterRow {
   id: string
-  name: string
-  role: (typeof AGENT_ROLES)[number]
-  status: AgentStatus
+  status: InverterStatus
+  availability: number
+  energyMWh: number
+  expectedMWh: number
+  lossKWh: number
+  lossEUR: number
+  anomalyRate: number
+  curtailmentKWh: number
+  downtimeKWh: number
+  degradationKWh: number
+  unclassifiedKWh: number
+  nonzeroErrors: number
+  state6Events: number
   lastAction: string
-  lastActive: string
-  initials: string
-  avatarClass: string
 }
 
-const AGENTS: SolarAgent[] = [
-  {
-    id: "a1",
-    name: "Grid Optimizer",
-    role: "Grid Optimizer",
-    status: "Active",
-    lastAction: "Redistributed 12.4 kWh to sector B",
-    lastActive: "2 min ago",
-    initials: "GO",
-    avatarClass: "bg-orange-500/15 text-orange-600",
-  },
-  {
-    id: "a2",
-    name: "Fault Detector",
-    role: "Fault Detector",
-    status: "Error",
-    lastAction: "Panel #A7 flagged: output -34%",
-    lastActive: "5 min ago",
-    initials: "FD",
-    avatarClass: "bg-red-500/15 text-red-600",
-  },
-  {
-    id: "a3",
-    name: "Forecast Agent",
-    role: "Forecast Agent",
-    status: "Active",
-    lastAction: "Updated: 160 kWh expected tomorrow",
-    lastActive: "8 min ago",
-    initials: "FA",
-    avatarClass: "bg-sky-500/15 text-sky-600",
-  },
-  {
-    id: "a4",
-    name: "Storage Manager",
-    role: "Storage Manager",
-    status: "Active",
-    lastAction: "Battery at 78%, holding charge",
-    lastActive: "1 min ago",
-    initials: "SM",
-    avatarClass: "bg-emerald-500/15 text-emerald-600",
-  },
-  {
-    id: "a5",
-    name: "Report Agent",
-    role: "Report Agent",
-    status: "Idle",
-    lastAction: "Daily report sent at 06:00",
-    lastActive: "3h ago",
-    initials: "RA",
-    avatarClass: "bg-violet-500/15 text-violet-600",
-  },
-  {
-    id: "a6",
-    name: "Maintenance Scheduler",
-    role: "Maintenance Scheduler",
-    status: "Maintenance",
-    lastAction: "Panel cleaning scheduled: June 14",
-    lastActive: "22 min ago",
-    initials: "MS",
-    avatarClass: "bg-amber-500/15 text-amber-600",
-  },
-  {
-    id: "a7",
-    name: "Feed-in Monitor",
-    role: "Feed-in Monitor",
-    status: "Active",
-    lastAction: "Feed-in rate stable: 4.2 kW",
-    lastActive: "30 sec ago",
-    initials: "FM",
-    avatarClass: "bg-teal-500/15 text-teal-600",
-  },
-  {
-    id: "a8",
-    name: "Consumption Analyst",
-    role: "Consumption Analyst",
-    status: "Idle",
-    lastAction: "Peak demand: 14:30–15:00",
-    lastActive: "1h ago",
-    initials: "CA",
-    avatarClass: "bg-indigo-500/15 text-indigo-600",
-  },
+interface AlertRow {
+  inverter: string
+  timestamp: string
+  severity: AlertSeverity
+  title: string
+  message: string
+  action: string
+}
+
+const data = dashboardData as {
+  generatedFrom: { periodStart: string; periodEnd: string }
+  summary: {
+    totalInverters: number
+    healthy: number
+    watch: number
+    maintenance: number
+    lastYearEnergyMWh: number
+    totalLossKWh: number
+    totalLossEUR: number
+    topPriorityInverter: string
+    alerts: number
+    medianModelR2: number | null
+    medianModelMAE: number | null
+    baseline: string
+  }
+  inverters: InverterRow[]
+  alerts: AlertRow[]
+  monthly: { month: string; energyMWh: number; lossMWh?: number; lossEUR?: number; anomalyEvents: number }[]
+}
+
+const NAV_ITEMS: { page: Page; icon: ElementType }[] = [
+  { page: "Overview", icon: LayoutDashboard },
+  { page: "Inverter Grid", icon: Grid3X3 },
+  { page: "Alerts", icon: BellRing },
+  { page: "Analytics", icon: LineChartIcon },
+  { page: "Chat", icon: MessageSquare },
+  { page: "Logs", icon: ScrollText },
+  { page: "Settings", icon: Settings },
 ]
 
-const STATUS_DOT: Record<AgentStatus, string> = {
-  Active: "bg-green-500",
-  Idle: "bg-zinc-400",
-  Error: "bg-red-500",
-  Maintenance: "bg-orange-400",
+const STATUS_STYLES: Record<InverterStatus, string> = {
+  Healthy: "border-emerald-500/30 bg-emerald-500/10 text-emerald-700",
+  Watch: "border-amber-500/30 bg-amber-500/10 text-amber-700",
+  "Maintenance Required": "border-red-500/30 bg-red-500/10 text-red-700",
 }
 
-type ConnectorId = "whatsapp" | "telegram" | "slack" | "gmail" | "codex" | "claude"
-
-interface ConnectorDef {
-  id: ConnectorId
-  name: string
-  description: string
-  icon: React.ReactNode
+const STATUS_DOT: Record<InverterStatus, string> = {
+  Healthy: "bg-emerald-500",
+  Watch: "bg-amber-500",
+  "Maintenance Required": "bg-red-500",
 }
 
-const CONNECTOR_DEFS: ConnectorDef[] = [
-  {
-    id: "whatsapp",
-    name: "WhatsApp",
-    description: "Send solar alerts and daily reports via WhatsApp",
-    icon: <FaWhatsapp className="size-7 text-[#25D366]" />,
-  },
-  {
-    id: "telegram",
-    name: "Telegram",
-    description: "Receive agent notifications in Telegram channels",
-    icon: <FaTelegram className="size-7 text-[#229ED9]" />,
-  },
-  {
-    id: "slack",
-    name: "Slack",
-    description: "Post yield summaries and anomaly alerts to Slack",
-    icon: <FaSlack className="size-7 text-[#E01E5A]" />,
-  },
-  {
-    id: "gmail",
-    name: "Gmail",
-    description: "Email automated performance reports to stakeholders",
-    icon: <SiGmail className="size-7 text-[#EA4335]" />,
-  },
-  {
-    id: "codex",
-    name: "Codex",
-    description: "Enable agents to write and execute optimization scripts",
-    icon: <SiOpenai className="size-7 text-zinc-900" />,
-  },
-  {
-    id: "claude",
-    name: "Claude",
-    description: "Power agent reasoning and report generation via Claude",
-    icon: <ClaudeIcon className="size-7" />,
-  },
-]
-
-type FileKind = "pdf" | "docx" | "xlsx" | "csv" | "txt" | "md"
-
-interface KnowledgeItem {
-  id: string
-  name: string
-  size: string
-  kind: FileKind
-  uploaded: string
-  status: "Indexed" | "Processing"
-  agents: string[]
-}
-
-const KNOWLEDGE_ITEMS: KnowledgeItem[] = [
-  { id: "k1", name: "solar_panel_specs_2024.pdf", size: "4.2 MB", kind: "pdf", uploaded: "Jun 2, 2026", status: "Indexed", agents: ["FD", "GO"] },
-  { id: "k2", name: "maintenance_manual_v3.docx", size: "1.8 MB", kind: "docx", uploaded: "Jun 3, 2026", status: "Indexed", agents: ["MS"] },
-  { id: "k3", name: "historical_yield_data.xlsx", size: "12.1 MB", kind: "xlsx", uploaded: "Jun 5, 2026", status: "Indexed", agents: ["FA", "CA"] },
-  { id: "k4", name: "grid_regulations_DE.pdf", size: "2.9 MB", kind: "pdf", uploaded: "Jun 7, 2026", status: "Indexed", agents: ["GO", "FM"] },
-  { id: "k5", name: "fault_codes_reference.txt", size: "0.3 MB", kind: "txt", uploaded: "Jun 11, 2026", status: "Processing", agents: ["FD"] },
-  { id: "k6", name: "weather_api_schema.md", size: "0.1 MB", kind: "md", uploaded: "Jun 9, 2026", status: "Indexed", agents: ["FA"] },
-]
-
-const FILE_ICON_CLASS: Record<FileKind, string> = {
-  pdf: "bg-red-500/10 text-red-500",
-  docx: "bg-blue-500/10 text-blue-500",
-  xlsx: "bg-green-500/10 text-green-600",
-  csv: "bg-green-500/10 text-green-600",
-  txt: "bg-zinc-500/10 text-zinc-500",
-  md: "bg-zinc-500/10 text-zinc-500",
-}
-
-function FileKindIcon({ kind }: { kind: FileKind }) {
-  if (kind === "xlsx" || kind === "csv") return <FileSpreadsheet className="size-4" />
-  return <FileText className="size-4" />
-}
-
-/* Chart data ------------------------------------------------------- */
-
-const spark = (values: number[]) => values.map((v, i) => ({ i, v }))
-
-const SPARK_AGENTS = spark([7, 8, 8, 8, 7, 8, 8, 8, 8, 8, 8, 8])
-const SPARK_YIELD = spark([2, 9, 24, 52, 88, 118, 134, 142, 128, 96, 54, 18])
-const SPARK_FEEDIN = spark([5, 9, 14, 22, 31, 40, 48, 55, 63, 70, 79, 87])
-const SPARK_ANOMALIES = spark([9, 8, 8, 7, 6, 5, 5, 4, 3, 3, 2, 2])
-
-const WEEK_DATA = [
-  { day: "Jun 5", yield: 118, feedIn: 64, consumption: 55 },
-  { day: "Jun 6", yield: 131, feedIn: 75, consumption: 58 },
-  { day: "Jun 7", yield: 149, feedIn: 92, consumption: 52 },
-  { day: "Jun 8", yield: 156, feedIn: 98, consumption: 61 },
-  { day: "Jun 9", yield: 84, feedIn: 41, consumption: 57 },
-  { day: "Jun 10", yield: 138, feedIn: 82, consumption: 63 },
-  { day: "Jun 11", yield: 142.6, feedIn: 87.3, consumption: 59 },
-]
-
-/* ------------------------------------------------------------------ */
-/* Small building blocks                                               */
-/* ------------------------------------------------------------------ */
-
-function Sparkline({ data }: { data: { i: number; v: number }[] }) {
+function StatusBadge({ status }: { status: InverterStatus }) {
   return (
-    <div className="h-[60px] w-full">
-      <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={data} margin={{ top: 4, right: 0, bottom: 0, left: 0 }}>
-          <Area
-            type="monotone"
-            dataKey="v"
-            stroke="#f97316"
-            strokeWidth={2}
-            fill="#f97316"
-            fillOpacity={0.1}
-            isAnimationActive={false}
-          />
-        </AreaChart>
-      </ResponsiveContainer>
-    </div>
-  )
-}
-
-function StatusBadge({ status }: { status: AgentStatus }) {
-  return (
-    <Badge
-      variant="outline"
-      className="gap-1.5 border-zinc-200 bg-zinc-50 text-zinc-600"
-    >
+    <Badge variant="outline" className={`gap-1.5 ${STATUS_STYLES[status]}`}>
       <span className={`size-2 rounded-full ${STATUS_DOT[status]}`} />
       {status}
     </Badge>
   )
 }
-
-/* ------------------------------------------------------------------ */
-/* Main component                                                      */
-/* ------------------------------------------------------------------ */
-
-interface AgentDraft {
-  agentId: string | null
-  name: string
-  role: (typeof AGENT_ROLES)[number]
-  description: string
-  knowledge: string[]
-  connectors: ConnectorId[]
-  www: boolean
-  wwwMode: "unrestricted" | "whitelist"
-  domains: string[]
+function metricLabel(value: number, suffix = "") {
+  return `${new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 }).format(value)}${suffix}`
 }
 
-const NAV_ITEMS: { page: Page; icon: React.ElementType }[] = [
-  { page: "Overview", icon: LayoutDashboard },
-  { page: "Agents", icon: Bot },
-  { page: "Connectors", icon: Plug },
-  { page: "Knowledge", icon: BookOpen },
-  { page: "Logs", icon: ScrollText },
-  { page: "Settings", icon: Settings },
-]
+function shortInverter(id: string) {
+  return `#${id.slice(-3)}`
+}
 
-const TAB_PAGES: Page[] = ["Overview", "Agents", "Connectors", "Knowledge"]
+function MetricCard({
+  label,
+  value,
+  helper,
+  icon: Icon,
+}: {
+  label: string
+  value: string
+  helper: string
+  icon: ElementType
+}) {
+  return (
+    <Card className="gap-2 border-zinc-200/80 bg-white/95 p-3.5 shadow-sm shadow-zinc-200/70">
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <p className="text-[11px] font-medium uppercase tracking-wide text-zinc-500">{label}</p>
+          <p className="mt-1 text-xl leading-tight font-semibold text-zinc-950">{value}</p>
+        </div>
+        <div className="flex size-7 items-center justify-center rounded-md bg-[#003A70]/10 text-[#003A70] ring-1 ring-[#003A70]/10">
+          <Icon className="size-3.5" />
+        </div>
+      </div>
+      <p className="truncate text-[11px] text-zinc-400">{helper}</p>
+    </Card>
+  )
+}
+
+function FilterPills<T extends string>({
+  options,
+  value,
+  onChange,
+}: {
+  options: T[]
+  value: T
+  onChange: (value: T) => void
+}) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {options.map((option) => (
+        <button
+          key={option}
+          onClick={() => onChange(option)}
+          className={`rounded-full px-3 py-1 text-xs font-medium transition-all ${
+            value === option
+              ? "bg-[#003A70] text-white shadow-sm shadow-[#003A70]/20"
+              : "border border-zinc-200 bg-white text-zinc-600 hover:ring-1 hover:ring-[#003A70]"
+          }`}
+        >
+          {option}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+function InverterGrid({ compact = false, inverters = data.inverters }: { compact?: boolean; inverters?: InverterRow[] }) {
+  return (
+    <div className={`grid gap-2 ${compact ? "grid-cols-5" : "grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 xl:grid-cols-10"}`}>
+      {inverters.map((inv) => (
+        <div
+          key={inv.id}
+          className={`rounded-lg border p-2.5 transition-colors ${
+            inv.status === "Maintenance Required"
+              ? "border-red-200 bg-red-50"
+              : inv.status === "Watch"
+                ? "border-amber-200 bg-amber-50"
+                : "border-zinc-200 bg-white"
+          }`}
+        >
+          <div className="flex items-center justify-between gap-2">
+            <span className="truncate text-xs font-bold text-zinc-900">{shortInverter(inv.id)}</span>
+            <span className={`size-2.5 shrink-0 rounded-full ${STATUS_DOT[inv.status]}`} />
+          </div>
+          {!compact && (
+            <>
+              <p className="mt-2 text-[11px] text-zinc-500">Availability</p>
+              <p className="text-sm font-semibold text-zinc-900">{metricLabel(inv.availability, "%")}</p>
+            </>
+          )}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function AlertList({ alerts = data.alerts }: { alerts?: AlertRow[] }) {
+  return (
+    <div className="divide-y divide-zinc-100">
+      {alerts.map((alert) => (
+        <div key={`${alert.inverter}-${alert.title}-${alert.timestamp}`} className="grid grid-cols-[96px_88px_78px_minmax(0,1fr)] items-center gap-3 px-3 py-2 text-xs">
+          <span className="truncate font-mono text-[11px] text-zinc-500">{alert.timestamp}</span>
+          <span className="font-semibold text-zinc-900">{alert.inverter}</span>
+          <Badge variant="outline" className={`h-5 justify-center px-1.5 text-[10px] ${alert.severity === "Critical" ? STATUS_STYLES["Maintenance Required"] : STATUS_STYLES.Watch}`}>
+            {alert.severity}
+          </Badge>
+          <p className="truncate font-medium text-zinc-800">
+            {alert.title} - {alert.message} - {alert.action}
+          </p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+interface ChatMessage {
+  role: "user" | "assistant"
+  content: string
+}
 
 export default function SolarDashboard() {
   const [collapsed, setCollapsed] = useState(false)
   const [page, setPage] = useState<Page>("Overview")
-  const [agentFilter, setAgentFilter] = useState<AgentFilter>("All")
-  const [dragOver, setDragOver] = useState(false)
-  const [toastVisible, setToastVisible] = useState(false)
+  const [gridFilter, setGridFilter] = useState<GridFilter>("All")
+  const [alertFilter, setAlertFilter] = useState<AlertFilter>("All")
+  const [chatInput, setChatInput] = useState("Which inverter should a technician inspect first?")
+  const [chatLoading, setChatLoading] = useState(false)
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+    {
+      role: "assistant",
+      content:
+        "Ask about inverter priorities, curtailment, downtime, degradation, errorcode correlation, or EUR impact. I answer from the generated analysis summaries.",
+    },
+  ])
 
-  const [connectorState, setConnectorState] = useState<
-    Record<ConnectorId, { connected: boolean; loading: boolean }>
-  >({
-    whatsapp: { connected: false, loading: false },
-    telegram: { connected: false, loading: false },
-    slack: { connected: false, loading: false },
-    gmail: { connected: true, loading: false },
-    codex: { connected: false, loading: false },
-    claude: { connected: true, loading: false },
-  })
-
-  const [panelOpen, setPanelOpen] = useState(false)
-  const [draft, setDraft] = useState<AgentDraft>(() => makeDraft(null))
-  const [domainInput, setDomainInput] = useState("")
-
-  function makeDraft(agent: SolarAgent | null): AgentDraft {
-    if (!agent) {
-      return {
-        agentId: null,
-        name: "",
-        role: "Grid Optimizer",
-        description: "",
-        knowledge: [],
-        connectors: ["claude"],
-        www: false,
-        wwwMode: "unrestricted",
-        domains: [],
-      }
-    }
-    return {
-      agentId: agent.id,
-      name: agent.name,
-      role: agent.role,
-      description: `Autonomous ${agent.role.toLowerCase()} for the SolarOS fleet.`,
-      knowledge: KNOWLEDGE_ITEMS.filter((k) => k.agents.includes(agent.initials)).map((k) => k.id),
-      connectors: ["claude", "gmail"],
-      www: agent.role === "Forecast Agent",
-      wwwMode: agent.role === "Forecast Agent" ? "whitelist" : "unrestricted",
-      domains: agent.role === "Forecast Agent" ? ["openweathermap.org"] : [],
-    }
-  }
-
-  function openPanel(agent: SolarAgent | null) {
-    setDraft(makeDraft(agent))
-    setDomainInput("")
-    setPanelOpen(true)
-  }
-
-  function toggleConnector(id: ConnectorId, on: boolean) {
-    if (!on) {
-      setConnectorState((s) => ({ ...s, [id]: { connected: false, loading: false } }))
-      return
-    }
-    setConnectorState((s) => ({ ...s, [id]: { connected: false, loading: true } }))
-    setTimeout(() => {
-      setConnectorState((s) => ({ ...s, [id]: { connected: true, loading: false } }))
-    }, 1500)
-  }
-
-  function saveConfiguration() {
-    setPanelOpen(false)
-    setToastVisible(true)
-    setTimeout(() => setToastVisible(false), 3000)
-  }
-
-  function addDomain() {
-    const value = domainInput.trim().replace(/,+$/, "")
-    if (!value) return
-    setDraft((d) =>
-      d.domains.includes(value) ? d : { ...d, domains: [...d.domains, value] }
-    )
-    setDomainInput("")
-  }
-
-  const filteredAgents = useMemo(
-    () => AGENTS.filter((a) => agentFilter === "All" || a.status === agentFilter),
-    [agentFilter]
-  )
-
-  const metricCards = useMemo(
-    () => [
-      {
-        label: "Active Agents",
-        value: "8 / 8",
-        trend: "+1 since yesterday",
-        up: true,
-        icon: Bot,
-        data: SPARK_AGENTS,
-      },
-      {
-        label: "Solar Yield Today",
-        value: "142.6 kWh",
-        trend: "+18% vs. yesterday",
-        up: true,
-        icon: Sun,
-        data: SPARK_YIELD,
-      },
-      {
-        label: "Grid Feed-in",
-        value: "87.3 kWh",
-        trend: "+11%",
-        up: true,
-        icon: Zap,
-        data: SPARK_FEEDIN,
-      },
-      {
-        label: "System Anomalies",
-        value: "2",
-        trend: "-3 vs. yesterday",
-        up: false,
-        icon: AlertTriangle,
-        data: SPARK_ANOMALIES,
-      },
-    ],
+  const topRisk = useMemo(
+    () => [...data.inverters].sort((a, b) => b.anomalyRate - a.anomalyRate).slice(0, 6),
     []
   )
+  const categoryTotals = useMemo(
+    () =>
+      data.inverters.reduce(
+        (totals, inv) => ({
+          curtailmentKWh: totals.curtailmentKWh + inv.curtailmentKWh,
+          downtimeKWh: totals.downtimeKWh + inv.downtimeKWh,
+          degradationKWh: totals.degradationKWh + inv.degradationKWh,
+          unclassifiedKWh: totals.unclassifiedKWh + inv.unclassifiedKWh,
+        }),
+        { curtailmentKWh: 0, downtimeKWh: 0, degradationKWh: 0, unclassifiedKWh: 0 }
+      ),
+    []
+  )
+  const topDegradation = useMemo(
+    () => [...data.inverters].sort((a, b) => b.degradationKWh - a.degradationKWh).slice(0, 3),
+    []
+  )
+  const filteredInverters = useMemo(
+    () => data.inverters.filter((inv) => gridFilter === "All" || inv.status === gridFilter),
+    [gridFilter]
+  )
+  const filteredAlerts = useMemo(
+    () => data.alerts.filter((alert) => alertFilter === "All" || alert.severity === alertFilter),
+    [alertFilter]
+  )
 
-  /* ------------------------------ render --------------------------- */
+  async function askChat(question = chatInput) {
+    const clean = question.trim()
+    if (!clean || chatLoading) return
+    setChatInput("")
+    setChatMessages((messages) => [...messages, { role: "user", content: clean }])
+    setChatLoading(true)
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: clean }),
+      })
+      if (!response.ok) {
+        const text = await response.text()
+        throw new Error(text || `Chat endpoint returned ${response.status}`)
+      }
+      const payload = (await response.json()) as { answer?: string }
+      setChatMessages((messages) => [
+        ...messages,
+        { role: "assistant", content: payload.answer ?? "No answer returned." },
+      ])
+    } catch {
+      setChatMessages((messages) => [
+        ...messages,
+        {
+          role: "assistant",
+          content:
+            "LLM chat is not available in this environment. Set OPENAI_API_KEY and deploy/run an API route to enable grounded answers over the generated analysis summaries.",
+        },
+      ])
+    } finally {
+      setChatLoading(false)
+    }
+  }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-zinc-50 text-zinc-900">
-      {/* ============================ SIDEBAR ========================= */}
-      <aside
-        className={`relative flex shrink-0 flex-col border-r border-zinc-200 bg-white transition-all duration-200 ease-in-out ${
-          collapsed ? "w-16" : "w-56"
-        }`}
-      >
+    <div className="flex h-screen overflow-hidden bg-[#f4f8fb] text-zinc-900">
+      <aside className={`relative flex shrink-0 flex-col border-r border-zinc-200/80 bg-white transition-all duration-200 ${collapsed ? "w-16" : "w-64"}`}>
         <Button
           variant="outline"
           size="icon-xs"
           className="absolute top-5 -right-3 z-10 rounded-full border-zinc-200 bg-white text-zinc-500 hover:text-zinc-900"
-          onClick={() => setCollapsed((c) => !c)}
+          onClick={() => setCollapsed((value) => !value)}
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {collapsed ? <ChevronRight /> : <ChevronLeft />}
         </Button>
 
         <div className={`flex h-14 items-center gap-2 border-b border-zinc-200 px-4 ${collapsed ? "justify-center px-0" : ""}`}>
-          <Sun className="size-6 shrink-0 text-orange-500" />
-          {!collapsed && <span className="text-lg font-bold tracking-tight text-zinc-900">SolarOS</span>}
+          <ShieldAlert className="size-6 shrink-0 text-[#003A70]" />
+          {!collapsed && (
+            <div className="min-w-0">
+              <span className="block text-[15px] font-semibold tracking-tight text-zinc-950">stealthdetection.ml</span>
+              <span className="block text-[10px] font-medium uppercase tracking-[0.18em] text-[#003A70]">Enerparc intelligence</span>
+            </div>
+          )}
         </div>
 
         <nav className="flex-1 space-y-1 py-4">
-          {NAV_ITEMS.map(({ page: p, icon: Icon }) => {
-            const active = page === p
+          {NAV_ITEMS.map(({ page: item, icon: Icon }) => {
+            const active = page === item
             return (
               <button
-                key={p}
-                onClick={() => setPage(p)}
+                key={item}
+                onClick={() => setPage(item)}
                 className={`relative flex w-full items-center gap-3 px-5 py-2.5 text-sm transition-colors ${
                   collapsed ? "justify-center px-0" : ""
-                } ${
-                  active
-                    ? "bg-zinc-100 text-zinc-900"
-                    : "text-zinc-500 hover:bg-zinc-100/60 hover:text-zinc-900"
-                }`}
+                } ${active ? "bg-zinc-100 text-zinc-900" : "text-zinc-500 hover:bg-zinc-100/60 hover:text-zinc-900"}`}
               >
-                {active && (
-                  <span className="absolute top-1/2 left-0 h-6 w-0.5 -translate-y-1/2 rounded-r bg-orange-500" />
-                )}
-                <Icon className={`size-4.5 shrink-0 ${active ? "text-orange-500" : ""}`} />
-                {!collapsed && <span>{p}</span>}
+                {active && <span className="absolute top-1/2 left-0 h-6 w-0.5 -translate-y-1/2 rounded-r bg-[#003A70]" />}
+                <Icon className={`size-4.5 shrink-0 ${active ? "text-[#003A70]" : ""}`} />
+                {!collapsed && <span>{item}</span>}
               </button>
             )
           })}
         </nav>
 
-        <div className={`flex items-center gap-3 border-t border-zinc-200 p-4 ${collapsed ? "justify-center p-2 py-4" : ""}`}>
-          <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-orange-500/15 text-xs font-bold text-orange-600">
-            AD
+        <div className={`border-t border-zinc-200 p-4 ${collapsed ? "px-2" : ""}`}>
+          <div className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#003A70]/15 text-xs font-bold text-[#002B55]">SD</div>
+            {!collapsed && (
+              <div className="min-w-0">
+                <p className="truncate text-sm font-medium text-zinc-900">Plant A</p>
+                <p className="truncate text-xs text-zinc-500">65 inverter fleet</p>
+              </div>
+            )}
           </div>
-          {!collapsed && (
-            <div className="min-w-0">
-              <p className="truncate text-sm font-medium text-zinc-900">Admin</p>
-              <p className="truncate text-xs text-zinc-500">Solar Operations</p>
-            </div>
-          )}
         </div>
       </aside>
 
-      {/* ============================= MAIN =========================== */}
       <div className="flex min-w-0 flex-1 flex-col">
-        {/* Top bar */}
-        <header className="flex h-14 shrink-0 items-center justify-between border-b border-zinc-200 bg-white pr-32 pl-6">
-          <h1 className="text-lg font-bold text-zinc-900">{page}</h1>
+        <header className="flex h-16 shrink-0 items-center justify-between border-b border-zinc-200/80 bg-white/95 pr-32 pl-7 shadow-sm shadow-zinc-200/50">
+          <div>
+            <h1 className="text-xl font-semibold tracking-tight text-zinc-950">{page}</h1>
+            <p className="text-xs font-medium text-zinc-400">{data.generatedFrom.periodStart} to {data.generatedFrom.periodEnd}</p>
+          </div>
           <div className="flex items-center gap-4">
-            <button
-              className="relative rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
-              aria-label="Notifications"
-            >
+            <button className="relative rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900" aria-label="Notifications">
               <BellRing className="size-5" />
-              <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-orange-500" />
+              <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-red-500" />
             </button>
-            <div className="flex size-8 items-center justify-center rounded-full bg-orange-500/15 text-xs font-bold text-orange-600">
-              AD
-            </div>
+            <div className="flex size-8 items-center justify-center rounded-full bg-[#003A70]/15 text-xs font-bold text-[#002B55]">SD</div>
           </div>
         </header>
 
-        {/* Tab pill navbar */}
-        <div className="flex shrink-0 gap-2 px-6 pt-4">
-          {TAB_PAGES.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setPage(tab)}
-              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200 ${
-                page === tab
-                  ? "bg-orange-500 text-white shadow-md shadow-orange-500/25"
-                  : "border border-zinc-200 bg-white text-zinc-600 hover:ring-1 hover:ring-orange-500"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-
-        {/* Page content */}
-        <main className="min-h-0 flex-1 overflow-y-auto p-6">
+        <main className="min-h-0 flex-1 overflow-y-auto p-7">
           {page === "Overview" && (
             <div className="space-y-6">
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {metricCards.map((m) => (
-                  <Card key={m.label} className="gap-3 border-zinc-200 bg-white p-5">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <p className="text-sm text-zinc-500">{m.label}</p>
-                        <p className="mt-1 text-3xl font-bold text-zinc-900">{m.value}</p>
-                      </div>
-                      <div className="rounded-lg bg-orange-500/10 p-2">
-                        <m.icon className="size-5 text-orange-500" />
-                      </div>
-                    </div>
-                    <p className="flex items-center gap-1 text-xs font-medium text-emerald-600">
-                      {m.up ? <TrendingUp className="size-3.5" /> : <TrendingDown className="size-3.5" />}
-                      {m.trend}
-                    </p>
-                    <Sparkline data={m.data} />
-                  </Card>
-                ))}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <MetricCard label="10-year loss" value={`${metricLabel(data.summary.totalLossKWh / 1000)} MWh`} helper="Expected P_AC minus actual P_AC" icon={Gauge} />
+                <MetricCard label="EUR impact" value={`EUR ${metricLabel(data.summary.totalLossEUR)}`} helper="Flat tariff assumption from analysis config" icon={Zap} />
+                <MetricCard label="Top priority" value={data.summary.topPriorityInverter} helper={`${data.summary.maintenance} maintenance candidates`} icon={Wrench} />
+                <MetricCard label="Model quality" value={data.summary.medianModelR2 == null ? "n/a" : `${metricLabel(data.summary.medianModelR2 * 100, "%")}`} helper="Median validation R2 across 65 twins" icon={AlertTriangle} />
               </div>
 
-              <Card className="gap-4 border-zinc-200 bg-white p-5">
-                <h2 className="text-base font-semibold text-zinc-900">
-                  Energy Overview — Last 7 Days
-                </h2>
-                <div className="h-80 w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={WEEK_DATA} margin={{ top: 8, right: 8, bottom: 0, left: -8 }}>
-                      <CartesianGrid stroke="#e4e4e7" strokeDasharray="3 3" />
-                      <XAxis
-                        dataKey="day"
-                        tick={{ fill: "#f97316", fontSize: 12 }}
-                        stroke="#e4e4e7"
-                        tickLine={false}
-                      />
-                      <YAxis
-                        tick={{ fill: "#f97316", fontSize: 12 }}
-                        stroke="#e4e4e7"
-                        tickLine={false}
-                        unit=" kWh"
-                        width={72}
-                      />
-                      <RechartsTooltip
-                        contentStyle={{
-                          backgroundColor: "#ffffff",
-                          border: "1px solid #e4e4e7",
-                          borderRadius: "0.5rem",
-                          color: "#18181b",
-                          fontSize: 12,
-                        }}
-                        formatter={(value) => [`${value} kWh`]}
-                      />
-                      <Legend verticalAlign="top" align="right" iconType="plainline" wrapperStyle={{ fontSize: 12, paddingBottom: 8 }} />
-                      <Line type="monotone" dataKey="yield" name="Solar Yield" stroke="#f97316" strokeWidth={2} dot={{ r: 3, fill: "#f97316" }} />
-                      <Line type="monotone" dataKey="feedIn" name="Grid Feed-in" stroke="#facc15" strokeWidth={2} dot={{ r: 3, fill: "#facc15" }} />
-                      <Line type="monotone" dataKey="consumption" name="Consumption" stroke="#71717a" strokeWidth={2} dot={{ r: 3, fill: "#71717a" }} />
-                    </LineChart>
-                  </ResponsiveContainer>
+              <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+                <Card className="border-zinc-200/80 bg-white/95 p-5 shadow-sm shadow-zinc-200/70">
+                  <div className="mb-4 flex items-center justify-between">
+                    <div>
+                      <h2 className="text-[15px] font-semibold text-zinc-950">Energy and anomaly timeline</h2>
+                      <p className="text-xs text-zinc-400">Last year from the plant monitoring export</p>
+                    </div>
+                    <Badge className="bg-zinc-100 text-zinc-600">Digital twin baseline</Badge>
+                  </div>
+                  <div className="h-72">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={data.monthly} margin={{ top: 10, right: 16, bottom: 0, left: 0 }}>
+                        <CartesianGrid stroke="#e4e4e7" strokeDasharray="4 4" />
+                        <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#71717a" }} tickMargin={8} />
+                        <YAxis tick={{ fontSize: 11, fill: "#71717a" }} width={42} />
+                        <RechartsTooltip />
+                        <Area type="monotone" dataKey="lossMWh" name="Loss MWh" stroke="#003A70" fill="#003A70" fillOpacity={0.12} strokeWidth={2} />
+                        <Area type="monotone" dataKey="anomalyEvents" name="Anomaly events" stroke="#ef4444" fill="#ef4444" fillOpacity={0.08} strokeWidth={2} />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
+                </Card>
+
+                <Card className="gap-0 border-zinc-200/80 bg-white/95 p-0 shadow-sm shadow-zinc-200/70">
+                  <div className="border-b border-zinc-200 p-4">
+                    <h2 className="text-[15px] font-semibold text-zinc-950">Live notifications</h2>
+                    <p className="text-xs text-zinc-400">Prioritized for expensive field-service decisions</p>
+                  </div>
+                  <ScrollArea className="h-72">
+                    <AlertList />
+                  </ScrollArea>
+                </Card>
+              </div>
+
+              <Card className="border-zinc-200/80 bg-white/95 p-5 shadow-sm shadow-zinc-200/70">
+                <div className="mb-4 flex items-center justify-between">
+                  <div>
+                    <h2 className="text-[15px] font-semibold text-zinc-950">Highest-risk inverters</h2>
+                    <p className="text-xs text-zinc-400">Maintenance queue based on anomaly rate and error states</p>
+                  </div>
+                  <Button size="sm" onClick={() => setPage("Inverter Grid")}>
+                    Open Grid
+                  </Button>
+                </div>
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+                  {topRisk.map((inv) => (
+                    <div key={inv.id} className="rounded-lg border border-zinc-200 bg-zinc-50 p-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="font-bold text-zinc-900">{inv.id}</p>
+                          <p className="mt-1 text-xs text-zinc-500">{inv.lastAction}</p>
+                        </div>
+                        <StatusBadge status={inv.status} />
+                      </div>
+                      <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
+                        <div><p className="text-zinc-400">Avail.</p><p className="font-semibold">{metricLabel(inv.availability, "%")}</p></div>
+                        <div><p className="text-zinc-400">Energy</p><p className="font-semibold">{metricLabel(inv.energyMWh)} MWh</p></div>
+                        <div><p className="text-zinc-400">State 6</p><p className="font-semibold">{inv.state6Events}</p></div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </Card>
             </div>
           )}
 
-          {page === "Agents" && (
-            <Card className="gap-0 border-zinc-200 bg-white p-0">
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-200 p-4">
-                <div className="flex flex-wrap gap-2">
-                  {(["All", "Active", "Idle", "Error", "Maintenance"] as AgentFilter[]).map((f) => (
-                    <button
-                      key={f}
-                      onClick={() => setAgentFilter(f)}
-                      className={`rounded-full px-3 py-1 text-xs font-medium transition-all duration-200 ${
-                        agentFilter === f
-                          ? "bg-orange-500 text-white shadow-sm shadow-orange-500/25"
-                          : "border border-zinc-200 bg-white text-zinc-600 hover:ring-1 hover:ring-orange-500"
-                      }`}
-                    >
-                      {f}
-                    </button>
-                  ))}
+          {page === "Inverter Grid" && (
+            <Card className="border-zinc-200/80 bg-white/95 p-5 shadow-sm shadow-zinc-200/70">
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-[15px] font-semibold text-zinc-950">65-inverter status grid</h2>
+                  <p className="text-xs text-zinc-400">Green: healthy, amber: watch, red: maintenance required</p>
                 </div>
-                <Button onClick={() => openPanel(null)}>
-                  <Plus className="size-4" />
-                  Deploy Agent
-                </Button>
+                <FilterPills
+                  options={["All", "Healthy", "Watch", "Maintenance Required"]}
+                  value={gridFilter}
+                  onChange={setGridFilter}
+                />
               </div>
-
-              <ScrollArea className="h-[520px]">
-                <div className="divide-y divide-zinc-100">
-                  {filteredAgents.map((agent) => (
-                    <div
-                      key={agent.id}
-                      onClick={() => openPanel(agent)}
-                      className="flex cursor-pointer items-center gap-4 px-4 py-3.5 transition-colors hover:bg-zinc-50"
-                    >
-                      <div
-                        className={`flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-bold ${agent.avatarClass}`}
-                      >
-                        {agent.initials}
-                      </div>
-                      <div className="w-56 shrink-0">
-                        <p className="truncate text-sm font-bold text-zinc-900">{agent.name}</p>
-                        <Badge className="mt-1 bg-zinc-100 text-[10px] text-zinc-600">
-                          {agent.role}
-                        </Badge>
-                      </div>
-                      <p className="min-w-0 flex-1 truncate text-sm text-zinc-500">
-                        {agent.lastAction}
-                      </p>
-                      <span className="hidden w-20 shrink-0 text-right text-xs text-zinc-400 lg:block">
-                        {agent.lastActive}
-                      </span>
-                      <StatusBadge status={agent.status} />
-                      <span onClick={(e) => e.stopPropagation()}>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger
-                            render={
-                              <Button
-                                variant="ghost"
-                                size="icon-sm"
-                                className="text-zinc-400 hover:text-zinc-900"
-                                aria-label={`Actions for ${agent.name}`}
-                              />
-                            }
-                          >
-                            <MoreHorizontal />
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="min-w-36">
-                            <DropdownMenuItem>View Logs</DropdownMenuItem>
-                            <DropdownMenuItem>Restart</DropdownMenuItem>
-                            <DropdownMenuItem>Pause</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => openPanel(agent)}>
-                              Details
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </span>
-                    </div>
-                  ))}
-                  {filteredAgents.length === 0 && (
-                    <div className="flex flex-col items-center gap-2 py-16 text-center">
-                      <Bot className="size-8 text-zinc-300" />
-                      <p className="text-sm text-zinc-500">
-                        No agents with status “{agentFilter}” right now.
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </ScrollArea>
+              <InverterGrid inverters={filteredInverters} />
             </Card>
           )}
 
-          {page === "Connectors" && (
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-xl font-bold text-zinc-900">Connect your tools</h2>
-                <p className="mt-1 text-sm text-zinc-500">
-                  Link external services to extend your solar agents&apos; communication and
-                  data capabilities
-                </p>
+          {page === "Alerts" && (
+            <Card className="gap-0 border-zinc-200/80 bg-white/95 p-0 shadow-sm shadow-zinc-200/70">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-200 p-4">
+                <div>
+                  <h2 className="text-[15px] font-semibold text-zinc-950">Actionable notifications</h2>
+                  <p className="text-xs text-zinc-400">Aligned with the transcript: prioritize technician visits by likely yield impact</p>
+                </div>
+                <FilterPills
+                  options={["All", "Critical", "Warning"]}
+                  value={alertFilter}
+                  onChange={setAlertFilter}
+                />
               </div>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {CONNECTOR_DEFS.map((c) => {
-                  const state = connectorState[c.id]
-                  return (
-                    <Card
-                      key={c.id}
-                      className={`gap-3 border-zinc-200 bg-white p-5 ${
-                        state.connected ? "bg-orange-500/5 ring-1 ring-orange-500/20" : ""
-                      }`}
-                    >
-                      <div className="flex items-start justify-between">
-                        {c.icon}
-                        {state.connected ? (
-                          <Badge
-                            variant="outline"
-                            className="gap-1 border-emerald-500/30 bg-emerald-500/10 text-emerald-700"
-                          >
-                            <CheckCircle2 className="size-3" />
-                            Connected
-                          </Badge>
-                        ) : (
-                          <Badge
-                            variant="outline"
-                            className="border-zinc-200 bg-zinc-50 text-zinc-500"
-                          >
-                            Not connected
-                          </Badge>
-                        )}
-                      </div>
-                      <div>
-                        <p className="text-base font-bold text-zinc-900">{c.name}</p>
-                        <p className="mt-1 text-sm text-zinc-500">{c.description}</p>
-                      </div>
-                      <div className="mt-1 flex items-center justify-between">
-                        {state.loading ? (
-                          <span className="flex h-[18.4px] items-center">
-                            <Loader2 className="size-4 animate-spin text-orange-500" />
-                          </span>
-                        ) : (
-                          <Switch
-                            checked={state.connected}
-                            onCheckedChange={(on) => toggleConnector(c.id, on)}
-                            aria-label={`Toggle ${c.name} connection`}
-                          />
-                        )}
-                        {state.connected && (
-                          <Button variant="ghost" size="sm" className="text-orange-500 hover:text-orange-600">
-                            Configure
-                          </Button>
-                        )}
-                      </div>
-                    </Card>
-                  )
-                })}
-              </div>
+              <AlertList alerts={filteredAlerts} />
+            </Card>
+          )}
+
+          {page === "Analytics" && (
+            <div className="grid grid-cols-1 gap-6 xl:grid-cols-[0.8fr_1.2fr]">
+              <Card className="border-zinc-200/80 bg-white/95 p-5 shadow-sm shadow-zinc-200/70">
+                <h2 className="text-[15px] font-semibold text-zinc-950">Model vs baseline</h2>
+                <div className="mt-4 space-y-3 text-sm text-zinc-600">
+                  <p className="flex gap-2"><CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />65 inverter-specific P_AC models trained on Year 1.</p>
+                  <p className="flex gap-2"><CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />Median model R2: {data.summary.medianModelR2 == null ? "n/a" : metricLabel(data.summary.medianModelR2 * 100, "%")}.</p>
+                  <p className="flex gap-2"><CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />Median MAE: {data.summary.medianModelMAE == null ? "n/a" : `${metricLabel(data.summary.medianModelMAE)} kW`}.</p>
+                  <p className="flex gap-2"><CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />Baseline comparison: {data.summary.baseline}</p>
+                </div>
+              </Card>
+              <Card className="border-zinc-200/80 bg-white/95 p-5 shadow-sm shadow-zinc-200/70">
+                <h2 className="text-[15px] font-semibold text-zinc-950">Degradation overview</h2>
+                <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
+                  <div className="rounded-lg bg-zinc-50 p-4 text-center"><p className="text-2xl font-bold text-zinc-900">{metricLabel(categoryTotals.curtailmentKWh / 1000)}</p><p className="text-xs text-zinc-500">Curtailment MWh</p></div>
+                  <div className="rounded-lg bg-zinc-50 p-4 text-center"><p className="text-2xl font-bold text-zinc-900">{metricLabel(categoryTotals.downtimeKWh / 1000)}</p><p className="text-xs text-zinc-500">Downtime MWh</p></div>
+                  <div className="rounded-lg bg-zinc-50 p-4 text-center"><p className="text-2xl font-bold text-zinc-900">{metricLabel(categoryTotals.degradationKWh / 1000)}</p><p className="text-xs text-zinc-500">Degradation MWh</p></div>
+                  <div className="rounded-lg bg-zinc-50 p-4 text-center"><p className="text-2xl font-bold text-zinc-900">{metricLabel(categoryTotals.unclassifiedKWh / 1000)}</p><p className="text-xs text-zinc-500">Unclassified MWh</p></div>
+                </div>
+                <div className="mt-5 rounded-lg bg-zinc-50 p-4 text-sm text-zinc-600">
+                  <p className="font-medium text-zinc-900">Monthly loss trend</p>
+                  <p className="mt-1">Full-period losses are aggregated by month in `monthly_losses.csv` and rendered in the Overview timeline.</p>
+                  <p className="mt-3 font-medium text-zinc-900">Top degradation candidates</p>
+                  <p className="mt-1 text-xs text-zinc-500">
+                    {topDegradation.map((inv) => `${inv.id}: ${metricLabel(inv.degradationKWh / 1000)} MWh`).join(" | ")}
+                  </p>
+                </div>
+              </Card>
             </div>
           )}
 
-          {page === "Knowledge" && (
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-xl font-bold text-zinc-900">Knowledge Base</h2>
-                <p className="mt-1 text-sm text-zinc-500">
-                  Upload documents and data sources your agents can query
-                </p>
-              </div>
-
-              <Card
-                onDragOver={(e) => {
-                  e.preventDefault()
-                  setDragOver(true)
-                }}
-                onDragLeave={() => setDragOver(false)}
-                onDrop={(e) => {
-                  e.preventDefault()
-                  setDragOver(false)
-                }}
-                className={`items-center gap-3 border-2 border-dashed bg-white p-8 transition-colors ${
-                  dragOver ? "border-orange-500 bg-orange-500/5" : "border-zinc-300"
-                }`}
-              >
-                <UploadCloud className="size-8 text-orange-500" />
-                <p className="text-sm font-medium text-zinc-900">
-                  Drop files here or click to upload
-                </p>
-                <p className="text-xs text-zinc-400">
-                  Supports PDF, DOCX, TXT, CSV, XLSX, MD — max 50 MB per file
-                </p>
-                <Button className="mt-1">Upload Files</Button>
-              </Card>
-
-              <Card className="gap-0 border-zinc-200 bg-white p-0">
-                <div className="flex items-center justify-between border-b border-zinc-200 p-4">
-                  <h3 className="text-sm font-semibold text-zinc-900">Documents</h3>
-                  <Badge className="bg-zinc-100 text-xs text-zinc-600">
-                    21.4 MB / 500 MB used
-                  </Badge>
-                </div>
-                <ScrollArea className="h-[380px]">
-                  <div className="divide-y divide-zinc-100">
-                    {KNOWLEDGE_ITEMS.map((item) => (
-                      <div
-                        key={item.id}
-                        className="flex items-center gap-4 px-4 py-3.5 transition-colors hover:bg-zinc-50"
-                      >
-                        <div
-                          className={`flex size-9 shrink-0 items-center justify-center rounded-full ${FILE_ICON_CLASS[item.kind]}`}
-                        >
-                          <FileKindIcon kind={item.kind} />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-bold text-zinc-900">{item.name}</p>
-                          <p className="text-xs text-zinc-400">{item.size}</p>
-                        </div>
-                        <span className="hidden text-xs text-zinc-400 md:block">
-                          {item.uploaded}
-                        </span>
-                        {item.status === "Indexed" ? (
-                          <Badge
-                            variant="outline"
-                            className="gap-1 border-emerald-500/30 bg-emerald-500/10 text-emerald-700"
-                          >
-                            <CheckCircle2 className="size-3" />
-                            Indexed
-                          </Badge>
-                        ) : (
-                          <Badge
-                            variant="outline"
-                            className="gap-1 border-orange-500/30 bg-orange-500/10 text-orange-600"
-                          >
-                            <Loader2 className="size-3 animate-spin" />
-                            Processing
-                          </Badge>
-                        )}
-                        <div className="hidden gap-1 lg:flex">
-                          {item.agents.map((a) => (
-                            <span
-                              key={a}
-                              className="rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] font-medium text-zinc-600"
-                            >
-                              {a}
-                            </span>
-                          ))}
-                        </div>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger
-                            render={
-                              <Button
-                                variant="ghost"
-                                size="icon-sm"
-                                className="text-zinc-400 hover:text-zinc-900"
-                                aria-label={`Actions for ${item.name}`}
-                              />
-                            }
-                          >
-                            <MoreHorizontal />
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="min-w-36">
-                            <DropdownMenuItem>View Details</DropdownMenuItem>
-                            <DropdownMenuItem>Re-index</DropdownMenuItem>
-                            <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    ))}
+          {page === "Chat" && (
+            <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_0.55fr]">
+              <Card className="flex min-h-[560px] border-zinc-200/80 bg-white/95 p-0 shadow-sm shadow-zinc-200/70">
+                <div className="flex min-h-0 flex-1 flex-col">
+                  <div className="border-b border-zinc-200 p-4">
+                    <h2 className="text-[15px] font-semibold text-zinc-950">LLM analysis chat</h2>
+                    <p className="text-xs text-zinc-400">Grounded on generated JSON/CSV summaries, not raw XLSB files at runtime.</p>
+                    <p className="mt-2 text-xs text-amber-600">Live answers require OPENAI_API_KEY on the API server; otherwise the chat returns a disabled-state message.</p>
                   </div>
-                </ScrollArea>
+                  <ScrollArea className="min-h-0 flex-1 p-4">
+                    <div className="space-y-3">
+                      {chatMessages.map((message, index) => (
+                        <div
+                          key={`${message.role}-${index}`}
+                          className={`rounded-lg border p-3 text-sm ${
+                            message.role === "user"
+                              ? "ml-auto max-w-[80%] border-[#003A70]/20 bg-[#003A70]/5 text-zinc-900"
+                              : "max-w-[86%] border-zinc-200 bg-zinc-50 text-zinc-700"
+                          }`}
+                        >
+                          {message.content}
+                        </div>
+                      ))}
+                      {chatLoading && (
+                        <div className="flex items-center gap-2 text-sm text-zinc-400">
+                          <Loader2 className="size-4 animate-spin" />
+                          Thinking over analysis summaries...
+                        </div>
+                      )}
+                    </div>
+                  </ScrollArea>
+                  <div className="border-t border-zinc-200 p-4">
+                    <div className="flex gap-2">
+                      <Textarea
+                        value={chatInput}
+                        onChange={(event) => setChatInput(event.target.value)}
+                        onKeyDown={(event) => {
+                          if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
+                            void askChat()
+                          }
+                        }}
+                        className="min-h-20 resize-none border-zinc-200 bg-white text-sm"
+                        placeholder="Ask: Which inverter underperforms the most?"
+                      />
+                      <Button className="h-20 w-20 shrink-0" onClick={() => void askChat()} disabled={chatLoading}>
+                        {chatLoading ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+              <Card className="border-zinc-200/80 bg-white/95 p-5 shadow-sm shadow-zinc-200/70">
+                <h2 className="text-[15px] font-semibold text-zinc-950">Suggested questions</h2>
+                <div className="mt-4 space-y-2">
+                  {[
+                    "Which inverter underperforms the most?",
+                    "Where should we send a technician first?",
+                    "How much loss is curtailment?",
+                    "Which errorcodes correlate with production loss?",
+                  ].map((question) => (
+                    <button
+                      key={question}
+                      onClick={() => void askChat(question)}
+                      className="block w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-left text-sm text-zinc-700 transition-colors hover:border-[#003A70] hover:bg-white"
+                    >
+                      {question}
+                    </button>
+                  ))}
+                </div>
+                <div className="mt-5 rounded-lg bg-zinc-50 p-3 text-xs text-zinc-500">
+                  Requires `OPENAI_API_KEY` on the API server. Without it, the chat explains that LLM mode is disabled.
+                </div>
               </Card>
             </div>
           )}
 
           {page === "Logs" && (
-            <Card className="items-center gap-3 border-zinc-200 bg-white p-12">
-              <ScrollText className="size-8 text-zinc-300" />
-              <p className="text-sm font-medium text-zinc-900">Agent activity logs</p>
-              <p className="text-xs text-zinc-400">
-                Centralized log streaming for all solar agents arrives in the next release.
-              </p>
+            <Card className="items-center gap-3 border-zinc-200/80 bg-white/95 p-12 shadow-sm shadow-zinc-200/70">
+              <Activity className="size-8 text-zinc-300" />
+              <p className="text-sm font-medium text-zinc-900">Event stream ready</p>
+              <p className="text-xs text-zinc-400">Ticket relevance checks and connector events can be appended here.</p>
             </Card>
           )}
 
           {page === "Settings" && (
-            <Card className="items-center gap-3 border-zinc-200 bg-white p-12">
-              <Settings className="size-8 text-zinc-300" />
-              <p className="text-sm font-medium text-zinc-900">Workspace settings</p>
-              <p className="text-xs text-zinc-400">
-                Plant location, tariff configuration and alert thresholds will be managed here.
-              </p>
+            <Card className="items-center gap-3 border-zinc-200/80 bg-white/95 p-12 shadow-sm shadow-zinc-200/70">
+              <Sun className="size-8 text-zinc-300" />
+              <p className="text-sm font-medium text-zinc-900">Plant and model settings</p>
+              <p className="text-xs text-zinc-400">Thresholds, curtailment masks and tariff assumptions belong here.</p>
             </Card>
           )}
         </main>
-      </div>
-
-      {/* ==================== AGENT CONFIG PANEL ====================== */}
-      <div
-        onClick={() => setPanelOpen(false)}
-        className={`fixed inset-0 z-40 bg-black/30 transition-opacity duration-300 ${
-          panelOpen ? "opacity-100" : "pointer-events-none opacity-0"
-        }`}
-      />
-      <div
-        className={`fixed inset-y-0 right-0 z-50 flex w-96 transform flex-col border-l border-zinc-200 bg-white shadow-2xl transition-transform duration-300 ${
-          panelOpen ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
-        <div className="flex items-start justify-between border-b border-zinc-200 p-5">
-          <div>
-            <h2 className="text-base font-bold text-zinc-900">
-              {draft.name || "New Agent"}
-            </h2>
-            <p className="text-xs text-zinc-500">Configuration</p>
-          </div>
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            className="text-zinc-500 hover:text-zinc-900"
-            onClick={() => setPanelOpen(false)}
-            aria-label="Close configuration panel"
-          >
-            <X />
-          </Button>
-        </div>
-
-        <ScrollArea className="min-h-0 flex-1">
-          <div className="space-y-6 p-5">
-            {/* Section 1 — General */}
-            <section className="space-y-3">
-              <h3 className="text-sm font-semibold text-zinc-900">General</h3>
-              <div className="space-y-1.5">
-                <Label className="text-xs text-zinc-500">Agent Name</Label>
-                <Input
-                  value={draft.name}
-                  onChange={(e) => setDraft({ ...draft, name: e.target.value })}
-                  placeholder="e.g. Grid Optimizer"
-                  className="border-zinc-200 bg-zinc-50"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label className="text-xs text-zinc-500">Role</Label>
-                <Select
-                  value={draft.role}
-                  onValueChange={(v) =>
-                    setDraft({ ...draft, role: v as (typeof AGENT_ROLES)[number] })
-                  }
-                >
-                  <SelectTrigger className="w-full border-zinc-200 bg-zinc-50">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {AGENT_ROLES.map((r) => (
-                      <SelectItem key={r} value={r}>
-                        {r}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-1.5">
-                <Label className="text-xs text-zinc-500">Description</Label>
-                <Textarea
-                  rows={2}
-                  value={draft.description}
-                  onChange={(e) => setDraft({ ...draft, description: e.target.value })}
-                  placeholder="What does this agent manage?"
-                  className="border-zinc-200 bg-zinc-50"
-                />
-              </div>
-            </section>
-
-            <Separator className="bg-zinc-200" />
-
-            {/* Section 2 — Knowledge Access */}
-            <section className="space-y-3">
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <h3 className="text-sm font-semibold text-zinc-900">Knowledge Sources</h3>
-                  <p className="text-xs text-zinc-400">
-                    Which documents can this agent query?
-                  </p>
-                </div>
-                <div className="flex shrink-0 gap-2 text-xs">
-                  <button
-                    className="text-orange-500 transition-colors hover:text-orange-600"
-                    onClick={() =>
-                      setDraft({ ...draft, knowledge: KNOWLEDGE_ITEMS.map((k) => k.id) })
-                    }
-                  >
-                    Select All
-                  </button>
-                  <button
-                    className="text-zinc-400 transition-colors hover:text-zinc-600"
-                    onClick={() => setDraft({ ...draft, knowledge: [] })}
-                  >
-                    Deselect All
-                  </button>
-                </div>
-              </div>
-              <div className="space-y-1">
-                {KNOWLEDGE_ITEMS.map((item) => {
-                  const checked = draft.knowledge.includes(item.id)
-                  return (
-                    <label
-                      key={item.id}
-                      className="flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-1.5 transition-colors hover:bg-zinc-100"
-                    >
-                      <Checkbox
-                        checked={checked}
-                        onCheckedChange={(on) =>
-                          setDraft((d) => ({
-                            ...d,
-                            knowledge: on
-                              ? [...d.knowledge, item.id]
-                              : d.knowledge.filter((id) => id !== item.id),
-                          }))
-                        }
-                      />
-                      <span className={FILE_ICON_CLASS[item.kind].split(" ")[1]}>
-                        <FileKindIcon kind={item.kind} />
-                      </span>
-                      <span className="truncate text-sm text-zinc-700">{item.name}</span>
-                    </label>
-                  )
-                })}
-              </div>
-            </section>
-
-            <Separator className="bg-zinc-200" />
-
-            {/* Section 3 — Connector Access */}
-            <section className="space-y-3">
-              <div>
-                <h3 className="text-sm font-semibold text-zinc-900">Connector Access</h3>
-                <p className="text-xs text-zinc-400">
-                  Which integrations can this agent use?
-                </p>
-              </div>
-              <div className="space-y-1">
-                {CONNECTOR_DEFS.map((c) => {
-                  const globallyConnected = connectorState[c.id].connected
-                  const enabled = draft.connectors.includes(c.id)
-                  const row = (
-                    <div
-                      className={`flex items-center justify-between rounded-md px-2 py-2 ${
-                        globallyConnected ? "" : "opacity-40"
-                      }`}
-                    >
-                      <span className="flex items-center gap-2.5">
-                        <span className="[&>svg]:size-5">{c.icon}</span>
-                        <span className="text-sm text-zinc-700">{c.name}</span>
-                      </span>
-                      <Switch
-                        checked={enabled && globallyConnected}
-                        disabled={!globallyConnected}
-                        onCheckedChange={(on) =>
-                          setDraft((d) => ({
-                            ...d,
-                            connectors: on
-                              ? [...d.connectors, c.id]
-                              : d.connectors.filter((id) => id !== c.id),
-                          }))
-                        }
-                        aria-label={`Allow ${c.name} access`}
-                      />
-                    </div>
-                  )
-                  if (globallyConnected) return <div key={c.id}>{row}</div>
-                  return (
-                    <Tooltip key={c.id}>
-                      <TooltipTrigger render={<div className="block w-full" />}>
-                        {row}
-                      </TooltipTrigger>
-                      <TooltipContent side="left">
-                        Connect this integration in the Connectors tab first
-                      </TooltipContent>
-                    </Tooltip>
-                  )
-                })}
-              </div>
-            </section>
-
-            <Separator className="bg-zinc-200" />
-
-            {/* Section 4 — Web Access */}
-            <section className="space-y-3">
-              <h3 className="text-sm font-semibold text-zinc-900">Internet Access</h3>
-              <div className="flex items-center justify-between rounded-md px-2 py-1">
-                <span className="flex items-center gap-2.5">
-                  <Globe className="size-5 text-zinc-500" />
-                  <span className="text-sm text-zinc-700">Allow WWW Access</span>
-                </span>
-                <Switch
-                  checked={draft.www}
-                  onCheckedChange={(on) => setDraft({ ...draft, www: on })}
-                  aria-label="Allow WWW access"
-                />
-              </div>
-
-              {draft.www && (
-                <div className="space-y-3 pl-2">
-                  <RadioGroup
-                    value={draft.wwwMode}
-                    onValueChange={(v) =>
-                      setDraft({ ...draft, wwwMode: v as "unrestricted" | "whitelist" })
-                    }
-                    className="gap-2"
-                  >
-                    <label className="flex cursor-pointer items-center gap-2.5">
-                      <RadioGroupItem value="unrestricted" />
-                      <span className="text-sm text-zinc-700">Unrestricted</span>
-                      <span className="text-xs text-zinc-400">— agent can search freely</span>
-                    </label>
-                    <label className="flex cursor-pointer items-center gap-2.5">
-                      <RadioGroupItem value="whitelist" />
-                      <span className="text-sm text-zinc-700">Domain Whitelist</span>
-                      <span className="text-xs text-zinc-400">— only allowed domains</span>
-                    </label>
-                  </RadioGroup>
-
-                  {draft.wwwMode === "whitelist" && (
-                    <div className="space-y-2">
-                      <div className="flex gap-2">
-                        <Input
-                          value={domainInput}
-                          onChange={(e) => setDomainInput(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") addDomain()
-                          }}
-                          placeholder="e.g. pvgis.ec.europa.eu, openweathermap.org"
-                          className="border-zinc-200 bg-zinc-50 text-sm"
-                        />
-                        <Button variant="outline" size="sm" className="h-8 shrink-0" onClick={addDomain}>
-                          <Plus className="size-3.5" />
-                          Add Domain
-                        </Button>
-                      </div>
-                      {draft.domains.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5">
-                          {draft.domains.map((domain) => (
-                            <span
-                              key={domain}
-                              className="flex items-center gap-1 rounded-full bg-zinc-100 px-2.5 py-1 text-xs text-zinc-700"
-                            >
-                              {domain}
-                              <button
-                                onClick={() =>
-                                  setDraft((d) => ({
-                                    ...d,
-                                    domains: d.domains.filter((x) => x !== domain),
-                                  }))
-                                }
-                                className="text-zinc-400 transition-colors hover:text-zinc-900"
-                                aria-label={`Remove ${domain}`}
-                              >
-                                <X className="size-3" />
-                              </button>
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-            </section>
-
-            {/* Section 5 — Access Summary */}
-            <section className="rounded-lg bg-zinc-100 p-3">
-              <p className="text-xs font-medium text-zinc-700">This agent has access to:</p>
-              <ul className="mt-2 space-y-1.5 text-xs text-zinc-600">
-                <li className="flex items-center gap-2">
-                  <FileText className="size-3.5 text-orange-500" />
-                  {draft.knowledge.length} knowledge file
-                  {draft.knowledge.length === 1 ? "" : "s"}
-                </li>
-                <li className="flex items-center gap-2">
-                  <Plug className="size-3.5 text-orange-500" />
-                  {
-                    draft.connectors.filter((id) => connectorState[id].connected).length
-                  }{" "}
-                  connectors:
-                  <span className="flex items-center gap-1.5 [&>svg]:size-3.5">
-                    {CONNECTOR_DEFS.filter(
-                      (c) =>
-                        draft.connectors.includes(c.id) && connectorState[c.id].connected
-                    ).map((c) => (
-                      <span key={c.id} className="[&>svg]:size-3.5">
-                        {c.icon}
-                      </span>
-                    ))}
-                  </span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Globe className="size-3.5 text-orange-500" />
-                  WWW:{" "}
-                  {!draft.www
-                    ? "No access"
-                    : draft.wwwMode === "unrestricted"
-                      ? "Unrestricted"
-                      : `Whitelist (${draft.domains.length} domain${draft.domains.length === 1 ? "" : "s"})`}
-                </li>
-              </ul>
-            </section>
-          </div>
-        </ScrollArea>
-
-        <div className="flex justify-end gap-2 border-t border-zinc-200 p-4">
-          <Button variant="ghost" className="text-zinc-500 hover:text-zinc-900" onClick={() => setPanelOpen(false)}>
-            Cancel
-          </Button>
-          <Button onClick={saveConfiguration}>Save Configuration</Button>
-        </div>
-      </div>
-
-      {/* ============================ TOAST =========================== */}
-      <div
-        className={`fixed right-6 bottom-6 z-[60] flex items-center gap-2.5 rounded-lg border border-zinc-200 bg-white px-4 py-3 shadow-xl transition-all duration-300 ${
-          toastVisible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0"
-        }`}
-      >
-        <CheckCircle2 className="size-4 text-green-500" />
-        <span className="text-sm text-zinc-900">Agent configuration saved</span>
       </div>
     </div>
   )

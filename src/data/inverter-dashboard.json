@@ -1,0 +1,2511 @@
+{
+  "generatedFrom": {
+    "main": "main_monitoring_data.xlsb",
+    "errors": "errorcodes.xlsb",
+    "periodStart": "2016-12-31 22:00",
+    "periodEnd": "2026-06-01 21:55",
+    "analysisMode": "full_10_year_digital_twin"
+  },
+  "assumptions": {
+    "eur_per_kwh": 0.075,
+    "tariff_note": "Flat configurable tariff assumption for hackathon analysis; no real tariff file was provided.",
+    "model_dir": "C:\\Users\\User\\Documents\\Enerparc\\models\\first_year_2016_2017",
+    "training_window": "Year 1 from monitoring data",
+    "daylight_irradiance": 200.0,
+    "expected_threshold_kw": 0.5,
+    "downtime_actual_kw": 0.1,
+    "degradation_month_kwh": 50.0,
+    "curtailment_rule": "DRD11A DV or EVU below 99%",
+    "module_metadata": "not provided"
+  },
+  "summary": {
+    "totalInverters": 65,
+    "healthy": 40,
+    "watch": 17,
+    "maintenance": 8,
+    "lastYearEnergyMWh": 15424.53,
+    "totalLossKWh": 5181033.7,
+    "totalLossEUR": 388577.53,
+    "alerts": 12,
+    "medianModelR2": 0.91,
+    "medianModelMAE": 0.883,
+    "baseline": "Simple fleet baseline retained as comparison narrative; ML twin uses Year-1 inverter models.",
+    "topPriorityInverter": "INV 01.03.015"
+  },
+  "inverters": [
+    {
+      "id": "INV 01.01.001",
+      "status": "Watch",
+      "availability": 74.5,
+      "energyMWh": 258.86,
+      "expectedMWh": 340.92,
+      "lossKWh": 86778.55,
+      "lossEUR": 6508.39,
+      "anomalyRate": 25.45,
+      "curtailmentKWh": 2175.72,
+      "downtimeKWh": 942.69,
+      "degradationKWh": 83359.48,
+      "unclassifiedKWh": 300.66,
+      "nonzeroErrors": 3093,
+      "state6Events": 3094,
+      "lastAction": "Monitor residuals and correlate with error codes"
+    },
+    {
+      "id": "INV 01.01.002",
+      "status": "Healthy",
+      "availability": 73.8,
+      "energyMWh": 240.57,
+      "expectedMWh": 319.7,
+      "lossKWh": 83761.39,
+      "lossEUR": 6282.1,
+      "anomalyRate": 26.2,
+      "curtailmentKWh": 2107.28,
+      "downtimeKWh": 9944.01,
+      "degradationKWh": 71614.51,
+      "unclassifiedKWh": 95.59,
+      "nonzeroErrors": 27158,
+      "state6Events": 27160,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.01.003",
+      "status": "Healthy",
+      "availability": 75.6,
+      "energyMWh": 236.95,
+      "expectedMWh": 306.75,
+      "lossKWh": 74765.53,
+      "lossEUR": 5607.41,
+      "anomalyRate": 24.37,
+      "curtailmentKWh": 2056.24,
+      "downtimeKWh": 7375.13,
+      "degradationKWh": 65224.12,
+      "unclassifiedKWh": 110.04,
+      "nonzeroErrors": 12873,
+      "state6Events": 12873,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.01.004",
+      "status": "Healthy",
+      "availability": 71.4,
+      "energyMWh": 197.49,
+      "expectedMWh": 266.76,
+      "lossKWh": 76300.12,
+      "lossEUR": 5722.51,
+      "anomalyRate": 28.6,
+      "curtailmentKWh": 1942.03,
+      "downtimeKWh": 5127.72,
+      "degradationKWh": 69193.49,
+      "unclassifiedKWh": 36.88,
+      "nonzeroErrors": 14572,
+      "state6Events": 14574,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.01.005",
+      "status": "Healthy",
+      "availability": 78.6,
+      "energyMWh": 243.36,
+      "expectedMWh": 301.96,
+      "lossKWh": 64491.36,
+      "lossEUR": 4836.85,
+      "anomalyRate": 21.36,
+      "curtailmentKWh": 2037.25,
+      "downtimeKWh": 860.85,
+      "degradationKWh": 61545.6,
+      "unclassifiedKWh": 47.66,
+      "nonzeroErrors": 3349,
+      "state6Events": 3350,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.01.006",
+      "status": "Watch",
+      "availability": 74.2,
+      "energyMWh": 252.14,
+      "expectedMWh": 332.92,
+      "lossKWh": 86047.51,
+      "lossEUR": 6453.56,
+      "anomalyRate": 25.85,
+      "curtailmentKWh": 2188.78,
+      "downtimeKWh": 1017.15,
+      "degradationKWh": 82665.95,
+      "unclassifiedKWh": 175.63,
+      "nonzeroErrors": 2993,
+      "state6Events": 2993,
+      "lastAction": "Monitor residuals and correlate with error codes"
+    },
+    {
+      "id": "INV 01.01.007",
+      "status": "Healthy",
+      "availability": 74.5,
+      "energyMWh": 215.79,
+      "expectedMWh": 282.05,
+      "lossKWh": 71850.46,
+      "lossEUR": 5388.78,
+      "anomalyRate": 25.47,
+      "curtailmentKWh": 1968.35,
+      "downtimeKWh": 1900.88,
+      "degradationKWh": 67937.53,
+      "unclassifiedKWh": 43.7,
+      "nonzeroErrors": 4630,
+      "state6Events": 4633,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.02.008",
+      "status": "Maintenance Required",
+      "availability": 70.2,
+      "energyMWh": 249.01,
+      "expectedMWh": 347.33,
+      "lossKWh": 103347.82,
+      "lossEUR": 7751.09,
+      "anomalyRate": 29.76,
+      "curtailmentKWh": 2220.49,
+      "downtimeKWh": 879.48,
+      "degradationKWh": 99900.56,
+      "unclassifiedKWh": 347.29,
+      "nonzeroErrors": 2498,
+      "state6Events": 2498,
+      "lastAction": "Dispatch technician and validate ticket impact"
+    },
+    {
+      "id": "INV 01.02.009",
+      "status": "Healthy",
+      "availability": 77.4,
+      "energyMWh": 264.66,
+      "expectedMWh": 333.6,
+      "lossKWh": 75279.48,
+      "lossEUR": 5645.96,
+      "anomalyRate": 22.57,
+      "curtailmentKWh": 2135.78,
+      "downtimeKWh": 984.76,
+      "degradationKWh": 71937.37,
+      "unclassifiedKWh": 221.57,
+      "nonzeroErrors": 2868,
+      "state6Events": 2868,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.02.010",
+      "status": "Healthy",
+      "availability": 77.6,
+      "energyMWh": 248.18,
+      "expectedMWh": 312.14,
+      "lossKWh": 69908.06,
+      "lossEUR": 5243.1,
+      "anomalyRate": 22.4,
+      "curtailmentKWh": 2029.23,
+      "downtimeKWh": 892.44,
+      "degradationKWh": 66878.73,
+      "unclassifiedKWh": 107.65,
+      "nonzeroErrors": 2872,
+      "state6Events": 2873,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.02.011",
+      "status": "Healthy",
+      "availability": 77.4,
+      "energyMWh": 216.14,
+      "expectedMWh": 270.87,
+      "lossKWh": 61176.01,
+      "lossEUR": 4588.2,
+      "anomalyRate": 22.58,
+      "curtailmentKWh": 1938.57,
+      "downtimeKWh": 1008.01,
+      "degradationKWh": 58185.43,
+      "unclassifiedKWh": 44.01,
+      "nonzeroErrors": 3612,
+      "state6Events": 3614,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.02.012",
+      "status": "Watch",
+      "availability": 71.0,
+      "energyMWh": 241.05,
+      "expectedMWh": 332.64,
+      "lossKWh": 96628.84,
+      "lossEUR": 7247.16,
+      "anomalyRate": 29.05,
+      "curtailmentKWh": 2178.53,
+      "downtimeKWh": 13717.43,
+      "degradationKWh": 80512.19,
+      "unclassifiedKWh": 220.69,
+      "nonzeroErrors": 28176,
+      "state6Events": 28190,
+      "lastAction": "Monitor residuals and correlate with error codes"
+    },
+    {
+      "id": "INV 01.02.013",
+      "status": "Healthy",
+      "availability": 77.5,
+      "energyMWh": 235.14,
+      "expectedMWh": 295.7,
+      "lossKWh": 66657.72,
+      "lossEUR": 4999.33,
+      "anomalyRate": 22.54,
+      "curtailmentKWh": 1989.33,
+      "downtimeKWh": 934.72,
+      "degradationKWh": 63674.1,
+      "unclassifiedKWh": 59.57,
+      "nonzeroErrors": 3224,
+      "state6Events": 3223,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.02.014",
+      "status": "Healthy",
+      "availability": 75.3,
+      "energyMWh": 232.84,
+      "expectedMWh": 301.89,
+      "lossKWh": 74571.77,
+      "lossEUR": 5592.88,
+      "anomalyRate": 24.7,
+      "curtailmentKWh": 2035.24,
+      "downtimeKWh": 2831.04,
+      "degradationKWh": 69650.63,
+      "unclassifiedKWh": 54.85,
+      "nonzeroErrors": 6778,
+      "state6Events": 6778,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.03.015",
+      "status": "Maintenance Required",
+      "availability": 68.6,
+      "energyMWh": 236.07,
+      "expectedMWh": 337.41,
+      "lossKWh": 105865.53,
+      "lossEUR": 7939.91,
+      "anomalyRate": 31.38,
+      "curtailmentKWh": 2060.75,
+      "downtimeKWh": 716.34,
+      "degradationKWh": 102822.11,
+      "unclassifiedKWh": 266.33,
+      "nonzeroErrors": 2355,
+      "state6Events": 2355,
+      "lastAction": "Dispatch technician and validate ticket impact"
+    },
+    {
+      "id": "INV 01.03.016",
+      "status": "Maintenance Required",
+      "availability": 67.4,
+      "energyMWh": 221.74,
+      "expectedMWh": 320.02,
+      "lossKWh": 104178.68,
+      "lossEUR": 7813.4,
+      "anomalyRate": 32.55,
+      "curtailmentKWh": 2006.06,
+      "downtimeKWh": 714.0,
+      "degradationKWh": 101360.02,
+      "unclassifiedKWh": 98.61,
+      "nonzeroErrors": 2811,
+      "state6Events": 2811,
+      "lastAction": "Dispatch technician and validate ticket impact"
+    },
+    {
+      "id": "INV 01.03.017",
+      "status": "Watch",
+      "availability": 70.0,
+      "energyMWh": 216.43,
+      "expectedMWh": 301.54,
+      "lossKWh": 90382.16,
+      "lossEUR": 6778.66,
+      "anomalyRate": 29.97,
+      "curtailmentKWh": 1898.93,
+      "downtimeKWh": 2046.56,
+      "degradationKWh": 86365.86,
+      "unclassifiedKWh": 70.81,
+      "nonzeroErrors": 4482,
+      "state6Events": 4480,
+      "lastAction": "Monitor residuals and correlate with error codes"
+    },
+    {
+      "id": "INV 01.03.018",
+      "status": "Healthy",
+      "availability": 71.6,
+      "energyMWh": 192.0,
+      "expectedMWh": 260.86,
+      "lossKWh": 74060.2,
+      "lossEUR": 5554.52,
+      "anomalyRate": 28.39,
+      "curtailmentKWh": 1803.2,
+      "downtimeKWh": 855.15,
+      "degradationKWh": 71393.79,
+      "unclassifiedKWh": 8.06,
+      "nonzeroErrors": 3482,
+      "state6Events": 3484,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.03.019",
+      "status": "Watch",
+      "availability": 71.1,
+      "energyMWh": 240.14,
+      "expectedMWh": 330.05,
+      "lossKWh": 95353.39,
+      "lossEUR": 7151.5,
+      "anomalyRate": 28.89,
+      "curtailmentKWh": 2029.56,
+      "downtimeKWh": 726.04,
+      "degradationKWh": 92412.73,
+      "unclassifiedKWh": 185.05,
+      "nonzeroErrors": 2354,
+      "state6Events": 2354,
+      "lastAction": "Monitor residuals and correlate with error codes"
+    },
+    {
+      "id": "INV 01.03.020",
+      "status": "Healthy",
+      "availability": 72.4,
+      "energyMWh": 210.05,
+      "expectedMWh": 282.73,
+      "lossKWh": 77915.22,
+      "lossEUR": 5843.64,
+      "anomalyRate": 27.56,
+      "curtailmentKWh": 1871.01,
+      "downtimeKWh": 750.5,
+      "degradationKWh": 75267.01,
+      "unclassifiedKWh": 26.7,
+      "nonzeroErrors": 3134,
+      "state6Events": 3137,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.03.021",
+      "status": "Watch",
+      "availability": 72.7,
+      "energyMWh": 231.47,
+      "expectedMWh": 311.32,
+      "lossKWh": 85083.51,
+      "lossEUR": 6381.26,
+      "anomalyRate": 27.33,
+      "curtailmentKWh": 1960.59,
+      "downtimeKWh": 717.72,
+      "degradationKWh": 82351.29,
+      "unclassifiedKWh": 53.9,
+      "nonzeroErrors": 2410,
+      "state6Events": 2411,
+      "lastAction": "Monitor residuals and correlate with error codes"
+    },
+    {
+      "id": "INV 01.04.022",
+      "status": "Maintenance Required",
+      "availability": 70.2,
+      "energyMWh": 249.69,
+      "expectedMWh": 345.81,
+      "lossKWh": 103168.41,
+      "lossEUR": 7737.63,
+      "anomalyRate": 29.83,
+      "curtailmentKWh": 2047.17,
+      "downtimeKWh": 731.44,
+      "degradationKWh": 99997.78,
+      "unclassifiedKWh": 392.02,
+      "nonzeroErrors": 4307,
+      "state6Events": 4307,
+      "lastAction": "Dispatch technician and validate ticket impact"
+    },
+    {
+      "id": "INV 01.04.023",
+      "status": "Maintenance Required",
+      "availability": 70.5,
+      "energyMWh": 240.56,
+      "expectedMWh": 330.43,
+      "lossKWh": 97427.43,
+      "lossEUR": 7307.06,
+      "anomalyRate": 29.49,
+      "curtailmentKWh": 1997.81,
+      "downtimeKWh": 1418.24,
+      "degradationKWh": 93818.81,
+      "unclassifiedKWh": 192.58,
+      "nonzeroErrors": 3642,
+      "state6Events": 3642,
+      "lastAction": "Dispatch technician and validate ticket impact"
+    },
+    {
+      "id": "INV 01.04.024",
+      "status": "Watch",
+      "availability": 72.5,
+      "energyMWh": 233.68,
+      "expectedMWh": 310.69,
+      "lossKWh": 85430.91,
+      "lossEUR": 6407.32,
+      "anomalyRate": 27.5,
+      "curtailmentKWh": 1886.41,
+      "downtimeKWh": 692.26,
+      "degradationKWh": 82698.41,
+      "unclassifiedKWh": 153.84,
+      "nonzeroErrors": 2323,
+      "state6Events": 2323,
+      "lastAction": "Monitor residuals and correlate with error codes"
+    },
+    {
+      "id": "INV 01.04.025",
+      "status": "Healthy",
+      "availability": 72.0,
+      "energyMWh": 199.75,
+      "expectedMWh": 267.52,
+      "lossKWh": 74969.74,
+      "lossEUR": 5622.73,
+      "anomalyRate": 28.02,
+      "curtailmentKWh": 1801.51,
+      "downtimeKWh": 791.32,
+      "degradationKWh": 72365.82,
+      "unclassifiedKWh": 11.1,
+      "nonzeroErrors": 2435,
+      "state6Events": 2435,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.04.026",
+      "status": "Watch",
+      "availability": 71.5,
+      "energyMWh": 225.38,
+      "expectedMWh": 306.49,
+      "lossKWh": 87369.53,
+      "lossEUR": 6552.71,
+      "anomalyRate": 28.51,
+      "curtailmentKWh": 1947.87,
+      "downtimeKWh": 2830.08,
+      "degradationKWh": 82562.06,
+      "unclassifiedKWh": 29.51,
+      "nonzeroErrors": 5296,
+      "state6Events": 5296,
+      "lastAction": "Monitor residuals and correlate with error codes"
+    },
+    {
+      "id": "INV 01.04.027",
+      "status": "Watch",
+      "availability": 71.4,
+      "energyMWh": 226.31,
+      "expectedMWh": 307.04,
+      "lossKWh": 87954.55,
+      "lossEUR": 6596.59,
+      "anomalyRate": 28.65,
+      "curtailmentKWh": 1942.89,
+      "downtimeKWh": 869.76,
+      "degradationKWh": 85096.61,
+      "unclassifiedKWh": 45.3,
+      "nonzeroErrors": 2790,
+      "state6Events": 2789,
+      "lastAction": "Monitor residuals and correlate with error codes"
+    },
+    {
+      "id": "INV 01.04.028",
+      "status": "Healthy",
+      "availability": 73.9,
+      "energyMWh": 238.82,
+      "expectedMWh": 311.71,
+      "lossKWh": 81386.06,
+      "lossEUR": 6103.95,
+      "anomalyRate": 26.11,
+      "curtailmentKWh": 1949.07,
+      "downtimeKWh": 724.66,
+      "degradationKWh": 78683.49,
+      "unclassifiedKWh": 28.84,
+      "nonzeroErrors": 2312,
+      "state6Events": 2311,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.05.029",
+      "status": "Watch",
+      "availability": 72.4,
+      "energyMWh": 235.59,
+      "expectedMWh": 314.8,
+      "lossKWh": 86815.99,
+      "lossEUR": 6511.2,
+      "anomalyRate": 27.58,
+      "curtailmentKWh": 1945.19,
+      "downtimeKWh": 2415.43,
+      "degradationKWh": 82288.12,
+      "unclassifiedKWh": 167.26,
+      "nonzeroErrors": 4768,
+      "state6Events": 4798,
+      "lastAction": "Monitor residuals and correlate with error codes"
+    },
+    {
+      "id": "INV 01.05.030",
+      "status": "Watch",
+      "availability": 69.0,
+      "energyMWh": 221.55,
+      "expectedMWh": 311.89,
+      "lossKWh": 96822.27,
+      "lossEUR": 7261.67,
+      "anomalyRate": 31.04,
+      "curtailmentKWh": 1973.21,
+      "downtimeKWh": 744.72,
+      "degradationKWh": 94044.86,
+      "unclassifiedKWh": 59.48,
+      "nonzeroErrors": 2630,
+      "state6Events": 2631,
+      "lastAction": "Monitor residuals and correlate with error codes"
+    },
+    {
+      "id": "INV 01.05.031",
+      "status": "Watch",
+      "availability": 72.4,
+      "energyMWh": 228.14,
+      "expectedMWh": 304.13,
+      "lossKWh": 83923.72,
+      "lossEUR": 6294.28,
+      "anomalyRate": 27.59,
+      "curtailmentKWh": 1915.99,
+      "downtimeKWh": 694.51,
+      "degradationKWh": 81281.93,
+      "unclassifiedKWh": 31.3,
+      "nonzeroErrors": 2439,
+      "state6Events": 2440,
+      "lastAction": "Monitor residuals and correlate with error codes"
+    },
+    {
+      "id": "INV 01.05.032",
+      "status": "Healthy",
+      "availability": 69.3,
+      "energyMWh": 170.84,
+      "expectedMWh": 238.01,
+      "lossKWh": 73145.37,
+      "lossEUR": 5485.9,
+      "anomalyRate": 30.73,
+      "curtailmentKWh": 1465.49,
+      "downtimeKWh": 2186.61,
+      "degradationKWh": 69442.89,
+      "unclassifiedKWh": 50.38,
+      "nonzeroErrors": 5251,
+      "state6Events": 5252,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.05.033",
+      "status": "Watch",
+      "availability": 69.0,
+      "energyMWh": 224.83,
+      "expectedMWh": 313.83,
+      "lossKWh": 97207.63,
+      "lossEUR": 7290.57,
+      "anomalyRate": 30.97,
+      "curtailmentKWh": 1899.77,
+      "downtimeKWh": 2659.31,
+      "degradationKWh": 92422.8,
+      "unclassifiedKWh": 225.76,
+      "nonzeroErrors": 5227,
+      "state6Events": 5226,
+      "lastAction": "Monitor residuals and correlate with error codes"
+    },
+    {
+      "id": "INV 01.05.034",
+      "status": "Maintenance Required",
+      "availability": 70.4,
+      "energyMWh": 254.31,
+      "expectedMWh": 347.05,
+      "lossKWh": 102859.37,
+      "lossEUR": 7714.45,
+      "anomalyRate": 29.64,
+      "curtailmentKWh": 2059.42,
+      "downtimeKWh": 737.72,
+      "degradationKWh": 99643.81,
+      "unclassifiedKWh": 418.43,
+      "nonzeroErrors": 2336,
+      "state6Events": 2336,
+      "lastAction": "Dispatch technician and validate ticket impact"
+    },
+    {
+      "id": "INV 01.05.035",
+      "status": "Maintenance Required",
+      "availability": 68.8,
+      "energyMWh": 226.87,
+      "expectedMWh": 315.89,
+      "lossKWh": 98572.53,
+      "lossEUR": 7392.94,
+      "anomalyRate": 31.2,
+      "curtailmentKWh": 1942.76,
+      "downtimeKWh": 708.97,
+      "degradationKWh": 95885.68,
+      "unclassifiedKWh": 35.12,
+      "nonzeroErrors": 2386,
+      "state6Events": 2387,
+      "lastAction": "Dispatch technician and validate ticket impact"
+    },
+    {
+      "id": "INV 01.06.036",
+      "status": "Healthy",
+      "availability": 76.9,
+      "energyMWh": 270.75,
+      "expectedMWh": 345.37,
+      "lossKWh": 79694.28,
+      "lossEUR": 5977.07,
+      "anomalyRate": 23.07,
+      "curtailmentKWh": 2174.61,
+      "downtimeKWh": 7188.01,
+      "degradationKWh": 69887.28,
+      "unclassifiedKWh": 444.38,
+      "nonzeroErrors": 16107,
+      "state6Events": 16136,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.06.037",
+      "status": "Healthy",
+      "availability": 78.6,
+      "energyMWh": 258.82,
+      "expectedMWh": 322.82,
+      "lossKWh": 69017.77,
+      "lossEUR": 5176.33,
+      "anomalyRate": 21.38,
+      "curtailmentKWh": 2110.64,
+      "downtimeKWh": 1760.14,
+      "degradationKWh": 65048.71,
+      "unclassifiedKWh": 98.28,
+      "nonzeroErrors": 17581,
+      "state6Events": 17725,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.06.038",
+      "status": "Healthy",
+      "availability": 81.2,
+      "energyMWh": 251.93,
+      "expectedMWh": 303.54,
+      "lossKWh": 57132.43,
+      "lossEUR": 4284.93,
+      "anomalyRate": 18.82,
+      "curtailmentKWh": 2000.73,
+      "downtimeKWh": 855.01,
+      "degradationKWh": 54258.21,
+      "unclassifiedKWh": 18.49,
+      "nonzeroErrors": 2929,
+      "state6Events": 2972,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.06.039",
+      "status": "Healthy",
+      "availability": 80.0,
+      "energyMWh": 222.46,
+      "expectedMWh": 270.77,
+      "lossKWh": 54097.09,
+      "lossEUR": 4057.28,
+      "anomalyRate": 19.98,
+      "curtailmentKWh": 1928.96,
+      "downtimeKWh": 910.32,
+      "degradationKWh": 51242.81,
+      "unclassifiedKWh": 15.01,
+      "nonzeroErrors": 3222,
+      "state6Events": 3264,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.06.040",
+      "status": "Healthy",
+      "availability": 77.3,
+      "energyMWh": 275.84,
+      "expectedMWh": 349.35,
+      "lossKWh": 79177.89,
+      "lossEUR": 5938.34,
+      "anomalyRate": 22.66,
+      "curtailmentKWh": 2215.64,
+      "downtimeKWh": 925.36,
+      "degradationKWh": 75652.65,
+      "unclassifiedKWh": 384.24,
+      "nonzeroErrors": 2802,
+      "state6Events": 2799,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.06.041",
+      "status": "Healthy",
+      "availability": 81.2,
+      "energyMWh": 274.81,
+      "expectedMWh": 331.06,
+      "lossKWh": 62377.57,
+      "lossEUR": 4678.32,
+      "anomalyRate": 18.84,
+      "curtailmentKWh": 2139.35,
+      "downtimeKWh": 905.64,
+      "degradationKWh": 59244.58,
+      "unclassifiedKWh": 88.01,
+      "nonzeroErrors": 3145,
+      "state6Events": 3171,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.06.042",
+      "status": "Healthy",
+      "availability": 80.6,
+      "energyMWh": 246.79,
+      "expectedMWh": 299.13,
+      "lossKWh": 57927.32,
+      "lossEUR": 4344.55,
+      "anomalyRate": 19.37,
+      "curtailmentKWh": 1993.85,
+      "downtimeKWh": 860.0,
+      "degradationKWh": 55061.04,
+      "unclassifiedKWh": 12.43,
+      "nonzeroErrors": 2783,
+      "state6Events": 2782,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.06.043",
+      "status": "Healthy",
+      "availability": 80.0,
+      "energyMWh": 223.48,
+      "expectedMWh": 270.71,
+      "lossKWh": 54243.56,
+      "lossEUR": 4068.27,
+      "anomalyRate": 20.04,
+      "curtailmentKWh": 1935.6,
+      "downtimeKWh": 821.17,
+      "degradationKWh": 51460.16,
+      "unclassifiedKWh": 26.62,
+      "nonzeroErrors": 2854,
+      "state6Events": 2874,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.07.044",
+      "status": "Healthy",
+      "availability": 77.1,
+      "energyMWh": 273.69,
+      "expectedMWh": 346.4,
+      "lossKWh": 79257.1,
+      "lossEUR": 5944.28,
+      "anomalyRate": 22.88,
+      "curtailmentKWh": 2138.19,
+      "downtimeKWh": 907.42,
+      "degradationKWh": 75838.23,
+      "unclassifiedKWh": 373.25,
+      "nonzeroErrors": 4945,
+      "state6Events": 4941,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.07.045",
+      "status": "Watch",
+      "availability": 73.1,
+      "energyMWh": 245.61,
+      "expectedMWh": 328.56,
+      "lossKWh": 88354.71,
+      "lossEUR": 6626.6,
+      "anomalyRate": 26.89,
+      "curtailmentKWh": 2105.29,
+      "downtimeKWh": 876.79,
+      "degradationKWh": 85209.0,
+      "unclassifiedKWh": 163.63,
+      "nonzeroErrors": 2764,
+      "state6Events": 2764,
+      "lastAction": "Monitor residuals and correlate with error codes"
+    },
+    {
+      "id": "INV 01.07.046",
+      "status": "Healthy",
+      "availability": 78.1,
+      "energyMWh": 247.66,
+      "expectedMWh": 308.97,
+      "lossKWh": 67747.59,
+      "lossEUR": 5081.07,
+      "anomalyRate": 21.93,
+      "curtailmentKWh": 1988.24,
+      "downtimeKWh": 1002.42,
+      "degradationKWh": 64719.11,
+      "unclassifiedKWh": 37.81,
+      "nonzeroErrors": 3177,
+      "state6Events": 3182,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.07.047",
+      "status": "Healthy",
+      "availability": 75.7,
+      "energyMWh": 208.37,
+      "expectedMWh": 267.28,
+      "lossKWh": 65072.59,
+      "lossEUR": 4880.44,
+      "anomalyRate": 24.35,
+      "curtailmentKWh": 1879.05,
+      "downtimeKWh": 788.73,
+      "degradationKWh": 62395.09,
+      "unclassifiedKWh": 9.72,
+      "nonzeroErrors": 3275,
+      "state6Events": 3274,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.07.048",
+      "status": "Healthy",
+      "availability": 76.5,
+      "energyMWh": 275.03,
+      "expectedMWh": 349.87,
+      "lossKWh": 82224.58,
+      "lossEUR": 6166.84,
+      "anomalyRate": 23.5,
+      "curtailmentKWh": 2144.86,
+      "downtimeKWh": 1020.18,
+      "degradationKWh": 78610.09,
+      "unclassifiedKWh": 449.45,
+      "nonzeroErrors": 3283,
+      "state6Events": 3115,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.07.049",
+      "status": "Healthy",
+      "availability": 81.3,
+      "energyMWh": 277.67,
+      "expectedMWh": 332.43,
+      "lossKWh": 62239.19,
+      "lossEUR": 4667.94,
+      "anomalyRate": 18.72,
+      "curtailmentKWh": 2114.86,
+      "downtimeKWh": 902.8,
+      "degradationKWh": 58937.22,
+      "unclassifiedKWh": 284.31,
+      "nonzeroErrors": 3650,
+      "state6Events": 3649,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.07.050",
+      "status": "Healthy",
+      "availability": 79.8,
+      "energyMWh": 255.05,
+      "expectedMWh": 310.48,
+      "lossKWh": 62757.06,
+      "lossEUR": 4706.78,
+      "anomalyRate": 20.21,
+      "curtailmentKWh": 1986.15,
+      "downtimeKWh": 937.26,
+      "degradationKWh": 59645.53,
+      "unclassifiedKWh": 188.12,
+      "nonzeroErrors": 2972,
+      "state6Events": 2972,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.07.051",
+      "status": "Healthy",
+      "availability": 80.1,
+      "energyMWh": 228.31,
+      "expectedMWh": 275.05,
+      "lossKWh": 54618.74,
+      "lossEUR": 4096.41,
+      "anomalyRate": 19.86,
+      "curtailmentKWh": 1915.14,
+      "downtimeKWh": 821.09,
+      "degradationKWh": 51848.37,
+      "unclassifiedKWh": 34.15,
+      "nonzeroErrors": 2813,
+      "state6Events": 2814,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.08.052",
+      "status": "Healthy",
+      "availability": 78.1,
+      "energyMWh": 243.77,
+      "expectedMWh": 304.63,
+      "lossKWh": 66569.63,
+      "lossEUR": 4992.72,
+      "anomalyRate": 21.85,
+      "curtailmentKWh": 1921.19,
+      "downtimeKWh": 785.21,
+      "degradationKWh": 63809.31,
+      "unclassifiedKWh": 53.91,
+      "nonzeroErrors": 2270,
+      "state6Events": 2271,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.08.053",
+      "status": "Healthy",
+      "availability": 74.4,
+      "energyMWh": 230.16,
+      "expectedMWh": 302.02,
+      "lossKWh": 77320.48,
+      "lossEUR": 5799.04,
+      "anomalyRate": 25.6,
+      "curtailmentKWh": 1905.94,
+      "downtimeKWh": 8255.72,
+      "degradationKWh": 67086.38,
+      "unclassifiedKWh": 72.44,
+      "nonzeroErrors": 17816,
+      "state6Events": 17815,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.08.054",
+      "status": "Watch",
+      "availability": 75.1,
+      "energyMWh": 268.55,
+      "expectedMWh": 348.45,
+      "lossKWh": 86849.07,
+      "lossEUR": 6513.68,
+      "anomalyRate": 24.92,
+      "curtailmentKWh": 2059.06,
+      "downtimeKWh": 831.55,
+      "degradationKWh": 83619.78,
+      "unclassifiedKWh": 338.68,
+      "nonzeroErrors": 2447,
+      "state6Events": 2447,
+      "lastAction": "Monitor residuals and correlate with error codes"
+    },
+    {
+      "id": "INV 01.08.055",
+      "status": "Healthy",
+      "availability": 75.4,
+      "energyMWh": 258.71,
+      "expectedMWh": 334.33,
+      "lossKWh": 82177.32,
+      "lossEUR": 6163.3,
+      "anomalyRate": 24.58,
+      "curtailmentKWh": 2023.9,
+      "downtimeKWh": 1646.56,
+      "degradationKWh": 78285.71,
+      "unclassifiedKWh": 221.15,
+      "nonzeroErrors": 4115,
+      "state6Events": 3931,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.08.056",
+      "status": "Healthy",
+      "availability": 76.4,
+      "energyMWh": 243.58,
+      "expectedMWh": 311.15,
+      "lossKWh": 73525.82,
+      "lossEUR": 5514.44,
+      "anomalyRate": 23.63,
+      "curtailmentKWh": 1921.61,
+      "downtimeKWh": 794.77,
+      "degradationKWh": 70675.79,
+      "unclassifiedKWh": 133.66,
+      "nonzeroErrors": 2272,
+      "state6Events": 2271,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.08.057",
+      "status": "Healthy",
+      "availability": 74.0,
+      "energyMWh": 204.77,
+      "expectedMWh": 268.28,
+      "lossKWh": 69814.35,
+      "lossEUR": 5236.08,
+      "anomalyRate": 26.02,
+      "curtailmentKWh": 1819.89,
+      "downtimeKWh": 8536.79,
+      "degradationKWh": 59443.72,
+      "unclassifiedKWh": 13.96,
+      "nonzeroErrors": 21640,
+      "state6Events": 21642,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.08.058",
+      "status": "Watch",
+      "availability": 69.0,
+      "energyMWh": 218.85,
+      "expectedMWh": 308.54,
+      "lossKWh": 95709.49,
+      "lossEUR": 7178.21,
+      "anomalyRate": 31.02,
+      "curtailmentKWh": 1991.5,
+      "downtimeKWh": 20815.55,
+      "degradationKWh": 72866.65,
+      "unclassifiedKWh": 35.79,
+      "nonzeroErrors": 48551,
+      "state6Events": 48549,
+      "lastAction": "Monitor residuals and correlate with error codes"
+    },
+    {
+      "id": "INV 01.08.059",
+      "status": "Healthy",
+      "availability": 76.6,
+      "energyMWh": 244.86,
+      "expectedMWh": 312.16,
+      "lossKWh": 73090.97,
+      "lossEUR": 5481.82,
+      "anomalyRate": 23.41,
+      "curtailmentKWh": 1955.05,
+      "downtimeKWh": 948.3,
+      "degradationKWh": 70082.12,
+      "unclassifiedKWh": 105.49,
+      "nonzeroErrors": 2920,
+      "state6Events": 2920,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.09.060",
+      "status": "Watch",
+      "availability": 72.1,
+      "energyMWh": 254.98,
+      "expectedMWh": 344.08,
+      "lossKWh": 96007.72,
+      "lossEUR": 7200.58,
+      "anomalyRate": 27.9,
+      "curtailmentKWh": 2035.63,
+      "downtimeKWh": 6758.4,
+      "degradationKWh": 86847.51,
+      "unclassifiedKWh": 366.18,
+      "nonzeroErrors": 14563,
+      "state6Events": 14564,
+      "lastAction": "Monitor residuals and correlate with error codes"
+    },
+    {
+      "id": "INV 01.09.061",
+      "status": "Healthy",
+      "availability": 74.4,
+      "energyMWh": 251.72,
+      "expectedMWh": 327.75,
+      "lossKWh": 83868.77,
+      "lossEUR": 6290.16,
+      "anomalyRate": 25.59,
+      "curtailmentKWh": 1986.03,
+      "downtimeKWh": 832.62,
+      "degradationKWh": 80851.05,
+      "unclassifiedKWh": 199.08,
+      "nonzeroErrors": 2290,
+      "state6Events": 2291,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.09.062",
+      "status": "Maintenance Required",
+      "availability": 67.5,
+      "energyMWh": 216.05,
+      "expectedMWh": 310.49,
+      "lossKWh": 100809.15,
+      "lossEUR": 7560.69,
+      "anomalyRate": 32.47,
+      "curtailmentKWh": 2023.58,
+      "downtimeKWh": 18528.13,
+      "degradationKWh": 80111.62,
+      "unclassifiedKWh": 145.82,
+      "nonzeroErrors": 46854,
+      "state6Events": 46773,
+      "lastAction": "Dispatch technician and validate ticket impact"
+    },
+    {
+      "id": "INV 01.09.063",
+      "status": "Healthy",
+      "availability": 77.9,
+      "energyMWh": 217.09,
+      "expectedMWh": 268.62,
+      "lossKWh": 59459.85,
+      "lossEUR": 4459.49,
+      "anomalyRate": 22.13,
+      "curtailmentKWh": 1794.45,
+      "downtimeKWh": 740.7,
+      "degradationKWh": 56911.57,
+      "unclassifiedKWh": 13.14,
+      "nonzeroErrors": 2108,
+      "state6Events": 2098,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.09.064",
+      "status": "Healthy",
+      "availability": 75.3,
+      "energyMWh": 259.69,
+      "expectedMWh": 335.55,
+      "lossKWh": 82977.61,
+      "lossEUR": 6223.32,
+      "anomalyRate": 24.73,
+      "curtailmentKWh": 2009.84,
+      "downtimeKWh": 852.77,
+      "degradationKWh": 79807.74,
+      "unclassifiedKWh": 307.25,
+      "nonzeroErrors": 2075,
+      "state6Events": 2155,
+      "lastAction": "No immediate action required"
+    },
+    {
+      "id": "INV 01.09.065",
+      "status": "Healthy",
+      "availability": 73.8,
+      "energyMWh": 219.08,
+      "expectedMWh": 287.99,
+      "lossKWh": 75457.17,
+      "lossEUR": 5659.29,
+      "anomalyRate": 26.2,
+      "curtailmentKWh": 1850.3,
+      "downtimeKWh": 1044.57,
+      "degradationKWh": 72531.58,
+      "unclassifiedKWh": 30.73,
+      "nonzeroErrors": 2921,
+      "state6Events": 2922,
+      "lastAction": "No immediate action required"
+    }
+  ],
+  "alerts": [
+    {
+      "inverter": "INV 01.03.015",
+      "severity": "Critical",
+      "title": "Maintenance required",
+      "message": "EUR 7,940 estimated loss, 105,866 kWh across 10 years.",
+      "action": "Dispatch technician and validate ticket impact",
+      "timestamp": "2026-06-01 21:55"
+    },
+    {
+      "inverter": "INV 01.03.016",
+      "severity": "Critical",
+      "title": "Maintenance required",
+      "message": "EUR 7,813 estimated loss, 104,179 kWh across 10 years.",
+      "action": "Dispatch technician and validate ticket impact",
+      "timestamp": "2022-08-30 09:45"
+    },
+    {
+      "inverter": "INV 01.02.008",
+      "severity": "Critical",
+      "title": "Maintenance required",
+      "message": "EUR 7,751 estimated loss, 103,348 kWh across 10 years.",
+      "action": "Dispatch technician and validate ticket impact",
+      "timestamp": "2025-05-05 08:35"
+    },
+    {
+      "inverter": "INV 01.04.022",
+      "severity": "Critical",
+      "title": "Maintenance required",
+      "message": "EUR 7,738 estimated loss, 103,168 kWh across 10 years.",
+      "action": "Dispatch technician and validate ticket impact",
+      "timestamp": "2026-06-01 21:55"
+    },
+    {
+      "inverter": "INV 01.05.034",
+      "severity": "Critical",
+      "title": "Maintenance required",
+      "message": "EUR 7,714 estimated loss, 102,859 kWh across 10 years.",
+      "action": "Dispatch technician and validate ticket impact",
+      "timestamp": "2026-06-01 21:55"
+    },
+    {
+      "inverter": "INV 01.09.062",
+      "severity": "Critical",
+      "title": "Maintenance required",
+      "message": "EUR 7,561 estimated loss, 100,809 kWh across 10 years.",
+      "action": "Dispatch technician and validate ticket impact",
+      "timestamp": "2024-04-23 09:00"
+    },
+    {
+      "inverter": "INV 01.05.035",
+      "severity": "Critical",
+      "title": "Maintenance required",
+      "message": "EUR 7,393 estimated loss, 98,573 kWh across 10 years.",
+      "action": "Dispatch technician and validate ticket impact",
+      "timestamp": "2026-06-01 21:55"
+    },
+    {
+      "inverter": "INV 01.04.023",
+      "severity": "Critical",
+      "title": "Maintenance required",
+      "message": "EUR 7,307 estimated loss, 97,427 kWh across 10 years.",
+      "action": "Dispatch technician and validate ticket impact",
+      "timestamp": "2025-08-23 10:45"
+    },
+    {
+      "inverter": "INV 01.05.033",
+      "severity": "Warning",
+      "title": "Performance watch",
+      "message": "EUR 7,291 estimated loss, 97,208 kWh across 10 years.",
+      "action": "Monitor residuals and correlate with error codes",
+      "timestamp": "2026-06-01 21:55"
+    },
+    {
+      "inverter": "INV 01.05.030",
+      "severity": "Warning",
+      "title": "Performance watch",
+      "message": "EUR 7,262 estimated loss, 96,822 kWh across 10 years.",
+      "action": "Monitor residuals and correlate with error codes",
+      "timestamp": "2026-06-01 21:55"
+    },
+    {
+      "inverter": "INV 01.02.012",
+      "severity": "Warning",
+      "title": "Performance watch",
+      "message": "EUR 7,247 estimated loss, 96,629 kWh across 10 years.",
+      "action": "Monitor residuals and correlate with error codes",
+      "timestamp": "2026-06-01 21:55"
+    },
+    {
+      "inverter": "INV 01.09.060",
+      "severity": "Warning",
+      "title": "Performance watch",
+      "message": "EUR 7,201 estimated loss, 96,008 kWh across 10 years.",
+      "action": "Monitor residuals and correlate with error codes",
+      "timestamp": "2025-09-08 09:50"
+    }
+  ],
+  "monthly": [
+    {
+      "month": "2016-12",
+      "energyMWh": 0,
+      "lossMWh": 0.07,
+      "lossEUR": 5.32,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2017-01",
+      "energyMWh": 0,
+      "lossMWh": 9.01,
+      "lossEUR": 676.06,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2017-02",
+      "energyMWh": 0,
+      "lossMWh": 30.25,
+      "lossEUR": 2268.92,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2017-03",
+      "energyMWh": 0,
+      "lossMWh": 32.97,
+      "lossEUR": 2472.53,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2017-04",
+      "energyMWh": 0,
+      "lossMWh": 32.01,
+      "lossEUR": 2400.69,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2017-05",
+      "energyMWh": 0,
+      "lossMWh": 32.08,
+      "lossEUR": 2405.68,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2017-06",
+      "energyMWh": 0,
+      "lossMWh": 36.14,
+      "lossEUR": 2710.21,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2017-07",
+      "energyMWh": 0,
+      "lossMWh": 32.65,
+      "lossEUR": 2448.67,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2017-08",
+      "energyMWh": 0,
+      "lossMWh": 31.37,
+      "lossEUR": 2352.41,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2017-09",
+      "energyMWh": 0,
+      "lossMWh": 33.55,
+      "lossEUR": 2516.21,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2017-10",
+      "energyMWh": 0,
+      "lossMWh": 29.68,
+      "lossEUR": 2226.27,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2017-11",
+      "energyMWh": 0,
+      "lossMWh": 30.39,
+      "lossEUR": 2279.56,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2017-12",
+      "energyMWh": 0,
+      "lossMWh": 24.52,
+      "lossEUR": 1839.26,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2018-01",
+      "energyMWh": 0,
+      "lossMWh": 17.5,
+      "lossEUR": 1312.4,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2018-02",
+      "energyMWh": 0,
+      "lossMWh": 29.24,
+      "lossEUR": 2193.15,
+      "anomalyEvents": 1
+    },
+    {
+      "month": "2018-03",
+      "energyMWh": 0,
+      "lossMWh": 41.35,
+      "lossEUR": 3101.49,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2018-04",
+      "energyMWh": 0,
+      "lossMWh": 34.64,
+      "lossEUR": 2598.21,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2018-05",
+      "energyMWh": 0,
+      "lossMWh": 42.02,
+      "lossEUR": 3151.56,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2018-06",
+      "energyMWh": 0,
+      "lossMWh": 37.24,
+      "lossEUR": 2793.09,
+      "anomalyEvents": 8
+    },
+    {
+      "month": "2018-07",
+      "energyMWh": 0,
+      "lossMWh": 38.09,
+      "lossEUR": 2856.72,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2018-08",
+      "energyMWh": 0,
+      "lossMWh": 58.06,
+      "lossEUR": 4354.15,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2018-09",
+      "energyMWh": 0,
+      "lossMWh": 53.47,
+      "lossEUR": 4010.07,
+      "anomalyEvents": 1
+    },
+    {
+      "month": "2018-10",
+      "energyMWh": 0,
+      "lossMWh": 60.6,
+      "lossEUR": 4545.26,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2018-11",
+      "energyMWh": 0,
+      "lossMWh": 49.19,
+      "lossEUR": 3689.34,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2018-12",
+      "energyMWh": 0,
+      "lossMWh": 33.92,
+      "lossEUR": 2543.67,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2019-01",
+      "energyMWh": 0,
+      "lossMWh": 13.47,
+      "lossEUR": 1009.96,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2019-02",
+      "energyMWh": 0,
+      "lossMWh": 35.83,
+      "lossEUR": 2686.93,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2019-03",
+      "energyMWh": 0,
+      "lossMWh": 37.88,
+      "lossEUR": 2841.3,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2019-04",
+      "energyMWh": 0,
+      "lossMWh": 32.08,
+      "lossEUR": 2406.15,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2019-05",
+      "energyMWh": 0,
+      "lossMWh": 39.34,
+      "lossEUR": 2950.24,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2019-06",
+      "energyMWh": 0,
+      "lossMWh": 39.17,
+      "lossEUR": 2937.4,
+      "anomalyEvents": 22
+    },
+    {
+      "month": "2019-07",
+      "energyMWh": 0,
+      "lossMWh": 86.86,
+      "lossEUR": 6514.31,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2019-08",
+      "energyMWh": 0,
+      "lossMWh": 104.13,
+      "lossEUR": 7809.69,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2019-09",
+      "energyMWh": 0,
+      "lossMWh": 86.89,
+      "lossEUR": 6516.53,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2019-10",
+      "energyMWh": 0,
+      "lossMWh": 69.4,
+      "lossEUR": 5205.11,
+      "anomalyEvents": 1
+    },
+    {
+      "month": "2019-11",
+      "energyMWh": 0,
+      "lossMWh": 43.89,
+      "lossEUR": 3291.97,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2019-12",
+      "energyMWh": 0,
+      "lossMWh": 25.56,
+      "lossEUR": 1916.88,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2020-01",
+      "energyMWh": 0,
+      "lossMWh": 14.18,
+      "lossEUR": 1063.52,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2020-02",
+      "energyMWh": 0,
+      "lossMWh": 31.78,
+      "lossEUR": 2383.76,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2020-03",
+      "energyMWh": 0,
+      "lossMWh": 37.18,
+      "lossEUR": 2788.14,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2020-04",
+      "energyMWh": 0,
+      "lossMWh": 30.44,
+      "lossEUR": 2282.93,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2020-05",
+      "energyMWh": 0,
+      "lossMWh": 43.31,
+      "lossEUR": 3247.96,
+      "anomalyEvents": 45
+    },
+    {
+      "month": "2020-06",
+      "energyMWh": 0,
+      "lossMWh": 30.52,
+      "lossEUR": 2288.71,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2020-07",
+      "energyMWh": 0,
+      "lossMWh": 33.71,
+      "lossEUR": 2527.99,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2020-08",
+      "energyMWh": 0,
+      "lossMWh": 51.61,
+      "lossEUR": 3870.99,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2020-09",
+      "energyMWh": 0,
+      "lossMWh": 34.85,
+      "lossEUR": 2613.74,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2020-10",
+      "energyMWh": 0,
+      "lossMWh": 35.33,
+      "lossEUR": 2649.57,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2020-11",
+      "energyMWh": 0,
+      "lossMWh": 31.84,
+      "lossEUR": 2388.07,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2020-12",
+      "energyMWh": 0,
+      "lossMWh": 23.84,
+      "lossEUR": 1787.97,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2021-01",
+      "energyMWh": 0,
+      "lossMWh": 10.68,
+      "lossEUR": 801.26,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2021-02",
+      "energyMWh": 0,
+      "lossMWh": 40.76,
+      "lossEUR": 3057.14,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2021-03",
+      "energyMWh": 0,
+      "lossMWh": 47.22,
+      "lossEUR": 3541.18,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2021-04",
+      "energyMWh": 0,
+      "lossMWh": 53.12,
+      "lossEUR": 3984.03,
+      "anomalyEvents": 31
+    },
+    {
+      "month": "2021-05",
+      "energyMWh": 0,
+      "lossMWh": 102.66,
+      "lossEUR": 7699.55,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2021-06",
+      "energyMWh": 0,
+      "lossMWh": 56.13,
+      "lossEUR": 4210.04,
+      "anomalyEvents": 1
+    },
+    {
+      "month": "2021-07",
+      "energyMWh": 0,
+      "lossMWh": 62.45,
+      "lossEUR": 4683.85,
+      "anomalyEvents": 1
+    },
+    {
+      "month": "2021-08",
+      "energyMWh": 0,
+      "lossMWh": 38.06,
+      "lossEUR": 2854.13,
+      "anomalyEvents": 1
+    },
+    {
+      "month": "2021-09",
+      "energyMWh": 0,
+      "lossMWh": 42.67,
+      "lossEUR": 3200.29,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2021-10",
+      "energyMWh": 0,
+      "lossMWh": 35.23,
+      "lossEUR": 2642.11,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2021-11",
+      "energyMWh": 0,
+      "lossMWh": 31.59,
+      "lossEUR": 2369.04,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2021-12",
+      "energyMWh": 0,
+      "lossMWh": 27.12,
+      "lossEUR": 2033.72,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2022-01",
+      "energyMWh": 0,
+      "lossMWh": 20.13,
+      "lossEUR": 1509.96,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2022-02",
+      "energyMWh": 0,
+      "lossMWh": 32.19,
+      "lossEUR": 2414.58,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2022-03",
+      "energyMWh": 0,
+      "lossMWh": 44.65,
+      "lossEUR": 3348.99,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2022-04",
+      "energyMWh": 0,
+      "lossMWh": 50.94,
+      "lossEUR": 3820.5,
+      "anomalyEvents": 6
+    },
+    {
+      "month": "2022-05",
+      "energyMWh": 0,
+      "lossMWh": 48.48,
+      "lossEUR": 3636.08,
+      "anomalyEvents": 1
+    },
+    {
+      "month": "2022-06",
+      "energyMWh": 0,
+      "lossMWh": 54.02,
+      "lossEUR": 4051.28,
+      "anomalyEvents": 30
+    },
+    {
+      "month": "2022-07",
+      "energyMWh": 0,
+      "lossMWh": 62.91,
+      "lossEUR": 4718.54,
+      "anomalyEvents": 21
+    },
+    {
+      "month": "2022-08",
+      "energyMWh": 0,
+      "lossMWh": 75.93,
+      "lossEUR": 5694.71,
+      "anomalyEvents": 23
+    },
+    {
+      "month": "2022-09",
+      "energyMWh": 0,
+      "lossMWh": 53.37,
+      "lossEUR": 4002.98,
+      "anomalyEvents": 4
+    },
+    {
+      "month": "2022-10",
+      "energyMWh": 0,
+      "lossMWh": 46.98,
+      "lossEUR": 3523.19,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2022-11",
+      "energyMWh": 0,
+      "lossMWh": 37.08,
+      "lossEUR": 2781.32,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2022-12",
+      "energyMWh": 0,
+      "lossMWh": 29.88,
+      "lossEUR": 2240.75,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2023-01",
+      "energyMWh": 0,
+      "lossMWh": 20.5,
+      "lossEUR": 1537.43,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2023-02",
+      "energyMWh": 0,
+      "lossMWh": 36.89,
+      "lossEUR": 2766.45,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2023-03",
+      "energyMWh": 0,
+      "lossMWh": 41.42,
+      "lossEUR": 3106.53,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2023-04",
+      "energyMWh": 0,
+      "lossMWh": 45.18,
+      "lossEUR": 3388.68,
+      "anomalyEvents": 14
+    },
+    {
+      "month": "2023-05",
+      "energyMWh": 0,
+      "lossMWh": 55.4,
+      "lossEUR": 4154.92,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2023-06",
+      "energyMWh": 0,
+      "lossMWh": 82.39,
+      "lossEUR": 6179.47,
+      "anomalyEvents": 13
+    },
+    {
+      "month": "2023-07",
+      "energyMWh": 0,
+      "lossMWh": 62.4,
+      "lossEUR": 4679.93,
+      "anomalyEvents": 3
+    },
+    {
+      "month": "2023-08",
+      "energyMWh": 0,
+      "lossMWh": 63.27,
+      "lossEUR": 4745.12,
+      "anomalyEvents": 1
+    },
+    {
+      "month": "2023-09",
+      "energyMWh": 0,
+      "lossMWh": 58.03,
+      "lossEUR": 4352.09,
+      "anomalyEvents": 2
+    },
+    {
+      "month": "2023-10",
+      "energyMWh": 0,
+      "lossMWh": 42.52,
+      "lossEUR": 3188.89,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2023-11",
+      "energyMWh": 0,
+      "lossMWh": 33.53,
+      "lossEUR": 2514.63,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2023-12",
+      "energyMWh": 0,
+      "lossMWh": 31.3,
+      "lossEUR": 2347.4,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2024-01",
+      "energyMWh": 0,
+      "lossMWh": 12.34,
+      "lossEUR": 925.32,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2024-02",
+      "energyMWh": 0,
+      "lossMWh": 33.73,
+      "lossEUR": 2529.79,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2024-03",
+      "energyMWh": 0,
+      "lossMWh": 54.86,
+      "lossEUR": 4114.33,
+      "anomalyEvents": 2
+    },
+    {
+      "month": "2024-04",
+      "energyMWh": 0,
+      "lossMWh": 74.41,
+      "lossEUR": 5580.51,
+      "anomalyEvents": 48
+    },
+    {
+      "month": "2024-05",
+      "energyMWh": 0,
+      "lossMWh": 67.85,
+      "lossEUR": 5088.87,
+      "anomalyEvents": 9
+    },
+    {
+      "month": "2024-06",
+      "energyMWh": 0,
+      "lossMWh": 43.66,
+      "lossEUR": 3274.61,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2024-07",
+      "energyMWh": 0,
+      "lossMWh": 48.98,
+      "lossEUR": 3673.24,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2024-08",
+      "energyMWh": 0,
+      "lossMWh": 49.01,
+      "lossEUR": 3676.1,
+      "anomalyEvents": 4
+    },
+    {
+      "month": "2024-09",
+      "energyMWh": 0,
+      "lossMWh": 42.99,
+      "lossEUR": 3223.94,
+      "anomalyEvents": 1
+    },
+    {
+      "month": "2024-10",
+      "energyMWh": 0,
+      "lossMWh": 39.09,
+      "lossEUR": 2931.9,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2024-11",
+      "energyMWh": 0,
+      "lossMWh": 33.55,
+      "lossEUR": 2516.25,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2024-12",
+      "energyMWh": 0,
+      "lossMWh": 24.54,
+      "lossEUR": 1840.55,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2025-01",
+      "energyMWh": 0,
+      "lossMWh": 12.64,
+      "lossEUR": 948.32,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2025-02",
+      "energyMWh": 0,
+      "lossMWh": 38.18,
+      "lossEUR": 2863.56,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2025-03",
+      "energyMWh": 0,
+      "lossMWh": 49.31,
+      "lossEUR": 3698.39,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2025-04",
+      "energyMWh": 0,
+      "lossMWh": 65.84,
+      "lossEUR": 4938.16,
+      "anomalyEvents": 14
+    },
+    {
+      "month": "2025-05",
+      "energyMWh": 0,
+      "lossMWh": 72.94,
+      "lossEUR": 5470.57,
+      "anomalyEvents": 18
+    },
+    {
+      "month": "2025-06",
+      "energyMWh": 0,
+      "lossMWh": 85.69,
+      "lossEUR": 6427.08,
+      "anomalyEvents": 37
+    },
+    {
+      "month": "2025-07",
+      "energyMWh": 0,
+      "lossMWh": 128.98,
+      "lossEUR": 9673.39,
+      "anomalyEvents": 3
+    },
+    {
+      "month": "2025-08",
+      "energyMWh": 0,
+      "lossMWh": 99.74,
+      "lossEUR": 7480.4,
+      "anomalyEvents": 27
+    },
+    {
+      "month": "2025-09",
+      "energyMWh": 0,
+      "lossMWh": 90.28,
+      "lossEUR": 6771.3,
+      "anomalyEvents": 23
+    },
+    {
+      "month": "2025-10",
+      "energyMWh": 0,
+      "lossMWh": 45.67,
+      "lossEUR": 3425.47,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2025-11",
+      "energyMWh": 0,
+      "lossMWh": 38.03,
+      "lossEUR": 2852.03,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2025-12",
+      "energyMWh": 0,
+      "lossMWh": 20.93,
+      "lossEUR": 1569.75,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2026-01",
+      "energyMWh": 0,
+      "lossMWh": 12.94,
+      "lossEUR": 970.62,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2026-02",
+      "energyMWh": 0,
+      "lossMWh": 48.26,
+      "lossEUR": 3619.55,
+      "anomalyEvents": 0
+    },
+    {
+      "month": "2026-03",
+      "energyMWh": 0,
+      "lossMWh": 87.36,
+      "lossEUR": 6551.81,
+      "anomalyEvents": 7
+    },
+    {
+      "month": "2026-04",
+      "energyMWh": 0,
+      "lossMWh": 116.34,
+      "lossEUR": 8725.8,
+      "anomalyEvents": 37
+    },
+    {
+      "month": "2026-05",
+      "energyMWh": 0,
+      "lossMWh": 98.86,
+      "lossEUR": 7414.56,
+      "anomalyEvents": 28
+    },
+    {
+      "month": "2026-06",
+      "energyMWh": 0,
+      "lossMWh": 3.87,
+      "lossEUR": 289.92,
+      "anomalyEvents": 12
+    }
+  ],
+  "demoTimeline": [
+    {
+      "timestamp": "2018-02-24 10:40",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.06.041"
+      ]
+    },
+    {
+      "timestamp": "2018-06-08 09:35",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.01.006"
+      ]
+    },
+    {
+      "timestamp": "2018-06-08 09:55",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.01.006"
+      ]
+    },
+    {
+      "timestamp": "2019-06-02 10:30",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.09.061"
+      ]
+    },
+    {
+      "timestamp": "2019-06-14 11:05",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.09.061"
+      ]
+    },
+    {
+      "timestamp": "2019-06-14 11:35",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.09.061"
+      ]
+    },
+    {
+      "timestamp": "2019-06-18 11:00",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.09.061"
+      ]
+    },
+    {
+      "timestamp": "2019-06-20 11:25",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.09.061"
+      ]
+    },
+    {
+      "timestamp": "2019-10-01 09:25",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.03.016"
+      ]
+    },
+    {
+      "timestamp": "2020-05-08 10:30",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.08.056",
+        "INV 01.08.055",
+        "INV 01.09.060",
+        "INV 01.08.058",
+        "INV 01.08.054",
+        "INV 01.08.059"
+      ]
+    },
+    {
+      "timestamp": "2020-05-08 11:30",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.08.056"
+      ]
+    },
+    {
+      "timestamp": "2020-05-08 11:55",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.08.056",
+        "INV 01.09.060",
+        "INV 01.08.055",
+        "INV 01.08.054"
+      ]
+    },
+    {
+      "timestamp": "2021-04-07 13:30",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.04.027"
+      ]
+    },
+    {
+      "timestamp": "2021-04-21 10:10",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.09.060",
+        "INV 01.08.059"
+      ]
+    },
+    {
+      "timestamp": "2021-07-04 09:35",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.01.006"
+      ]
+    },
+    {
+      "timestamp": "2022-05-07 09:45",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.03.016"
+      ]
+    },
+    {
+      "timestamp": "2022-06-11 09:00",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.02.010",
+        "INV 01.01.004",
+        "INV 01.01.003"
+      ]
+    },
+    {
+      "timestamp": "2022-06-12 09:50",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.02.010",
+        "INV 01.01.006",
+        "INV 01.02.013",
+        "INV 01.01.001",
+        "INV 01.01.002"
+      ]
+    },
+    {
+      "timestamp": "2022-06-15 11:00",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.08.055"
+      ]
+    },
+    {
+      "timestamp": "2022-07-04 10:30",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.01.003"
+      ]
+    },
+    {
+      "timestamp": "2022-07-04 10:50",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.01.003"
+      ]
+    },
+    {
+      "timestamp": "2022-07-05 09:55",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.01.003"
+      ]
+    },
+    {
+      "timestamp": "2022-07-21 09:45",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.01.006",
+        "INV 01.02.008"
+      ]
+    },
+    {
+      "timestamp": "2022-07-25 11:20",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.06.040"
+      ]
+    },
+    {
+      "timestamp": "2022-08-03 11:15",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.06.040"
+      ]
+    },
+    {
+      "timestamp": "2022-08-03 11:45",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.06.040"
+      ]
+    },
+    {
+      "timestamp": "2022-08-07 11:20",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.06.041"
+      ]
+    },
+    {
+      "timestamp": "2022-08-07 11:45",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.06.041"
+      ]
+    },
+    {
+      "timestamp": "2022-08-30 09:40",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.03.016"
+      ]
+    },
+    {
+      "timestamp": "2022-09-17 11:25",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.06.040",
+        "INV 01.08.052"
+      ]
+    },
+    {
+      "timestamp": "2023-04-10 11:30",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.06.041"
+      ]
+    },
+    {
+      "timestamp": "2023-06-08 09:55",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.01.002"
+      ]
+    },
+    {
+      "timestamp": "2023-06-11 12:05",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.06.041",
+        "INV 01.06.038",
+        "INV 01.06.042"
+      ]
+    },
+    {
+      "timestamp": "2023-06-29 10:20",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.01.003"
+      ]
+    },
+    {
+      "timestamp": "2023-09-15 10:40",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.09.062"
+      ]
+    },
+    {
+      "timestamp": "2024-04-07 09:55",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.06.040",
+        "INV 01.06.041",
+        "INV 01.01.002",
+        "INV 01.02.009",
+        "INV 01.06.037",
+        "INV 01.06.036",
+        "INV 01.06.042",
+        "INV 01.01.006"
+      ]
+    },
+    {
+      "timestamp": "2024-04-14 11:45",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.06.041",
+        "INV 01.06.039",
+        "INV 01.08.056",
+        "INV 01.07.046",
+        "INV 01.07.044",
+        "INV 01.07.047",
+        "INV 01.07.045"
+      ]
+    },
+    {
+      "timestamp": "2024-04-23 09:00",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.09.062"
+      ]
+    },
+    {
+      "timestamp": "2024-05-11 12:10",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.06.038",
+        "INV 01.06.039"
+      ]
+    },
+    {
+      "timestamp": "2024-08-22 10:35",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.06.037"
+      ]
+    },
+    {
+      "timestamp": "2024-09-10 11:45",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.03.020"
+      ]
+    },
+    {
+      "timestamp": "2025-04-22 10:45",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.08.058"
+      ]
+    },
+    {
+      "timestamp": "2025-04-28 10:20",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.08.055"
+      ]
+    },
+    {
+      "timestamp": "2025-04-28 11:00",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.08.058"
+      ]
+    },
+    {
+      "timestamp": "2025-05-05 08:50",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.01.003",
+        "INV 01.02.010",
+        "INV 01.02.013"
+      ]
+    },
+    {
+      "timestamp": "2025-06-01 12:10",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.01.006"
+      ]
+    },
+    {
+      "timestamp": "2025-06-15 09:55",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.01.006",
+        "INV 01.01.001"
+      ]
+    },
+    {
+      "timestamp": "2025-06-15 11:10",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.01.002",
+        "INV 01.04.028"
+      ]
+    },
+    {
+      "timestamp": "2025-06-15 11:30",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.01.002"
+      ]
+    },
+    {
+      "timestamp": "2025-06-18 10:50",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.06.038"
+      ]
+    },
+    {
+      "timestamp": "2025-06-22 09:55",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.01.006",
+        "INV 01.02.010"
+      ]
+    },
+    {
+      "timestamp": "2025-07-04 10:10",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.08.058"
+      ]
+    },
+    {
+      "timestamp": "2025-08-24 10:50",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.09.060"
+      ]
+    },
+    {
+      "timestamp": "2025-08-26 11:00",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.07.048",
+        "INV 01.09.065"
+      ]
+    },
+    {
+      "timestamp": "2025-08-27 12:10",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.06.036"
+      ]
+    },
+    {
+      "timestamp": "2025-08-30 11:05",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.06.036"
+      ]
+    },
+    {
+      "timestamp": "2025-09-03 12:10",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.09.060"
+      ]
+    },
+    {
+      "timestamp": "2025-09-06 12:05",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.09.060",
+        "INV 01.09.062"
+      ]
+    },
+    {
+      "timestamp": "2025-09-08 10:50",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.09.060",
+        "INV 01.07.048",
+        "INV 01.09.062"
+      ]
+    },
+    {
+      "timestamp": "2025-09-30 10:20",
+      "irradiance": null,
+      "blinking": [
+        "INV 01.06.036"
+      ]
+    }
+  ]
+}

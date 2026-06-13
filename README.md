@@ -1,73 +1,58 @@
-# React + TypeScript + Vite
+# stealthdetection.ml
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Enerparc Digital Twins of Solar Plants dashboard for the Energy x AI Hackathon.
 
-Currently, two official plugins are available:
+## What It Shows
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- 65 inverter-level `P_AC (kW)` digital twins trained on Year 1 monitoring data.
+- Full-period expected-vs-actual inference across Plant A monitoring data.
+- Loss attribution by `curtailment`, `downtime`, `degradation`, and `unclassified`.
+- Configurable EUR impact using a flat tariff assumption.
+- Technician-priority alerts and a 65-inverter status grid.
+- Optional LLM chat grounded on generated analysis summaries.
 
-## React Compiler
+## Analysis Outputs
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Run from the parent `Enerparc` directory:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```powershell
+& "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" .\full_digital_twin_analysis.py
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Generated files:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- `analysis_outputs/inverter_summary.json`
+- `analysis_outputs/monthly_losses.csv`
+- `analysis_outputs/loss_events.csv`
+- `analysis_outputs/model_metrics.csv`
+- `analysis_outputs/assumptions.json`
+- `StealthDetection_ai_dashboard/src/data/inverter-dashboard.json`
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Important assumption: EUR impact uses a configurable flat tariff, currently `0.075 EUR/kWh`, because no real tariff file is provided.
+
+## Dashboard
+
+```powershell
+npm install
+npm run dev
 ```
+
+Open `http://127.0.0.1:5173/`.
+
+## LLM Chat
+
+The chat page calls `POST /api/chat` and reads only the generated dashboard summary data. It does not read raw `.xlsb` files at runtime.
+
+Set this environment variable on the API server/deployment:
+
+```text
+OPENAI_API_KEY=...
+```
+
+Optional:
+
+```text
+OPENAI_MODEL=gpt-4o-mini
+```
+
+If no API key is configured, the chat UI shows a disabled/fallback message.
