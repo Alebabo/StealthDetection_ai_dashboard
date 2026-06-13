@@ -17,7 +17,6 @@ import {
   Settings,
   ShieldAlert,
   Sun,
-  Wrench,
   Zap,
 } from "lucide-react"
 import {
@@ -78,6 +77,7 @@ const data = dashboardData as {
     watch: number
     maintenance: number
     lastYearEnergyMWh: number
+    actualRevenueEUR: number
     totalLossKWh: number
     totalLossEUR: number
     topPriorityInverter: string
@@ -88,7 +88,16 @@ const data = dashboardData as {
   }
   inverters: InverterRow[]
   alerts: AlertRow[]
-  monthly: { month: string; energyMWh: number; lossMWh?: number; lossEUR?: number; anomalyEvents: number }[]
+  monthly: {
+    month: string
+    energyMWh: number
+    actualMWh?: number
+    expectedMWh?: number
+    actualRevenueEUR?: number
+    lossMWh?: number
+    lossEUR?: number
+    anomalyEvents: number
+  }[]
 }
 
 const NAV_ITEMS: { page: Page; icon: ElementType }[] = [
@@ -274,6 +283,7 @@ export default function SolarDashboard() {
     () => [...data.inverters].sort((a, b) => b.degradationKWh - a.degradationKWh).slice(0, 3),
     []
   )
+  const revenueTrend = useMemo(() => data.monthly.slice(-18), [])
   const filteredInverters = useMemo(
     () => data.inverters.filter((inv) => gridFilter === "All" || inv.status === gridFilter),
     [gridFilter]
@@ -377,7 +387,6 @@ export default function SolarDashboard() {
         <header className="flex h-16 shrink-0 items-center justify-between border-b border-zinc-200/80 bg-white/95 pr-32 pl-7 shadow-sm shadow-zinc-200/50">
           <div>
             <h1 className="text-xl font-semibold tracking-tight text-zinc-950">{page}</h1>
-            <p className="text-xs font-medium text-zinc-400">{data.generatedFrom.periodStart} to {data.generatedFrom.periodEnd}</p>
           </div>
           <div className="flex items-center gap-4">
             <button className="relative rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900" aria-label="Notifications">
@@ -391,31 +400,50 @@ export default function SolarDashboard() {
         <main className="min-h-0 flex-1 overflow-y-auto p-7">
           {page === "Overview" && (
             <div className="space-y-6">
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <MetricCard label="10-year loss" value={`${metricLabel(data.summary.totalLossKWh / 1000)} MWh`} helper="Expected P_AC minus actual P_AC" icon={Gauge} />
-                <MetricCard label="EUR impact" value={`EUR ${metricLabel(data.summary.totalLossEUR)}`} helper="Flat tariff assumption from analysis config" icon={Zap} />
-                <MetricCard label="Top priority" value={data.summary.topPriorityInverter} helper={`${data.summary.maintenance} maintenance candidates`} icon={Wrench} />
-                <MetricCard label="Model quality" value={data.summary.medianModelR2 == null ? "n/a" : `${metricLabel(data.summary.medianModelR2 * 100, "%")}`} helper="Median validation R2 across 65 twins" icon={AlertTriangle} />
+              <div className="grid grid-cols-1 gap-4 xl:grid-cols-[1fr_340px]">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                  <MetricCard label="Revenue" value={`EUR ${metricLabel(data.summary.actualRevenueEUR)}`} helper="Actual generated energy at flat tariff" icon={Zap} />
+                  <MetricCard label="Lost revenue" value={`EUR ${metricLabel(data.summary.totalLossEUR)}`} helper="Estimated missed production value" icon={Gauge} />
+                  <MetricCard label="Model quality" value={data.summary.medianModelR2 == null ? "n/a" : `${metricLabel(data.summary.medianModelR2 * 100, "%")}`} helper="Median validation R2 across twins" icon={AlertTriangle} />
+                </div>
+                <Card className="border-zinc-200/80 bg-white/95 p-3.5 shadow-sm shadow-zinc-200/70">
+                  <div className="mb-2 flex items-center justify-between">
+                    <div>
+                      <p className="text-[11px] font-medium uppercase tracking-wide text-zinc-500">Revenue trend</p>
+                      <p className="text-sm font-semibold text-zinc-950">Last 18 months</p>
+                    </div>
+                    <Badge className="bg-emerald-50 text-emerald-700">EUR</Badge>
+                  </div>
+                  <div className="h-[72px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={revenueTrend} margin={{ top: 4, right: 0, bottom: 0, left: 0 }}>
+                        <Area type="monotone" dataKey="actualRevenueEUR" name="Revenue" stroke="#008060" fill="#008060" fillOpacity={0.14} strokeWidth={2} />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
+                </Card>
               </div>
 
               <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.2fr_0.8fr]">
                 <Card className="border-zinc-200/80 bg-white/95 p-5 shadow-sm shadow-zinc-200/70">
                   <div className="mb-4 flex items-center justify-between">
                     <div>
-                      <h2 className="text-[15px] font-semibold text-zinc-950">Energy and anomaly timeline</h2>
-                      <p className="text-xs text-zinc-400">Last year from the plant monitoring export</p>
+                      <h2 className="text-[15px] font-semibold text-zinc-950">Expected vs actual generation</h2>
+                      <p className="text-xs text-zinc-400">Monthly energy and abnormality count from the digital twin analysis</p>
                     </div>
-                    <Badge className="bg-zinc-100 text-zinc-600">Digital twin baseline</Badge>
+                    <Badge className="bg-zinc-100 text-zinc-600">Digital twin</Badge>
                   </div>
                   <div className="h-72">
                     <ResponsiveContainer width="100%" height="100%">
                       <AreaChart data={data.monthly} margin={{ top: 10, right: 16, bottom: 0, left: 0 }}>
                         <CartesianGrid stroke="#e4e4e7" strokeDasharray="4 4" />
                         <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#71717a" }} tickMargin={8} />
-                        <YAxis tick={{ fontSize: 11, fill: "#71717a" }} width={42} />
+                        <YAxis yAxisId="energy" tick={{ fontSize: 11, fill: "#71717a" }} width={42} />
+                        <YAxis yAxisId="events" orientation="right" tick={{ fontSize: 11, fill: "#71717a" }} width={32} />
                         <RechartsTooltip />
-                        <Area type="monotone" dataKey="lossMWh" name="Loss MWh" stroke="#003A70" fill="#003A70" fillOpacity={0.12} strokeWidth={2} />
-                        <Area type="monotone" dataKey="anomalyEvents" name="Anomaly events" stroke="#ef4444" fill="#ef4444" fillOpacity={0.08} strokeWidth={2} />
+                        <Area yAxisId="energy" type="monotone" dataKey="expectedMWh" name="Expected MWh" stroke="#003A70" fill="#003A70" fillOpacity={0.1} strokeWidth={2} />
+                        <Area yAxisId="energy" type="monotone" dataKey="actualMWh" name="Actual MWh" stroke="#008060" fill="#008060" fillOpacity={0.12} strokeWidth={2} />
+                        <Area yAxisId="events" type="monotone" dataKey="anomalyEvents" name="Abnormalities" stroke="#ef4444" fill="#ef4444" fillOpacity={0.08} strokeWidth={2} />
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>

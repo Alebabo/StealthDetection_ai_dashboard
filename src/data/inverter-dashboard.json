@@ -30,7 +30,8 @@
     "medianModelR2": 0.91,
     "medianModelMAE": 0.883,
     "baseline": "Simple fleet baseline retained as comparison narrative; ML twin uses Year-1 inverter models.",
-    "topPriorityInverter": "INV 01.03.015"
+    "topPriorityInverter": "INV 01.03.015",
+    "actualRevenueEUR": 1158956.33
   },
   "inverters": [
     {
@@ -1240,808 +1241,1153 @@
   "monthly": [
     {
       "month": "2016-12",
-      "energyMWh": 0,
+      "energyMWh": 0.0,
       "lossMWh": 0.07,
       "lossEUR": 5.32,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 0.0,
+      "expectedMWh": 0.07,
+      "actualRevenueEUR": 0.0
     },
     {
       "month": "2017-01",
-      "energyMWh": 0,
+      "energyMWh": 3.69,
       "lossMWh": 9.01,
       "lossEUR": 676.06,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 3.69,
+      "expectedMWh": 12.7,
+      "actualRevenueEUR": 276.9
     },
     {
       "month": "2017-02",
-      "energyMWh": 0,
+      "energyMWh": 63.41,
       "lossMWh": 30.25,
       "lossEUR": 2268.92,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 63.41,
+      "expectedMWh": 93.66,
+      "actualRevenueEUR": 4755.82
     },
     {
       "month": "2017-03",
-      "energyMWh": 0,
+      "energyMWh": 151.6,
       "lossMWh": 32.97,
       "lossEUR": 2472.53,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 151.6,
+      "expectedMWh": 184.57,
+      "actualRevenueEUR": 11370.3
     },
     {
       "month": "2017-04",
-      "energyMWh": 0,
+      "energyMWh": 185.38,
       "lossMWh": 32.01,
       "lossEUR": 2400.69,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 185.38,
+      "expectedMWh": 217.39,
+      "actualRevenueEUR": 13903.48
     },
     {
       "month": "2017-05",
-      "energyMWh": 0,
+      "energyMWh": 262.52,
       "lossMWh": 32.08,
       "lossEUR": 2405.68,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 262.52,
+      "expectedMWh": 294.6,
+      "actualRevenueEUR": 19689.33
     },
     {
       "month": "2017-06",
-      "energyMWh": 0,
+      "energyMWh": 277.25,
       "lossMWh": 36.14,
       "lossEUR": 2710.21,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 277.25,
+      "expectedMWh": 313.39,
+      "actualRevenueEUR": 20793.78
     },
     {
       "month": "2017-07",
-      "energyMWh": 0,
+      "energyMWh": 238.44,
       "lossMWh": 32.65,
       "lossEUR": 2448.67,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 238.44,
+      "expectedMWh": 271.09,
+      "actualRevenueEUR": 17883.06
     },
     {
       "month": "2017-08",
-      "energyMWh": 0,
+      "energyMWh": 239.11,
       "lossMWh": 31.37,
       "lossEUR": 2352.41,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 239.11,
+      "expectedMWh": 270.48,
+      "actualRevenueEUR": 17933.03
     },
     {
       "month": "2017-09",
-      "energyMWh": 0,
+      "energyMWh": 152.53,
       "lossMWh": 33.55,
       "lossEUR": 2516.21,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 152.53,
+      "expectedMWh": 186.08,
+      "actualRevenueEUR": 11439.54
     },
     {
       "month": "2017-10",
-      "energyMWh": 0,
+      "energyMWh": 86.31,
       "lossMWh": 29.68,
       "lossEUR": 2226.27,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 86.31,
+      "expectedMWh": 115.99,
+      "actualRevenueEUR": 6473.33
     },
     {
       "month": "2017-11",
-      "energyMWh": 0,
+      "energyMWh": 30.26,
       "lossMWh": 30.39,
       "lossEUR": 2279.56,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 30.26,
+      "expectedMWh": 60.65,
+      "actualRevenueEUR": 2269.56
     },
     {
       "month": "2017-12",
-      "energyMWh": 0,
+      "energyMWh": 21.18,
       "lossMWh": 24.52,
       "lossEUR": 1839.26,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 21.18,
+      "expectedMWh": 45.7,
+      "actualRevenueEUR": 1588.52
     },
     {
       "month": "2018-01",
-      "energyMWh": 0,
+      "energyMWh": 26.13,
       "lossMWh": 17.5,
       "lossEUR": 1312.4,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 26.13,
+      "expectedMWh": 43.63,
+      "actualRevenueEUR": 1959.52
     },
     {
       "month": "2018-02",
-      "energyMWh": 0,
+      "energyMWh": 101.65,
       "lossMWh": 29.24,
       "lossEUR": 2193.15,
-      "anomalyEvents": 1
+      "anomalyEvents": 1,
+      "actualMWh": 101.65,
+      "expectedMWh": 130.89,
+      "actualRevenueEUR": 7623.47
     },
     {
       "month": "2018-03",
-      "energyMWh": 0,
+      "energyMWh": 128.42,
       "lossMWh": 41.35,
       "lossEUR": 3101.49,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 128.42,
+      "expectedMWh": 169.77,
+      "actualRevenueEUR": 9631.81
     },
     {
       "month": "2018-04",
-      "energyMWh": 0,
+      "energyMWh": 249.06,
       "lossMWh": 34.64,
       "lossEUR": 2598.21,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 249.06,
+      "expectedMWh": 283.7,
+      "actualRevenueEUR": 18679.46
     },
     {
       "month": "2018-05",
-      "energyMWh": 0,
+      "energyMWh": 292.86,
       "lossMWh": 42.02,
       "lossEUR": 3151.56,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 292.86,
+      "expectedMWh": 334.88,
+      "actualRevenueEUR": 21964.32
     },
     {
       "month": "2018-06",
-      "energyMWh": 0,
+      "energyMWh": 236.49,
       "lossMWh": 37.24,
       "lossEUR": 2793.09,
-      "anomalyEvents": 8
+      "anomalyEvents": 8,
+      "actualMWh": 236.49,
+      "expectedMWh": 273.73,
+      "actualRevenueEUR": 17737.05
     },
     {
       "month": "2018-07",
-      "energyMWh": 0,
+      "energyMWh": 292.17,
       "lossMWh": 38.09,
       "lossEUR": 2856.72,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 292.17,
+      "expectedMWh": 330.26,
+      "actualRevenueEUR": 21912.43
     },
     {
       "month": "2018-08",
-      "energyMWh": 0,
+      "energyMWh": 192.67,
       "lossMWh": 58.06,
       "lossEUR": 4354.15,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 192.67,
+      "expectedMWh": 250.73,
+      "actualRevenueEUR": 14450.04
     },
     {
       "month": "2018-09",
-      "energyMWh": 0,
+      "energyMWh": 165.09,
       "lossMWh": 53.47,
       "lossEUR": 4010.07,
-      "anomalyEvents": 1
+      "anomalyEvents": 1,
+      "actualMWh": 165.09,
+      "expectedMWh": 218.56,
+      "actualRevenueEUR": 12381.81
     },
     {
       "month": "2018-10",
-      "energyMWh": 0,
+      "energyMWh": 91.55,
       "lossMWh": 60.6,
       "lossEUR": 4545.26,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 91.55,
+      "expectedMWh": 152.15,
+      "actualRevenueEUR": 6866.26
     },
     {
       "month": "2018-11",
-      "energyMWh": 0,
+      "energyMWh": 38.53,
       "lossMWh": 49.19,
       "lossEUR": 3689.34,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 38.53,
+      "expectedMWh": 87.72,
+      "actualRevenueEUR": 2889.59
     },
     {
       "month": "2018-12",
-      "energyMWh": 0,
+      "energyMWh": 10.3,
       "lossMWh": 33.92,
       "lossEUR": 2543.67,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 10.3,
+      "expectedMWh": 44.22,
+      "actualRevenueEUR": 772.77
     },
     {
       "month": "2019-01",
-      "energyMWh": 0,
+      "energyMWh": 27.63,
       "lossMWh": 13.47,
       "lossEUR": 1009.96,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 27.63,
+      "expectedMWh": 41.1,
+      "actualRevenueEUR": 2072.27
     },
     {
       "month": "2019-02",
-      "energyMWh": 0,
+      "energyMWh": 78.48,
       "lossMWh": 35.83,
       "lossEUR": 2686.93,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 78.48,
+      "expectedMWh": 114.31,
+      "actualRevenueEUR": 5885.77
     },
     {
       "month": "2019-03",
-      "energyMWh": 0,
+      "energyMWh": 135.75,
       "lossMWh": 37.88,
       "lossEUR": 2841.3,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 135.75,
+      "expectedMWh": 173.63,
+      "actualRevenueEUR": 10181.43
     },
     {
       "month": "2019-04",
-      "energyMWh": 0,
+      "energyMWh": 273.77,
       "lossMWh": 32.08,
       "lossEUR": 2406.15,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 273.77,
+      "expectedMWh": 305.85,
+      "actualRevenueEUR": 20532.41
     },
     {
       "month": "2019-05",
-      "energyMWh": 0,
+      "energyMWh": 222.92,
       "lossMWh": 39.34,
       "lossEUR": 2950.24,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 222.92,
+      "expectedMWh": 262.26,
+      "actualRevenueEUR": 16718.93
     },
     {
       "month": "2019-06",
-      "energyMWh": 0,
+      "energyMWh": 315.41,
       "lossMWh": 39.17,
       "lossEUR": 2937.4,
-      "anomalyEvents": 22
+      "anomalyEvents": 22,
+      "actualMWh": 315.41,
+      "expectedMWh": 354.58,
+      "actualRevenueEUR": 23655.64
     },
     {
       "month": "2019-07",
-      "energyMWh": 0,
+      "energyMWh": 213.03,
       "lossMWh": 86.86,
       "lossEUR": 6514.31,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 213.03,
+      "expectedMWh": 299.89,
+      "actualRevenueEUR": 15977.32
     },
     {
       "month": "2019-08",
-      "energyMWh": 0,
+      "energyMWh": 165.34,
       "lossMWh": 104.13,
       "lossEUR": 7809.69,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 165.34,
+      "expectedMWh": 269.47,
+      "actualRevenueEUR": 12400.4
     },
     {
       "month": "2019-09",
-      "energyMWh": 0,
+      "energyMWh": 120.0,
       "lossMWh": 86.89,
       "lossEUR": 6516.53,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 120.0,
+      "expectedMWh": 206.89,
+      "actualRevenueEUR": 9000.2
     },
     {
       "month": "2019-10",
-      "energyMWh": 0,
+      "energyMWh": 76.66,
       "lossMWh": 69.4,
       "lossEUR": 5205.11,
-      "anomalyEvents": 1
+      "anomalyEvents": 1,
+      "actualMWh": 76.66,
+      "expectedMWh": 146.06,
+      "actualRevenueEUR": 5749.31
     },
     {
       "month": "2019-11",
-      "energyMWh": 0,
+      "energyMWh": 31.86,
       "lossMWh": 43.89,
       "lossEUR": 3291.97,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 31.86,
+      "expectedMWh": 75.75,
+      "actualRevenueEUR": 2389.24
     },
     {
       "month": "2019-12",
-      "energyMWh": 0,
+      "energyMWh": 33.78,
       "lossMWh": 25.56,
       "lossEUR": 1916.88,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 33.78,
+      "expectedMWh": 59.34,
+      "actualRevenueEUR": 2533.27
     },
     {
       "month": "2020-01",
-      "energyMWh": 0,
+      "energyMWh": 40.72,
       "lossMWh": 14.18,
       "lossEUR": 1063.52,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 40.72,
+      "expectedMWh": 54.9,
+      "actualRevenueEUR": 3054.22
     },
     {
       "month": "2020-02",
-      "energyMWh": 0,
+      "energyMWh": 53.88,
       "lossMWh": 31.78,
       "lossEUR": 2383.76,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 53.88,
+      "expectedMWh": 85.66,
+      "actualRevenueEUR": 4041.32
     },
     {
       "month": "2020-03",
-      "energyMWh": 0,
+      "energyMWh": 180.22,
       "lossMWh": 37.18,
       "lossEUR": 2788.14,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 180.22,
+      "expectedMWh": 217.4,
+      "actualRevenueEUR": 13516.3
     },
     {
       "month": "2020-04",
-      "energyMWh": 0,
+      "energyMWh": 288.45,
       "lossMWh": 30.44,
       "lossEUR": 2282.93,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 288.45,
+      "expectedMWh": 318.89,
+      "actualRevenueEUR": 21633.89
     },
     {
       "month": "2020-05",
-      "energyMWh": 0,
+      "energyMWh": 241.24,
       "lossMWh": 43.31,
       "lossEUR": 3247.96,
-      "anomalyEvents": 45
+      "anomalyEvents": 45,
+      "actualMWh": 241.24,
+      "expectedMWh": 284.55,
+      "actualRevenueEUR": 18092.92
     },
     {
       "month": "2020-06",
-      "energyMWh": 0,
+      "energyMWh": 233.63,
       "lossMWh": 30.52,
       "lossEUR": 2288.71,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 233.63,
+      "expectedMWh": 264.15,
+      "actualRevenueEUR": 17522.0
     },
     {
       "month": "2020-07",
-      "energyMWh": 0,
+      "energyMWh": 266.19,
       "lossMWh": 33.71,
       "lossEUR": 2527.99,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 266.19,
+      "expectedMWh": 299.9,
+      "actualRevenueEUR": 19964.33
     },
     {
       "month": "2020-08",
-      "energyMWh": 0,
+      "energyMWh": 171.28,
       "lossMWh": 51.61,
       "lossEUR": 3870.99,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 171.28,
+      "expectedMWh": 222.89,
+      "actualRevenueEUR": 12845.71
     },
     {
       "month": "2020-09",
-      "energyMWh": 0,
+      "energyMWh": 204.58,
       "lossMWh": 34.85,
       "lossEUR": 2613.74,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 204.58,
+      "expectedMWh": 239.43,
+      "actualRevenueEUR": 15343.69
     },
     {
       "month": "2020-10",
-      "energyMWh": 0,
+      "energyMWh": 75.56,
       "lossMWh": 35.33,
       "lossEUR": 2649.57,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 75.56,
+      "expectedMWh": 110.89,
+      "actualRevenueEUR": 5667.2
     },
     {
       "month": "2020-11",
-      "energyMWh": 0,
+      "energyMWh": 54.63,
       "lossMWh": 31.84,
       "lossEUR": 2388.07,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 54.63,
+      "expectedMWh": 86.47,
+      "actualRevenueEUR": 4097.41
     },
     {
       "month": "2020-12",
-      "energyMWh": 0,
+      "energyMWh": 34.88,
       "lossMWh": 23.84,
       "lossEUR": 1787.97,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 34.88,
+      "expectedMWh": 58.72,
+      "actualRevenueEUR": 2615.73
     },
     {
       "month": "2021-01",
-      "energyMWh": 0,
+      "energyMWh": 12.94,
       "lossMWh": 10.68,
       "lossEUR": 801.26,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 12.94,
+      "expectedMWh": 23.62,
+      "actualRevenueEUR": 970.83
     },
     {
       "month": "2021-02",
-      "energyMWh": 0,
+      "energyMWh": 62.89,
       "lossMWh": 40.76,
       "lossEUR": 3057.14,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 62.89,
+      "expectedMWh": 103.65,
+      "actualRevenueEUR": 4716.77
     },
     {
       "month": "2021-03",
-      "energyMWh": 0,
+      "energyMWh": 141.59,
       "lossMWh": 47.22,
       "lossEUR": 3541.18,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 141.59,
+      "expectedMWh": 188.81,
+      "actualRevenueEUR": 10619.27
     },
     {
       "month": "2021-04",
-      "energyMWh": 0,
+      "energyMWh": 158.08,
       "lossMWh": 53.12,
       "lossEUR": 3984.03,
-      "anomalyEvents": 31
+      "anomalyEvents": 31,
+      "actualMWh": 158.08,
+      "expectedMWh": 211.2,
+      "actualRevenueEUR": 11855.73
     },
     {
       "month": "2021-05",
-      "energyMWh": 0,
+      "energyMWh": 2.89,
       "lossMWh": 102.66,
       "lossEUR": 7699.55,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 2.89,
+      "expectedMWh": 105.55,
+      "actualRevenueEUR": 216.94
     },
     {
       "month": "2021-06",
-      "energyMWh": 0,
+      "energyMWh": 244.47,
       "lossMWh": 56.13,
       "lossEUR": 4210.04,
-      "anomalyEvents": 1
+      "anomalyEvents": 1,
+      "actualMWh": 244.47,
+      "expectedMWh": 300.6,
+      "actualRevenueEUR": 18335.27
     },
     {
       "month": "2021-07",
-      "energyMWh": 0,
+      "energyMWh": 233.22,
       "lossMWh": 62.45,
       "lossEUR": 4683.85,
-      "anomalyEvents": 1
+      "anomalyEvents": 1,
+      "actualMWh": 233.22,
+      "expectedMWh": 295.67,
+      "actualRevenueEUR": 17491.84
     },
     {
       "month": "2021-08",
-      "energyMWh": 0,
+      "energyMWh": 193.62,
       "lossMWh": 38.06,
       "lossEUR": 2854.13,
-      "anomalyEvents": 1
+      "anomalyEvents": 1,
+      "actualMWh": 193.62,
+      "expectedMWh": 231.68,
+      "actualRevenueEUR": 14521.23
     },
     {
       "month": "2021-09",
-      "energyMWh": 0,
+      "energyMWh": 161.77,
       "lossMWh": 42.67,
       "lossEUR": 3200.29,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 161.77,
+      "expectedMWh": 204.44,
+      "actualRevenueEUR": 12132.91
     },
     {
       "month": "2021-10",
-      "energyMWh": 0,
+      "energyMWh": 118.5,
       "lossMWh": 35.23,
       "lossEUR": 2642.11,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 118.5,
+      "expectedMWh": 153.73,
+      "actualRevenueEUR": 8887.27
     },
     {
       "month": "2021-11",
-      "energyMWh": 0,
+      "energyMWh": 35.18,
       "lossMWh": 31.59,
       "lossEUR": 2369.04,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 35.18,
+      "expectedMWh": 66.77,
+      "actualRevenueEUR": 2638.35
     },
     {
       "month": "2021-12",
-      "energyMWh": 0,
+      "energyMWh": 12.69,
       "lossMWh": 27.12,
       "lossEUR": 2033.72,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 12.69,
+      "expectedMWh": 39.81,
+      "actualRevenueEUR": 951.78
     },
     {
       "month": "2022-01",
-      "energyMWh": 0,
+      "energyMWh": 21.47,
       "lossMWh": 20.13,
       "lossEUR": 1509.96,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 21.47,
+      "expectedMWh": 41.6,
+      "actualRevenueEUR": 1610.29
     },
     {
       "month": "2022-02",
-      "energyMWh": 0,
+      "energyMWh": 68.67,
       "lossMWh": 32.19,
       "lossEUR": 2414.58,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 68.67,
+      "expectedMWh": 100.86,
+      "actualRevenueEUR": 5150.24
     },
     {
       "month": "2022-03",
-      "energyMWh": 0,
+      "energyMWh": 206.17,
       "lossMWh": 44.65,
       "lossEUR": 3348.99,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 206.17,
+      "expectedMWh": 250.82,
+      "actualRevenueEUR": 15462.56
     },
     {
       "month": "2022-04",
-      "energyMWh": 0,
+      "energyMWh": 182.87,
       "lossMWh": 50.94,
       "lossEUR": 3820.5,
-      "anomalyEvents": 6
+      "anomalyEvents": 6,
+      "actualMWh": 182.87,
+      "expectedMWh": 233.81,
+      "actualRevenueEUR": 13715.55
     },
     {
       "month": "2022-05",
-      "energyMWh": 0,
+      "energyMWh": 268.3,
       "lossMWh": 48.48,
       "lossEUR": 3636.08,
-      "anomalyEvents": 1
+      "anomalyEvents": 1,
+      "actualMWh": 268.3,
+      "expectedMWh": 316.78,
+      "actualRevenueEUR": 20122.63
     },
     {
       "month": "2022-06",
-      "energyMWh": 0,
+      "energyMWh": 249.6,
       "lossMWh": 54.02,
       "lossEUR": 4051.28,
-      "anomalyEvents": 30
+      "anomalyEvents": 30,
+      "actualMWh": 249.6,
+      "expectedMWh": 303.62,
+      "actualRevenueEUR": 18720.36
     },
     {
       "month": "2022-07",
-      "energyMWh": 0,
+      "energyMWh": 235.41,
       "lossMWh": 62.91,
       "lossEUR": 4718.54,
-      "anomalyEvents": 21
+      "anomalyEvents": 21,
+      "actualMWh": 235.41,
+      "expectedMWh": 298.32,
+      "actualRevenueEUR": 17655.76
     },
     {
       "month": "2022-08",
-      "energyMWh": 0,
+      "energyMWh": 182.29,
       "lossMWh": 75.93,
       "lossEUR": 5694.71,
-      "anomalyEvents": 23
+      "anomalyEvents": 23,
+      "actualMWh": 182.29,
+      "expectedMWh": 258.22,
+      "actualRevenueEUR": 13671.6
     },
     {
       "month": "2022-09",
-      "energyMWh": 0,
+      "energyMWh": 138.72,
       "lossMWh": 53.37,
       "lossEUR": 4002.98,
-      "anomalyEvents": 4
+      "anomalyEvents": 4,
+      "actualMWh": 138.72,
+      "expectedMWh": 192.09,
+      "actualRevenueEUR": 10403.86
     },
     {
       "month": "2022-10",
-      "energyMWh": 0,
+      "energyMWh": 103.19,
       "lossMWh": 46.98,
       "lossEUR": 3523.19,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 103.19,
+      "expectedMWh": 150.17,
+      "actualRevenueEUR": 7739.58
     },
     {
       "month": "2022-11",
-      "energyMWh": 0,
+      "energyMWh": 52.59,
       "lossMWh": 37.08,
       "lossEUR": 2781.32,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 52.59,
+      "expectedMWh": 89.67,
+      "actualRevenueEUR": 3944.6
     },
     {
       "month": "2022-12",
-      "energyMWh": 0,
+      "energyMWh": 8.63,
       "lossMWh": 29.88,
       "lossEUR": 2240.75,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 8.63,
+      "expectedMWh": 38.51,
+      "actualRevenueEUR": 647.07
     },
     {
       "month": "2023-01",
-      "energyMWh": 0,
+      "energyMWh": 17.97,
       "lossMWh": 20.5,
       "lossEUR": 1537.43,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 17.97,
+      "expectedMWh": 38.47,
+      "actualRevenueEUR": 1348.0
     },
     {
       "month": "2023-02",
-      "energyMWh": 0,
+      "energyMWh": 54.33,
       "lossMWh": 36.89,
       "lossEUR": 2766.45,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 54.33,
+      "expectedMWh": 91.22,
+      "actualRevenueEUR": 4074.9
     },
     {
       "month": "2023-03",
-      "energyMWh": 0,
+      "energyMWh": 116.14,
       "lossMWh": 41.42,
       "lossEUR": 3106.53,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 116.14,
+      "expectedMWh": 157.56,
+      "actualRevenueEUR": 8710.49
     },
     {
       "month": "2023-04",
-      "energyMWh": 0,
+      "energyMWh": 157.8,
       "lossMWh": 45.18,
       "lossEUR": 3388.68,
-      "anomalyEvents": 14
+      "anomalyEvents": 14,
+      "actualMWh": 157.8,
+      "expectedMWh": 202.98,
+      "actualRevenueEUR": 11834.68
     },
     {
       "month": "2023-05",
-      "energyMWh": 0,
+      "energyMWh": 264.75,
       "lossMWh": 55.4,
       "lossEUR": 4154.92,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 264.75,
+      "expectedMWh": 320.15,
+      "actualRevenueEUR": 19855.9
     },
     {
       "month": "2023-06",
-      "energyMWh": 0,
+      "energyMWh": 216.28,
       "lossMWh": 82.39,
       "lossEUR": 6179.47,
-      "anomalyEvents": 13
+      "anomalyEvents": 13,
+      "actualMWh": 216.28,
+      "expectedMWh": 298.67,
+      "actualRevenueEUR": 16220.71
     },
     {
       "month": "2023-07",
-      "energyMWh": 0,
+      "energyMWh": 237.57,
       "lossMWh": 62.4,
       "lossEUR": 4679.93,
-      "anomalyEvents": 3
+      "anomalyEvents": 3,
+      "actualMWh": 237.57,
+      "expectedMWh": 299.97,
+      "actualRevenueEUR": 17818.02
     },
     {
       "month": "2023-08",
-      "energyMWh": 0,
+      "energyMWh": 179.79,
       "lossMWh": 63.27,
       "lossEUR": 4745.12,
-      "anomalyEvents": 1
+      "anomalyEvents": 1,
+      "actualMWh": 179.79,
+      "expectedMWh": 243.06,
+      "actualRevenueEUR": 13484.23
     },
     {
       "month": "2023-09",
-      "energyMWh": 0,
+      "energyMWh": 208.77,
       "lossMWh": 58.03,
       "lossEUR": 4352.09,
-      "anomalyEvents": 2
+      "anomalyEvents": 2,
+      "actualMWh": 208.77,
+      "expectedMWh": 266.8,
+      "actualRevenueEUR": 15657.76
     },
     {
       "month": "2023-10",
-      "energyMWh": 0,
+      "energyMWh": 80.42,
       "lossMWh": 42.52,
       "lossEUR": 3188.89,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 80.42,
+      "expectedMWh": 122.94,
+      "actualRevenueEUR": 6031.46
     },
     {
       "month": "2023-11",
-      "energyMWh": 0,
+      "energyMWh": 28.84,
       "lossMWh": 33.53,
       "lossEUR": 2514.63,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 28.84,
+      "expectedMWh": 62.37,
+      "actualRevenueEUR": 2162.75
     },
     {
       "month": "2023-12",
-      "energyMWh": 0,
+      "energyMWh": 18.69,
       "lossMWh": 31.3,
       "lossEUR": 2347.4,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 18.69,
+      "expectedMWh": 49.99,
+      "actualRevenueEUR": 1401.66
     },
     {
       "month": "2024-01",
-      "energyMWh": 0,
+      "energyMWh": 30.5,
       "lossMWh": 12.34,
       "lossEUR": 925.32,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 30.5,
+      "expectedMWh": 42.84,
+      "actualRevenueEUR": 2287.15
     },
     {
       "month": "2024-02",
-      "energyMWh": 0,
+      "energyMWh": 50.9,
       "lossMWh": 33.73,
       "lossEUR": 2529.79,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 50.9,
+      "expectedMWh": 84.63,
+      "actualRevenueEUR": 3817.76
     },
     {
       "month": "2024-03",
-      "energyMWh": 0,
+      "energyMWh": 140.47,
       "lossMWh": 54.86,
       "lossEUR": 4114.33,
-      "anomalyEvents": 2
+      "anomalyEvents": 2,
+      "actualMWh": 140.47,
+      "expectedMWh": 195.33,
+      "actualRevenueEUR": 10535.25
     },
     {
       "month": "2024-04",
-      "energyMWh": 0,
+      "energyMWh": 180.06,
       "lossMWh": 74.41,
       "lossEUR": 5580.51,
-      "anomalyEvents": 48
+      "anomalyEvents": 48,
+      "actualMWh": 180.06,
+      "expectedMWh": 254.47,
+      "actualRevenueEUR": 13504.86
     },
     {
       "month": "2024-05",
-      "energyMWh": 0,
+      "energyMWh": 214.74,
       "lossMWh": 67.85,
       "lossEUR": 5088.87,
-      "anomalyEvents": 9
+      "anomalyEvents": 9,
+      "actualMWh": 214.74,
+      "expectedMWh": 282.59,
+      "actualRevenueEUR": 16105.34
     },
     {
       "month": "2024-06",
-      "energyMWh": 0,
+      "energyMWh": 237.29,
       "lossMWh": 43.66,
       "lossEUR": 3274.61,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 237.29,
+      "expectedMWh": 280.95,
+      "actualRevenueEUR": 17796.96
     },
     {
       "month": "2024-07",
-      "energyMWh": 0,
+      "energyMWh": 257.05,
       "lossMWh": 48.98,
       "lossEUR": 3673.24,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 257.05,
+      "expectedMWh": 306.03,
+      "actualRevenueEUR": 19278.65
     },
     {
       "month": "2024-08",
-      "energyMWh": 0,
+      "energyMWh": 250.75,
       "lossMWh": 49.01,
       "lossEUR": 3676.1,
-      "anomalyEvents": 4
+      "anomalyEvents": 4,
+      "actualMWh": 250.75,
+      "expectedMWh": 299.76,
+      "actualRevenueEUR": 18806.19
     },
     {
       "month": "2024-09",
-      "energyMWh": 0,
+      "energyMWh": 168.29,
       "lossMWh": 42.99,
       "lossEUR": 3223.94,
-      "anomalyEvents": 1
+      "anomalyEvents": 1,
+      "actualMWh": 168.29,
+      "expectedMWh": 211.28,
+      "actualRevenueEUR": 12621.43
     },
     {
       "month": "2024-10",
-      "energyMWh": 0,
+      "energyMWh": 95.39,
       "lossMWh": 39.09,
       "lossEUR": 2931.9,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 95.39,
+      "expectedMWh": 134.48,
+      "actualRevenueEUR": 7154.21
     },
     {
       "month": "2024-11",
-      "energyMWh": 0,
+      "energyMWh": 42.35,
       "lossMWh": 33.55,
       "lossEUR": 2516.25,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 42.35,
+      "expectedMWh": 75.9,
+      "actualRevenueEUR": 3176.15
     },
     {
       "month": "2024-12",
-      "energyMWh": 0,
+      "energyMWh": 28.14,
       "lossMWh": 24.54,
       "lossEUR": 1840.55,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 28.14,
+      "expectedMWh": 52.68,
+      "actualRevenueEUR": 2110.41
     },
     {
       "month": "2025-01",
-      "energyMWh": 0,
+      "energyMWh": 29.92,
       "lossMWh": 12.64,
       "lossEUR": 948.32,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 29.92,
+      "expectedMWh": 42.56,
+      "actualRevenueEUR": 2243.78
     },
     {
       "month": "2025-02",
-      "energyMWh": 0,
+      "energyMWh": 76.36,
       "lossMWh": 38.18,
       "lossEUR": 2863.56,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 76.36,
+      "expectedMWh": 114.54,
+      "actualRevenueEUR": 5727.14
     },
     {
       "month": "2025-03",
-      "energyMWh": 0,
+      "energyMWh": 167.12,
       "lossMWh": 49.31,
       "lossEUR": 3698.39,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 167.12,
+      "expectedMWh": 216.43,
+      "actualRevenueEUR": 12533.88
     },
     {
       "month": "2025-04",
-      "energyMWh": 0,
+      "energyMWh": 199.49,
       "lossMWh": 65.84,
       "lossEUR": 4938.16,
-      "anomalyEvents": 14
+      "anomalyEvents": 14,
+      "actualMWh": 199.49,
+      "expectedMWh": 265.33,
+      "actualRevenueEUR": 14962.07
     },
     {
       "month": "2025-05",
-      "energyMWh": 0,
+      "energyMWh": 226.76,
       "lossMWh": 72.94,
       "lossEUR": 5470.57,
-      "anomalyEvents": 18
+      "anomalyEvents": 18,
+      "actualMWh": 226.76,
+      "expectedMWh": 299.7,
+      "actualRevenueEUR": 17007.02
     },
     {
       "month": "2025-06",
-      "energyMWh": 0,
+      "energyMWh": 217.09,
       "lossMWh": 85.69,
       "lossEUR": 6427.08,
-      "anomalyEvents": 37
+      "anomalyEvents": 37,
+      "actualMWh": 217.09,
+      "expectedMWh": 302.78,
+      "actualRevenueEUR": 16281.4
     },
     {
       "month": "2025-07",
-      "energyMWh": 0,
+      "energyMWh": 117.75,
       "lossMWh": 128.98,
       "lossEUR": 9673.39,
-      "anomalyEvents": 3
+      "anomalyEvents": 3,
+      "actualMWh": 117.75,
+      "expectedMWh": 246.73,
+      "actualRevenueEUR": 8830.88
     },
     {
       "month": "2025-08",
-      "energyMWh": 0,
+      "energyMWh": 181.78,
       "lossMWh": 99.74,
       "lossEUR": 7480.4,
-      "anomalyEvents": 27
+      "anomalyEvents": 27,
+      "actualMWh": 181.78,
+      "expectedMWh": 281.52,
+      "actualRevenueEUR": 13633.33
     },
     {
       "month": "2025-09",
-      "energyMWh": 0,
+      "energyMWh": 125.92,
       "lossMWh": 90.28,
       "lossEUR": 6771.3,
-      "anomalyEvents": 23
+      "anomalyEvents": 23,
+      "actualMWh": 125.92,
+      "expectedMWh": 216.2,
+      "actualRevenueEUR": 9443.75
     },
     {
       "month": "2025-10",
-      "energyMWh": 0,
+      "energyMWh": 56.7,
       "lossMWh": 45.67,
       "lossEUR": 3425.47,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 56.7,
+      "expectedMWh": 102.37,
+      "actualRevenueEUR": 4252.21
     },
     {
       "month": "2025-11",
-      "energyMWh": 0,
+      "energyMWh": 47.74,
       "lossMWh": 38.03,
       "lossEUR": 2852.03,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 47.74,
+      "expectedMWh": 85.77,
+      "actualRevenueEUR": 3580.3
     },
     {
       "month": "2025-12",
-      "energyMWh": 0,
+      "energyMWh": 29.52,
       "lossMWh": 20.93,
       "lossEUR": 1569.75,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 29.52,
+      "expectedMWh": 50.45,
+      "actualRevenueEUR": 2213.86
     },
     {
       "month": "2026-01",
-      "energyMWh": 0,
+      "energyMWh": 25.76,
       "lossMWh": 12.94,
       "lossEUR": 970.62,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 25.76,
+      "expectedMWh": 38.7,
+      "actualRevenueEUR": 1932.18
     },
     {
       "month": "2026-02",
-      "energyMWh": 0,
+      "energyMWh": 37.74,
       "lossMWh": 48.26,
       "lossEUR": 3619.55,
-      "anomalyEvents": 0
+      "anomalyEvents": 0,
+      "actualMWh": 37.74,
+      "expectedMWh": 86.0,
+      "actualRevenueEUR": 2830.63
     },
     {
       "month": "2026-03",
-      "energyMWh": 0,
+      "energyMWh": 119.49,
       "lossMWh": 87.36,
       "lossEUR": 6551.81,
-      "anomalyEvents": 7
+      "anomalyEvents": 7,
+      "actualMWh": 119.49,
+      "expectedMWh": 206.85,
+      "actualRevenueEUR": 8961.73
     },
     {
       "month": "2026-04",
-      "energyMWh": 0,
+      "energyMWh": 153.54,
       "lossMWh": 116.34,
       "lossEUR": 8725.8,
-      "anomalyEvents": 37
+      "anomalyEvents": 37,
+      "actualMWh": 153.54,
+      "expectedMWh": 269.88,
+      "actualRevenueEUR": 11515.81
     },
     {
       "month": "2026-05",
-      "energyMWh": 0,
+      "energyMWh": 183.56,
       "lossMWh": 98.86,
       "lossEUR": 7414.56,
-      "anomalyEvents": 28
+      "anomalyEvents": 28,
+      "actualMWh": 183.56,
+      "expectedMWh": 282.42,
+      "actualRevenueEUR": 13767.23
     },
     {
       "month": "2026-06",
-      "energyMWh": 0,
+      "energyMWh": 7.01,
       "lossMWh": 3.87,
       "lossEUR": 289.92,
-      "anomalyEvents": 12
+      "anomalyEvents": 12,
+      "actualMWh": 7.01,
+      "expectedMWh": 10.88,
+      "actualRevenueEUR": 525.84
     }
   ],
   "demoTimeline": [
