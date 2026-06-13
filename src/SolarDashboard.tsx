@@ -1,6 +1,5 @@
 import { useMemo, useState, type ElementType } from "react"
 import {
-  Activity,
   AlertTriangle,
   BellRing,
   CheckCircle2,
@@ -12,12 +11,14 @@ import {
   LineChart as LineChartIcon,
   Loader2,
   MessageSquare,
-  ScrollText,
+  Plug,
   Send,
   Settings,
   Sun,
   Zap,
 } from "lucide-react"
+import { FaSlack, FaTelegram } from "react-icons/fa"
+import { SiGmail, SiOpenai } from "react-icons/si"
 import {
   Area,
   AreaChart,
@@ -32,11 +33,13 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import dashboardData from "@/data/inverter-dashboard.json"
 import stealthDetectionLogo from "@/assets/stealthdetection-logo.png"
 
-type Page = "Overview" | "Inverter Grid" | "Alerts" | "Analytics" | "Chat" | "Logs" | "Settings"
+type Page = "Overview" | "Inverter Grid" | "Alerts" | "Analytics" | "Chat" | "Connectors" | "Settings"
+type ConnectorId = "telegram" | "gmail" | "slack" | "claude" | "codex"
 type InverterStatus = "Healthy" | "Watch" | "Maintenance Required"
 type AlertSeverity = "Critical" | "Warning"
 type GridFilter = "All" | InverterStatus
@@ -123,7 +126,7 @@ const NAV_ITEMS: { page: Page; icon: ElementType }[] = [
   { page: "Alerts", icon: BellRing },
   { page: "Analytics", icon: LineChartIcon },
   { page: "Chat", icon: MessageSquare },
-  { page: "Logs", icon: ScrollText },
+  { page: "Connectors", icon: Plug },
   { page: "Settings", icon: Settings },
 ]
 
@@ -147,6 +150,60 @@ function StatusBadge({ status }: { status: InverterStatus }) {
     </Badge>
   )
 }
+
+function ClaudeIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 28 28" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M14 5 L24 21.5 H4 Z"
+        fill="#f97316"
+        stroke="#f97316"
+        strokeWidth="4"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+interface ConnectorDef {
+  id: ConnectorId
+  name: string
+  description: string
+  icon: React.ReactNode
+}
+
+const CONNECTOR_DEFS: ConnectorDef[] = [
+  {
+    id: "telegram",
+    name: "Telegram",
+    description: "Receive inverter alerts and daily reports in Telegram channels",
+    icon: <FaTelegram className="size-7 text-[#229ED9]" />,
+  },
+  {
+    id: "gmail",
+    name: "Gmail",
+    description: "Email automated performance and loss reports to stakeholders",
+    icon: <SiGmail className="size-7 text-[#EA4335]" />,
+  },
+  {
+    id: "slack",
+    name: "Slack",
+    description: "Post yield summaries and anomaly alerts to Slack channels",
+    icon: <FaSlack className="size-7 text-[#E01E5A]" />,
+  },
+  {
+    id: "claude",
+    name: "Claude",
+    description: "Power analysis chat and report generation via Claude",
+    icon: <ClaudeIcon className="size-7" />,
+  },
+  {
+    id: "codex",
+    name: "Codex",
+    description: "Let agents write and run inverter optimization scripts",
+    icon: <SiOpenai className="size-7 text-zinc-900" />,
+  },
+]
 function metricLabel(value: number, suffix = "") {
   return `${new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 }).format(value)}${suffix}`
 }
@@ -300,6 +357,26 @@ export default function SolarDashboard() {
   const [alertFilter, setAlertFilter] = useState<AlertFilter>("All")
   const [chatInput, setChatInput] = useState("Which inverter should a technician inspect first?")
   const [chatLoading, setChatLoading] = useState(false)
+  const [connectorState, setConnectorState] = useState<
+    Record<ConnectorId, { connected: boolean; loading: boolean }>
+  >({
+    telegram: { connected: false, loading: false },
+    gmail: { connected: true, loading: false },
+    slack: { connected: false, loading: false },
+    claude: { connected: true, loading: false },
+    codex: { connected: false, loading: false },
+  })
+
+  function toggleConnector(id: ConnectorId, on: boolean) {
+    if (!on) {
+      setConnectorState((s) => ({ ...s, [id]: { connected: false, loading: false } }))
+      return
+    }
+    setConnectorState((s) => ({ ...s, [id]: { connected: false, loading: true } }))
+    setTimeout(() => {
+      setConnectorState((s) => ({ ...s, [id]: { connected: true, loading: false } }))
+    }, 1500)
+  }
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
       role: "assistant",
@@ -739,12 +816,70 @@ export default function SolarDashboard() {
             </div>
           )}
 
-          {page === "Logs" && (
-            <Card className="items-center gap-3 border-zinc-200/80 bg-white/95 p-12 shadow-sm shadow-zinc-200/70">
-              <Activity className="size-8 text-zinc-300" />
-              <p className="text-sm font-medium text-zinc-900">Event stream ready</p>
-              <p className="text-xs text-zinc-400">Ticket relevance checks and connector events can be appended here.</p>
-            </Card>
+          {page === "Connectors" && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-xl font-bold text-zinc-900">Connect your tools</h2>
+                <p className="mt-1 text-sm text-zinc-500">
+                  Link external services to extend how the dashboard reports inverter alerts and analysis
+                </p>
+              </div>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                {CONNECTOR_DEFS.map((c) => {
+                  const state = connectorState[c.id]
+                  return (
+                    <Card
+                      key={c.id}
+                      className={`gap-3 border-zinc-200 bg-white p-5 ${
+                        state.connected ? "bg-[#003A70]/5 ring-1 ring-[#003A70]/20" : ""
+                      }`}
+                    >
+                      <div className="flex items-start justify-between">
+                        {c.icon}
+                        {state.connected ? (
+                          <Badge
+                            variant="outline"
+                            className="gap-1 border-emerald-500/30 bg-emerald-500/10 text-emerald-700"
+                          >
+                            <CheckCircle2 className="size-3" />
+                            Connected
+                          </Badge>
+                        ) : (
+                          <Badge
+                            variant="outline"
+                            className="border-zinc-200 bg-zinc-50 text-zinc-500"
+                          >
+                            Not connected
+                          </Badge>
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-base font-bold text-zinc-900">{c.name}</p>
+                        <p className="mt-1 text-sm text-zinc-500">{c.description}</p>
+                      </div>
+                      <div className="mt-1 flex items-center justify-between">
+                        {state.loading ? (
+                          <span className="flex h-[18.4px] items-center">
+                            <Loader2 className="size-4 animate-spin text-[#003A70]" />
+                          </span>
+                        ) : (
+                          <Switch
+                            checked={state.connected}
+                            onCheckedChange={(on) => toggleConnector(c.id, on)}
+                            aria-label={`Toggle ${c.name} connection`}
+                          />
+                        )}
+                        {state.connected && (
+                          <Button variant="ghost" size="sm" className="text-[#003A70] hover:text-[#002B55]">
+                            Configure
+                          </Button>
+                        )}
+                      </div>
+                    </Card>
+                  )
+                })}
+              </div>
+            </div>
           )}
 
           {page === "Settings" && (
