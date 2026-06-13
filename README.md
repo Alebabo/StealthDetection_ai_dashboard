@@ -39,20 +39,34 @@ npm run dev
 
 Open `http://127.0.0.1:5173/`.
 
-## LLM Chat
+## Agent, Chat, And Telegram
 
-The chat page calls `POST /api/chat` and reads only the generated dashboard summary data. It does not read raw `.xlsb` files at runtime.
+The chat page calls `POST /api/chat` through the Vite proxy and reads only generated dashboard summary data. It does not read raw `.xlsb` files at runtime.
 
-Set this environment variable on the API server/deployment:
+Start the local agent backend:
 
-```text
-OPENAI_API_KEY=...
+```powershell
+python -m uvicorn api:app --app-dir src/agent --host 127.0.0.1 --port 8000
 ```
 
-Optional:
+Set these environment variables on the API server/deployment:
 
 ```text
-OPENAI_MODEL=gpt-4o-mini
+AGENT_API_KEY=...
+AGENT_MODEL=gpt-4o-mini
+TELEGRAM_BOT_TOKEN=...
 ```
 
-If no API key is configured, the chat UI shows a disabled/fallback message.
+Telegram webhook endpoint:
+
+```text
+POST /api/telegram/webhook
+```
+
+Telegram behavior:
+
+- Any normal message is treated as a StealthDetection prompt.
+- `/report` returns the current inverter health report.
+- `/start` explains how to use the bot.
+
+If no LLM key is configured, chat and Telegram still return deterministic dashboard-summary answers. Never commit real bot tokens; keep them in environment variables.

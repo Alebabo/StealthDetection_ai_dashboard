@@ -14,11 +14,10 @@ import {
   Plug,
   Send,
   Settings,
-  Sun,
   Zap,
 } from "lucide-react"
 import { FaSlack, FaTelegram } from "react-icons/fa"
-import { SiGmail, SiOpenai } from "react-icons/si"
+import { SiClaude, SiGmail, SiOpenai } from "react-icons/si"
 import {
   Area,
   AreaChart,
@@ -151,20 +150,6 @@ function StatusBadge({ status }: { status: InverterStatus }) {
   )
 }
 
-function ClaudeIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 28 28" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M14 5 L24 21.5 H4 Z"
-        fill="#f97316"
-        stroke="#f97316"
-        strokeWidth="4"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
 interface ConnectorDef {
   id: ConnectorId
   name: string
@@ -176,7 +161,7 @@ const CONNECTOR_DEFS: ConnectorDef[] = [
   {
     id: "telegram",
     name: "Telegram",
-    description: "Receive inverter alerts and daily reports in Telegram channels",
+    description: "Receive inverter alerts and daily reports; configure with TELEGRAM_BOT_TOKEN on the server",
     icon: <FaTelegram className="size-7 text-[#229ED9]" />,
   },
   {
@@ -195,7 +180,7 @@ const CONNECTOR_DEFS: ConnectorDef[] = [
     id: "claude",
     name: "Claude",
     description: "Power analysis chat and report generation via Claude",
-    icon: <ClaudeIcon className="size-7" />,
+    icon: <SiClaude className="size-7 text-[#D97757]" />,
   },
   {
     id: "codex",
@@ -357,6 +342,10 @@ export default function SolarDashboard() {
   const [alertFilter, setAlertFilter] = useState<AlertFilter>("All")
   const [chatInput, setChatInput] = useState("Which inverter should a technician inspect first?")
   const [chatLoading, setChatLoading] = useState(false)
+  const [modelPreset, setModelPreset] = useState("Digital twin ensemble")
+  const [modelSensitivity, setModelSensitivity] = useState(68)
+  const [modelWindow, setModelWindow] = useState("Rolling 30 days")
+  const [modelSettingsSaved, setModelSettingsSaved] = useState(false)
   const [connectorState, setConnectorState] = useState<
     Record<ConnectorId, { connected: boolean; loading: boolean }>
   >({
@@ -528,15 +517,7 @@ export default function SolarDashboard() {
           <div>
             <h1 className="text-xl font-semibold tracking-tight text-zinc-950">{page}</h1>
           </div>
-          <div className="flex items-center gap-4">
-            <button className="relative rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900" aria-label="Notifications">
-              <BellRing className="size-5" />
-              <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-red-500" />
-            </button>
-            <div className="flex size-8 items-center justify-center rounded-full bg-white ring-1 ring-zinc-200">
-              <img src={stealthDetectionLogo} alt="StealthDetection" className="h-6 w-6 object-contain" />
-            </div>
-          </div>
+          <div />
         </header>
 
         <main className="min-h-0 flex-1 overflow-y-auto p-7">
@@ -883,11 +864,123 @@ export default function SolarDashboard() {
           )}
 
           {page === "Settings" && (
-            <Card className="items-center gap-3 border-zinc-200/80 bg-white/95 p-12 shadow-sm shadow-zinc-200/70">
-              <Sun className="size-8 text-zinc-300" />
-              <p className="text-sm font-medium text-zinc-900">Plant and model settings</p>
-              <p className="text-xs text-zinc-400">Thresholds, curtailment masks and tariff assumptions belong here.</p>
-            </Card>
+            <div className="grid grid-cols-1 gap-6 xl:grid-cols-[0.9fr_1.1fr]">
+              <Card className="border-zinc-200/80 bg-white/95 p-5 shadow-sm shadow-zinc-200/70">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h2 className="text-[15px] font-semibold text-zinc-950">Model settings</h2>
+                    <p className="mt-1 text-xs text-zinc-500">Presentation controls only; the trained models and analysis data stay unchanged.</p>
+                  </div>
+                  <Badge className="bg-zinc-100 text-zinc-600">Simulation</Badge>
+                </div>
+
+                <div className="mt-5 space-y-5">
+                  <label className="block">
+                    <span className="text-xs font-medium uppercase tracking-wide text-zinc-500">Model</span>
+                    <select
+                      value={modelPreset}
+                      onChange={(event) => {
+                        setModelPreset(event.target.value)
+                        setModelSettingsSaved(false)
+                      }}
+                      className="mt-2 h-10 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-900 outline-none ring-[#003A70]/20 focus:ring-2"
+                    >
+                      <option>Digital twin ensemble</option>
+                      <option>High sensitivity anomaly model</option>
+                      <option>Conservative maintenance model</option>
+                      <option>Revenue-first dispatch model</option>
+                    </select>
+                  </label>
+
+                  <label className="block">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-medium uppercase tracking-wide text-zinc-500">Sensitivity</span>
+                      <span className="font-mono text-xs text-zinc-500">{modelSensitivity}%</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={modelSensitivity}
+                      onChange={(event) => {
+                        setModelSensitivity(Number(event.target.value))
+                        setModelSettingsSaved(false)
+                      }}
+                      className="mt-3 w-full accent-[#003A70]"
+                    />
+                  </label>
+
+                  <label className="block">
+                    <span className="text-xs font-medium uppercase tracking-wide text-zinc-500">Detection window</span>
+                    <select
+                      value={modelWindow}
+                      onChange={(event) => {
+                        setModelWindow(event.target.value)
+                        setModelSettingsSaved(false)
+                      }}
+                      className="mt-2 h-10 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-900 outline-none ring-[#003A70]/20 focus:ring-2"
+                    >
+                      <option>Rolling 7 days</option>
+                      <option>Rolling 30 days</option>
+                      <option>Rolling 90 days</option>
+                      <option>Full analysis period</option>
+                    </select>
+                  </label>
+
+                  <div className="flex items-center gap-2 pt-2">
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        setModelSettingsSaved(true)
+                      }}
+                    >
+                      Save view
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setModelPreset("Digital twin ensemble")
+                        setModelSensitivity(68)
+                        setModelWindow("Rolling 30 days")
+                        setModelSettingsSaved(false)
+                      }}
+                    >
+                      Reset
+                    </Button>
+                    {modelSettingsSaved && <span className="text-xs font-medium text-emerald-700">View settings saved</span>}
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="border-zinc-200/80 bg-white/95 p-5 shadow-sm shadow-zinc-200/70">
+                <h2 className="text-[15px] font-semibold text-zinc-950">Current model profile</h2>
+                <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  <div className="rounded-lg bg-zinc-50 p-4">
+                    <p className="text-xs text-zinc-500">Selected model</p>
+                    <p className="mt-1 text-sm font-semibold text-zinc-900">{modelPreset}</p>
+                  </div>
+                  <div className="rounded-lg bg-zinc-50 p-4">
+                    <p className="text-xs text-zinc-500">Sensitivity</p>
+                    <p className="mt-1 text-sm font-semibold text-zinc-900">{modelSensitivity}%</p>
+                  </div>
+                  <div className="rounded-lg bg-zinc-50 p-4">
+                    <p className="text-xs text-zinc-500">Window</p>
+                    <p className="mt-1 text-sm font-semibold text-zinc-900">{modelWindow}</p>
+                  </div>
+                </div>
+                <div className="mt-5 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+                  These controls are intentionally non-destructive. They change the displayed configuration state only and do not retrain, reload, or overwrite the inverter models.
+                </div>
+                <div className="mt-5 rounded-lg bg-zinc-50 p-4 text-sm text-zinc-600">
+                  <p className="font-medium text-zinc-900">Active production model</p>
+                  <p className="mt-1">65 inverter digital twins trained on Year 1 monitoring data.</p>
+                  <p className="mt-2 text-xs text-zinc-400">
+                    Median R2 {data.summary.medianModelR2 == null ? "n/a" : metricLabel(data.summary.medianModelR2 * 100, "%")} · Median MAE {data.summary.medianModelMAE == null ? "n/a" : `${metricLabel(data.summary.medianModelMAE)} kW`}
+                  </p>
+                </div>
+              </Card>
+            </div>
           )}
         </main>
       </div>
