@@ -138,26 +138,55 @@ function shortInverter(id: string) {
   return `#${id.slice(-3)}`
 }
 
+function Sparkline({ data, color }: { data: { v: number }[]; color: string }) {
+  const gradientId = `spark-${color.replace("#", "")}`
+  return (
+    <ResponsiveContainer width="100%" height="100%">
+      <AreaChart data={data} margin={{ top: 4, right: 0, bottom: 0, left: 0 }}>
+        <defs>
+          <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={color} stopOpacity={0.25} />
+            <stop offset="100%" stopColor={color} stopOpacity={0} />
+          </linearGradient>
+        </defs>
+        <Area
+          type="monotone"
+          dataKey="v"
+          stroke={color}
+          strokeWidth={1.75}
+          fill={`url(#${gradientId})`}
+          isAnimationActive={false}
+        />
+      </AreaChart>
+    </ResponsiveContainer>
+  )
+}
+
 function MetricCard({
   label,
   value,
   helper,
   icon: Icon,
+  trend,
+  trendColor = "#003A70",
 }: {
   label: string
   value: string
   helper: string
   icon: ElementType
+  trend: { v: number }[]
+  trendColor?: string
 }) {
   return (
     <Card className="gap-2 border-zinc-200/80 bg-white/95 p-3.5 shadow-sm shadow-zinc-200/70">
-      <div className="flex items-start justify-between gap-2">
-        <div>
-          <p className="text-[11px] font-medium uppercase tracking-wide text-zinc-500">{label}</p>
-          <p className="mt-1 text-xl leading-tight font-semibold text-zinc-950">{value}</p>
-        </div>
-        <div className="flex size-7 items-center justify-center rounded-md bg-[#003A70]/10 text-[#003A70] ring-1 ring-[#003A70]/10">
-          <Icon className="size-3.5" />
+      <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-zinc-500">
+        <Icon className="size-3.5 text-zinc-400" />
+        {label}
+      </div>
+      <div className="flex items-end justify-between gap-2">
+        <p className="text-xl leading-tight font-semibold text-zinc-950">{value}</p>
+        <div className="h-9 w-16 shrink-0">
+          <Sparkline data={trend} color={trendColor} />
         </div>
       </div>
       <p className="truncate text-[11px] text-zinc-400">{helper}</p>
@@ -284,6 +313,21 @@ export default function SolarDashboard() {
     []
   )
   const revenueTrend = useMemo(() => data.monthly.slice(-18), [])
+  const revenueSpark = useMemo(
+    () => data.monthly.slice(-12).map((m) => ({ v: m.actualRevenueEUR ?? 0 })),
+    []
+  )
+  const lossSpark = useMemo(
+    () => data.monthly.slice(-12).map((m) => ({ v: m.lossEUR ?? 0 })),
+    []
+  )
+  const fitSpark = useMemo(
+    () =>
+      data.monthly
+        .slice(-12)
+        .map((m) => ({ v: m.expectedMWh ? (m.actualMWh ?? 0) / m.expectedMWh : 0 })),
+    []
+  )
   const filteredInverters = useMemo(
     () => data.inverters.filter((inv) => gridFilter === "All" || inv.status === gridFilter),
     [gridFilter]
@@ -402,9 +446,9 @@ export default function SolarDashboard() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 gap-4 xl:grid-cols-[1fr_340px]">
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                  <MetricCard label="Revenue" value={`EUR ${metricLabel(data.summary.actualRevenueEUR)}`} helper="Actual generated energy at flat tariff" icon={Zap} />
-                  <MetricCard label="Lost revenue" value={`EUR ${metricLabel(data.summary.totalLossEUR)}`} helper="Estimated missed production value" icon={Gauge} />
-                  <MetricCard label="Model quality" value={data.summary.medianModelR2 == null ? "n/a" : `${metricLabel(data.summary.medianModelR2 * 100, "%")}`} helper="Median validation R2 across twins" icon={AlertTriangle} />
+                  <MetricCard label="Revenue" value={`EUR ${metricLabel(data.summary.actualRevenueEUR)}`} helper="Actual generated energy at flat tariff" icon={Zap} trend={revenueSpark} trendColor="#008060" />
+                  <MetricCard label="Lost revenue" value={`EUR ${metricLabel(data.summary.totalLossEUR)}`} helper="Estimated missed production value" icon={Gauge} trend={lossSpark} trendColor="#ef4444" />
+                  <MetricCard label="Model quality" value={data.summary.medianModelR2 == null ? "n/a" : `${metricLabel(data.summary.medianModelR2 * 100, "%")}`} helper="Median validation R2 across twins" icon={AlertTriangle} trend={fitSpark} trendColor="#003A70" />
                 </div>
                 <Card className="border-zinc-200/80 bg-white/95 p-3.5 shadow-sm shadow-zinc-200/70">
                   <div className="mb-2 flex items-center justify-between">
@@ -424,41 +468,29 @@ export default function SolarDashboard() {
                 </Card>
               </div>
 
-              <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-                <Card className="border-zinc-200/80 bg-white/95 p-5 shadow-sm shadow-zinc-200/70">
-                  <div className="mb-4 flex items-center justify-between">
-                    <div>
-                      <h2 className="text-[15px] font-semibold text-zinc-950">Expected vs actual generation</h2>
-                      <p className="text-xs text-zinc-400">Monthly energy and abnormality count from the digital twin analysis</p>
-                    </div>
-                    <Badge className="bg-zinc-100 text-zinc-600">Digital twin</Badge>
+              <Card className="border-zinc-200/80 bg-white/95 p-5 shadow-sm shadow-zinc-200/70">
+                <div className="mb-4 flex items-center justify-between">
+                  <div>
+                    <h2 className="text-[15px] font-semibold text-zinc-950">Expected vs actual generation</h2>
+                    <p className="text-xs text-zinc-400">Monthly energy and abnormality count from the digital twin analysis</p>
                   </div>
-                  <div className="h-72">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <AreaChart data={data.monthly} margin={{ top: 10, right: 16, bottom: 0, left: 0 }}>
-                        <CartesianGrid stroke="#e4e4e7" strokeDasharray="4 4" />
-                        <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#71717a" }} tickMargin={8} />
-                        <YAxis yAxisId="energy" tick={{ fontSize: 11, fill: "#71717a" }} width={42} />
-                        <YAxis yAxisId="events" orientation="right" tick={{ fontSize: 11, fill: "#71717a" }} width={32} />
-                        <RechartsTooltip />
-                        <Area yAxisId="energy" type="monotone" dataKey="expectedMWh" name="Expected MWh" stroke="#003A70" fill="#003A70" fillOpacity={0.1} strokeWidth={2} />
-                        <Area yAxisId="energy" type="monotone" dataKey="actualMWh" name="Actual MWh" stroke="#008060" fill="#008060" fillOpacity={0.12} strokeWidth={2} />
-                        <Area yAxisId="events" type="monotone" dataKey="anomalyEvents" name="Abnormalities" stroke="#ef4444" fill="#ef4444" fillOpacity={0.08} strokeWidth={2} />
-                      </AreaChart>
-                    </ResponsiveContainer>
-                  </div>
-                </Card>
-
-                <Card className="gap-0 border-zinc-200/80 bg-white/95 p-0 shadow-sm shadow-zinc-200/70">
-                  <div className="border-b border-zinc-200 p-4">
-                    <h2 className="text-[15px] font-semibold text-zinc-950">Live notifications</h2>
-                    <p className="text-xs text-zinc-400">Prioritized for expensive field-service decisions</p>
-                  </div>
-                  <ScrollArea className="h-72">
-                    <AlertList />
-                  </ScrollArea>
-                </Card>
-              </div>
+                  <Badge className="bg-zinc-100 text-zinc-600">Digital twin</Badge>
+                </div>
+                <div className="h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={data.monthly} margin={{ top: 10, right: 16, bottom: 0, left: 0 }}>
+                      <CartesianGrid stroke="#e4e4e7" strokeDasharray="4 4" />
+                      <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#71717a" }} tickMargin={8} />
+                      <YAxis yAxisId="energy" tick={{ fontSize: 11, fill: "#71717a" }} width={42} />
+                      <YAxis yAxisId="events" orientation="right" tick={{ fontSize: 11, fill: "#71717a" }} width={32} />
+                      <RechartsTooltip />
+                      <Area yAxisId="energy" type="monotone" dataKey="expectedMWh" name="Expected MWh" stroke="#003A70" fill="#003A70" fillOpacity={0.1} strokeWidth={2} />
+                      <Area yAxisId="energy" type="monotone" dataKey="actualMWh" name="Actual MWh" stroke="#008060" fill="#008060" fillOpacity={0.12} strokeWidth={2} />
+                      <Area yAxisId="events" type="monotone" dataKey="anomalyEvents" name="Abnormalities" stroke="#ef4444" fill="#ef4444" fillOpacity={0.08} strokeWidth={2} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </Card>
 
               <Card className="border-zinc-200/80 bg-white/95 p-5 shadow-sm shadow-zinc-200/70">
                 <div className="mb-4 flex items-center justify-between">
