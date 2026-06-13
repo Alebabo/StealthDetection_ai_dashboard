@@ -58,6 +58,8 @@ interface InverterRow {
   nonzeroErrors: number
   state6Events: number
   lastAction: string
+  moduleType?: string
+  degradationPctYr?: number | null
 }
 
 interface AlertRow {
@@ -86,6 +88,20 @@ const data = dashboardData as {
     medianModelMAE: number | null
     baseline: string
   }
+  detection: {
+    detectedBeforeTicket: number
+    ticketsMatched: number
+    medianLeadDays: number | null
+    ticketsNotYieldRelevant: number
+    ticketsAudited: number
+    unticketedLossEUR: number
+  }
+  degradation: {
+    fleetMedianPctYr: number
+    sensorTrendPctYr: number
+    caveat: string
+    byModuleType: { moduleType: string; nInverters: number; slopePctYr: number; ciLo: number; ciHi: number }[]
+  }
   inverters: InverterRow[]
   alerts: AlertRow[]
   monthly: {
@@ -98,6 +114,7 @@ const data = dashboardData as {
     lossEUR?: number
     anomalyEvents: number
   }[]
+  pr: { month: string; pr: number; prTempCorrected: number; lossEUR: number; lowCoverage: boolean }[]
 }
 
 const NAV_ITEMS: { page: Page; icon: ElementType }[] = [
@@ -287,7 +304,7 @@ export default function SolarDashboard() {
     {
       role: "assistant",
       content:
-        "Ask about inverter priorities, curtailment, downtime, degradation, errorcode correlation, or EUR impact. I answer from the generated analysis summaries.",
+        "Ask about inverter priorities, the 2019 plant-wide event, downtime vs curtailment, degradation by module type, ticket relevance, or EUR impact. Every number I give is cited to a specific event, inverter, or ledger table.",
     },
   ])
 
@@ -308,11 +325,11 @@ export default function SolarDashboard() {
       ),
     []
   )
-  const topDegradation = useMemo(
-    () => [...data.inverters].sort((a, b) => b.degradationKWh - a.degradationKWh).slice(0, 3),
+  const revenueTrend = useMemo(() => data.monthly.slice(-18), [])
+  const prTrend = useMemo(
+    () => data.pr.filter((p) => !p.lowCoverage).map((p) => ({ month: p.month, pr: p.pr, lossEUR: p.lossEUR })),
     []
   )
-  const revenueTrend = useMemo(() => data.monthly.slice(-18), [])
   const revenueSpark = useMemo(
     () => data.monthly.slice(-12).map((m) => ({ v: m.actualRevenueEUR ?? 0 })),
     []
@@ -364,7 +381,7 @@ export default function SolarDashboard() {
         {
           role: "assistant",
           content:
-            "LLM chat is not available in this environment. Set OPENAI_API_KEY and deploy/run an API route to enable grounded answers over the generated analysis summaries.",
+            "Chat backend not reachable. Start the grounded agent: `uvicorn api:app --port 8000 --app-dir src/agent` with AGENT_API_KEY set (OpenAI or Kimi). Charts above work without it.",
         },
       ])
     } finally {
@@ -446,8 +463,8 @@ export default function SolarDashboard() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 gap-4 xl:grid-cols-[1fr_340px]">
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                  <MetricCard label="Revenue" value={`EUR ${metricLabel(data.summary.actualRevenueEUR)}`} helper="Actual generated energy at flat tariff" icon={Zap} trend={revenueSpark} trendColor="#008060" />
-                  <MetricCard label="Lost revenue" value={`EUR ${metricLabel(data.summary.totalLossEUR)}`} helper="Estimated missed production value" icon={Gauge} trend={lossSpark} trendColor="#ef4444" />
+                  <MetricCard label="Revenue" value={`EUR ${metricLabel(data.summary.actualRevenueEUR)}`} helper="Actual generation at real weekly feed-in tariff" icon={Zap} trend={revenueSpark} trendColor="#008060" />
+                  <MetricCard label="Identified losses" value={`EUR ${metricLabel(data.summary.totalLossEUR)}`} helper={`${(data.summary.totalLossEUR / (data.summary.actualRevenueEUR + data.summary.totalLossEUR) * 100).toFixed(1)}% of potential revenue, attributed by cause`} icon={Gauge} trend={lossSpark} trendColor="#ef4444" />
                   <MetricCard label="Model quality" value={data.summary.medianModelR2 == null ? "n/a" : `${metricLabel(data.summary.medianModelR2 * 100, "%")}`} helper="Median validation R2 across twins" icon={AlertTriangle} trend={fitSpark} trendColor="#003A70" />
                 </div>
                 <Card className="border-zinc-200/80 bg-white/95 p-3.5 shadow-sm shadow-zinc-200/70">
@@ -467,6 +484,27 @@ export default function SolarDashboard() {
                   </div>
                 </Card>
               </div>
+
+              <Card className="border-[#003A70]/20 bg-[#003A70]/[0.04] p-4 shadow-sm">
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+                  <div>
+                    <p className="text-2xl font-bold text-[#003A70]">{data.detection.detectedBeforeTicket}/{data.detection.ticketsMatched}</p>
+                    <p className="text-xs text-zinc-500">faults caught <span className="font-medium">before</span> the ticket {data.detection.medianLeadDays != null ? `(median ${data.detection.medianLeadDays}d lead)` : ""}</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-red-600">EUR {metricLabel(data.detection.unticketedLossEUR)}</p>
+                    <p className="text-xs text-zinc-500">fault losses with <span className="font-medium">no ticket</span> on record</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-amber-600">{data.detection.ticketsNotYieldRelevant}</p>
+                    <p className="text-xs text-zinc-500">tickets with no yield impact (avoidable visits)</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-emerald-600">beyond PR</p>
+                    <p className="text-xs text-zinc-500">localizes, attributes & prices what Performance Ratio cannot</p>
+                  </div>
+                </div>
+              </Card>
 
               <Card className="border-zinc-200/80 bg-white/95 p-5 shadow-sm shadow-zinc-200/70">
                 <div className="mb-4 flex items-center justify-between">
@@ -568,22 +606,54 @@ export default function SolarDashboard() {
                   <p className="flex gap-2"><CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />Median MAE: {data.summary.medianModelMAE == null ? "n/a" : `${metricLabel(data.summary.medianModelMAE)} kW`}.</p>
                   <p className="flex gap-2"><CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />Baseline comparison: {data.summary.baseline}</p>
                 </div>
+                <div className="mt-5 border-t border-zinc-100 pt-4">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-zinc-900">Beyond Performance Ratio</p>
+                    <Badge className="bg-zinc-100 text-zinc-600">PR {prTrend[0]?.pr.toFixed(2)} → {prTrend[prTrend.length - 1]?.pr.toFixed(2)}</Badge>
+                  </div>
+                  <p className="mt-1 text-xs text-zinc-400">PR shows that the plant declines — not which inverter, why, or the EUR cost.</p>
+                  <div className="mt-2 h-28">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={prTrend} margin={{ top: 4, right: 8, bottom: 0, left: 0 }}>
+                        <CartesianGrid stroke="#e4e4e7" strokeDasharray="4 4" />
+                        <XAxis dataKey="month" tick={{ fontSize: 9, fill: "#a1a1aa" }} interval={11} tickMargin={6} />
+                        <YAxis domain={[0.4, 0.9]} tick={{ fontSize: 10, fill: "#71717a" }} width={32} />
+                        <RechartsTooltip />
+                        <Area type="monotone" dataKey="pr" name="Performance Ratio" stroke="#003A70" fill="#003A70" fillOpacity={0.1} strokeWidth={2} />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
               </Card>
               <Card className="border-zinc-200/80 bg-white/95 p-5 shadow-sm shadow-zinc-200/70">
                 <h2 className="text-[15px] font-semibold text-zinc-950">Degradation overview</h2>
                 <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
                   <div className="rounded-lg bg-zinc-50 p-4 text-center"><p className="text-2xl font-bold text-zinc-900">{metricLabel(categoryTotals.curtailmentKWh / 1000)}</p><p className="text-xs text-zinc-500">Curtailment MWh</p></div>
                   <div className="rounded-lg bg-zinc-50 p-4 text-center"><p className="text-2xl font-bold text-zinc-900">{metricLabel(categoryTotals.downtimeKWh / 1000)}</p><p className="text-xs text-zinc-500">Downtime MWh</p></div>
-                  <div className="rounded-lg bg-zinc-50 p-4 text-center"><p className="text-2xl font-bold text-zinc-900">{metricLabel(categoryTotals.degradationKWh / 1000)}</p><p className="text-xs text-zinc-500">Degradation MWh</p></div>
+                  <div className="rounded-lg bg-zinc-50 p-4 text-center"><p className="text-2xl font-bold text-zinc-900">{metricLabel(categoryTotals.degradationKWh / 1000)}</p><p className="text-xs text-zinc-500">Hidden / partial MWh</p></div>
                   <div className="rounded-lg bg-zinc-50 p-4 text-center"><p className="text-2xl font-bold text-zinc-900">{metricLabel(categoryTotals.unclassifiedKWh / 1000)}</p><p className="text-xs text-zinc-500">Unclassified MWh</p></div>
                 </div>
                 <div className="mt-5 rounded-lg bg-zinc-50 p-4 text-sm text-zinc-600">
-                  <p className="font-medium text-zinc-900">Monthly loss trend</p>
-                  <p className="mt-1">Full-period losses are aggregated by month in `monthly_losses.csv` and rendered in the Overview timeline.</p>
-                  <p className="mt-3 font-medium text-zinc-900">Top degradation candidates</p>
-                  <p className="mt-1 text-xs text-zinc-500">
-                    {topDegradation.map((inv) => `${inv.id}: ${metricLabel(inv.degradationKWh / 1000)} MWh`).join(" | ")}
-                  </p>
+                  <div className="flex items-center justify-between">
+                    <p className="font-medium text-zinc-900">Module degradation rate (%/yr)</p>
+                    <span className="text-xs text-zinc-400">fleet median {data.degradation.fleetMedianPctYr}%/yr</span>
+                  </div>
+                  <div className="mt-2 space-y-1">
+                    {data.degradation.byModuleType.slice(0, 6).map((m) => {
+                      const worst = data.degradation.byModuleType[0].slopePctYr
+                      const pct = Math.min(100, (m.slopePctYr / worst) * 100)
+                      return (
+                        <div key={m.moduleType} className="flex items-center gap-2 text-xs">
+                          <span className="w-28 shrink-0 truncate text-zinc-600">{m.moduleType} ({m.nInverters})</span>
+                          <div className="h-2 flex-1 rounded-full bg-zinc-200">
+                            <div className="h-2 rounded-full bg-red-400" style={{ width: `${pct}%` }} />
+                          </div>
+                          <span className="w-12 shrink-0 text-right font-mono text-zinc-700">{m.slopePctYr}%</span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                  <p className="mt-3 text-xs text-amber-700">{data.degradation.caveat}</p>
                 </div>
               </Card>
             </div>
@@ -595,8 +665,8 @@ export default function SolarDashboard() {
                 <div className="flex min-h-0 flex-1 flex-col">
                   <div className="border-b border-zinc-200 p-4">
                     <h2 className="text-[15px] font-semibold text-zinc-950">LLM analysis chat</h2>
-                    <p className="text-xs text-zinc-400">Grounded on generated JSON/CSV summaries, not raw XLSB files at runtime.</p>
-                    <p className="mt-2 text-xs text-amber-600">Live answers require OPENAI_API_KEY on the API server; otherwise the chat returns a disabled-state message.</p>
+                    <p className="text-xs text-zinc-400">Grounded on the analysis tables via read-only tools — every figure is cited, never generated.</p>
+                    <p className="mt-2 text-xs text-amber-600">Needs the agent backend running (AGENT_API_KEY; OpenAI or Kimi). Without it, a setup message is shown.</p>
                   </div>
                   <ScrollArea className="min-h-0 flex-1 p-4">
                     <div className="space-y-3">
@@ -644,10 +714,10 @@ export default function SolarDashboard() {
                 <h2 className="text-[15px] font-semibold text-zinc-950">Suggested questions</h2>
                 <div className="mt-4 space-y-2">
                   {[
-                    "Which inverter underperforms the most?",
+                    "Which inverter lost the most money in 2019 and why?",
                     "Where should we send a technician first?",
-                    "How much loss is curtailment?",
-                    "Which errorcodes correlate with production loss?",
+                    "Which module type degrades fastest?",
+                    "Are any tickets not actually relevant to yield?",
                   ].map((question) => (
                     <button
                       key={question}
@@ -659,7 +729,7 @@ export default function SolarDashboard() {
                   ))}
                 </div>
                 <div className="mt-5 rounded-lg bg-zinc-50 p-3 text-xs text-zinc-500">
-                  Requires `OPENAI_API_KEY` on the API server. Without it, the chat explains that LLM mode is disabled.
+                  Backend: <span className="font-mono">src/agent/api.py</span> (FastAPI, 8 read-only tools over the ledger). Provider-agnostic — set AGENT_API_KEY for OpenAI or Kimi.
                 </div>
               </Card>
             </div>

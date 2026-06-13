@@ -11,4 +11,13 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    // forward chat to our grounded FastAPI agent (src/agent/api.py on :8000)
+    proxy: {
+      "/api/chat": {
+        target: process.env.AGENT_BACKEND_URL || "http://localhost:8000",
+        changeOrigin: true,
+      },
+    },
+  },
 })
