@@ -21,7 +21,10 @@ import { SiClaude, SiGmail, SiOpenai } from "react-icons/si"
 import {
   Area,
   AreaChart,
+  Bar,
   CartesianGrid,
+  ComposedChart,
+  Line,
   ResponsiveContainer,
   Tooltip as RechartsTooltip,
   XAxis,
@@ -557,6 +560,29 @@ export default function SolarDashboard() {
                 </Card>
               </div>
 
+              <Card className="border-zinc-200/80 bg-white/95 p-5 shadow-sm shadow-zinc-200/70">
+                <div className="mb-4 flex items-center justify-between">
+                  <div>
+                    <h2 className="text-[15px] font-semibold text-zinc-950">Beyond Performance Ratio</h2>
+                    <p className="text-xs text-zinc-400">PR shows that the plant declines — we show where, why, how much.</p>
+                  </div>
+                  <Badge className="bg-[#003A70]/10 text-[#003A70]">PR {data.pr[0].pr.toFixed(2)} → {data.pr[data.pr.length - 1].pr.toFixed(2)}</Badge>
+                </div>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <ComposedChart data={data.pr} margin={{ top: 10, right: 8, bottom: 0, left: 0 }}>
+                      <CartesianGrid strokeDasharray="4 4" stroke="#e4e4e7" />
+                      <XAxis dataKey="month" interval={11} tickMargin={8} tick={{ fontSize: 11, fill: "#71717a" }} />
+                      <YAxis yAxisId="pr" domain={[0, 0.95]} tick={{ fontSize: 11, fill: "#71717a" }} width={42} />
+                      <YAxis yAxisId="loss" orientation="right" tick={{ fontSize: 11, fill: "#71717a" }} width={48} />
+                      <RechartsTooltip />
+                      <Bar yAxisId="loss" dataKey="lossEUR" name="EUR loss / month" fill="#f6a6a0" />
+                      <Line yAxisId="pr" type="monotone" dataKey="pr" name="Performance Ratio" stroke="#003A70" strokeWidth={2} dot={false} />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                </div>
+              </Card>
+
               <Card className="border-[#003A70]/20 bg-[#003A70]/[0.04] p-4 shadow-sm">
                 <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                   <div>
@@ -575,30 +601,6 @@ export default function SolarDashboard() {
                     <p className="text-2xl font-bold text-emerald-600">beyond PR</p>
                     <p className="text-xs text-zinc-500">localizes, attributes & prices what Performance Ratio cannot</p>
                   </div>
-                </div>
-              </Card>
-
-              <Card className="border-zinc-200/80 bg-white/95 p-5 shadow-sm shadow-zinc-200/70">
-                <div className="mb-4 flex items-center justify-between">
-                  <div>
-                    <h2 className="text-[15px] font-semibold text-zinc-950">Expected vs actual generation</h2>
-                    <p className="text-xs text-zinc-400">Monthly energy and abnormality count from the digital twin analysis</p>
-                  </div>
-                  <Badge className="bg-zinc-100 text-zinc-600">Digital twin</Badge>
-                </div>
-                <div className="h-72">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={data.monthly} margin={{ top: 10, right: 16, bottom: 0, left: 0 }}>
-                      <CartesianGrid stroke="#e4e4e7" strokeDasharray="4 4" />
-                      <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#71717a" }} tickMargin={8} />
-                      <YAxis yAxisId="energy" tick={{ fontSize: 11, fill: "#71717a" }} width={42} />
-                      <YAxis yAxisId="events" orientation="right" tick={{ fontSize: 11, fill: "#71717a" }} width={32} />
-                      <RechartsTooltip />
-                      <Area yAxisId="energy" type="monotone" dataKey="expectedMWh" name="Expected MWh" stroke="#003A70" fill="#003A70" fillOpacity={0.1} strokeWidth={2} />
-                      <Area yAxisId="energy" type="monotone" dataKey="actualMWh" name="Actual MWh" stroke="#008060" fill="#008060" fillOpacity={0.12} strokeWidth={2} />
-                      <Area yAxisId="events" type="monotone" dataKey="anomalyEvents" name="Abnormalities" stroke="#ef4444" fill="#ef4444" fillOpacity={0.08} strokeWidth={2} />
-                    </AreaChart>
-                  </ResponsiveContainer>
                 </div>
               </Card>
 
@@ -629,6 +631,30 @@ export default function SolarDashboard() {
                       </div>
                     </div>
                   ))}
+                </div>
+              </Card>
+
+              <Card className="border-zinc-200/80 bg-white/95 p-5 shadow-sm shadow-zinc-200/70">
+                <div className="mb-4 flex items-center justify-between">
+                  <div>
+                    <h2 className="text-[15px] font-semibold text-zinc-950">Fleet status</h2>
+                    <p className="text-xs text-zinc-400">{data.summary.totalInverters} inverters classified by digital-twin health</p>
+                  </div>
+                  <Badge className="bg-zinc-100 text-zinc-600">{data.summary.totalInverters} total</Badge>
+                </div>
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+                    <p className="text-2xl font-bold text-emerald-700">{data.summary.healthy}</p>
+                    <p className="text-xs text-zinc-500">Healthy</p>
+                  </div>
+                  <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+                    <p className="text-2xl font-bold text-amber-700">{data.summary.watch}</p>
+                    <p className="text-xs text-zinc-500">Watch</p>
+                  </div>
+                  <div className="rounded-lg border border-red-200 bg-red-50 p-4">
+                    <p className="text-2xl font-bold text-red-700">{data.summary.maintenance}</p>
+                    <p className="text-xs text-zinc-500">Maintenance required</p>
+                  </div>
                 </div>
               </Card>
             </div>
@@ -669,7 +695,32 @@ export default function SolarDashboard() {
           )}
 
           {page === "Analytics" && (
-            <div className="grid grid-cols-1 gap-6 xl:grid-cols-[0.8fr_1.2fr]">
+            <div className="space-y-6">
+              <Card className="border-zinc-200/80 bg-white/95 p-5 shadow-sm shadow-zinc-200/70">
+                <div className="mb-4 flex items-center justify-between">
+                  <div>
+                    <h2 className="text-[15px] font-semibold text-zinc-950">Expected vs actual generation</h2>
+                    <p className="text-xs text-zinc-400">Monthly energy and abnormality count from the digital twin analysis</p>
+                  </div>
+                  <Badge className="bg-zinc-100 text-zinc-600">Digital twin</Badge>
+                </div>
+                <div className="h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={data.monthly} margin={{ top: 10, right: 16, bottom: 0, left: 0 }}>
+                      <CartesianGrid stroke="#e4e4e7" strokeDasharray="4 4" />
+                      <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#71717a" }} tickMargin={8} />
+                      <YAxis yAxisId="energy" tick={{ fontSize: 11, fill: "#71717a" }} width={42} />
+                      <YAxis yAxisId="events" orientation="right" tick={{ fontSize: 11, fill: "#71717a" }} width={32} />
+                      <RechartsTooltip />
+                      <Area yAxisId="energy" type="monotone" dataKey="expectedMWh" name="Expected MWh" stroke="#003A70" fill="#003A70" fillOpacity={0.1} strokeWidth={2} />
+                      <Area yAxisId="energy" type="monotone" dataKey="actualMWh" name="Actual MWh" stroke="#008060" fill="#008060" fillOpacity={0.12} strokeWidth={2} />
+                      <Area yAxisId="events" type="monotone" dataKey="anomalyEvents" name="Abnormalities" stroke="#ef4444" fill="#ef4444" fillOpacity={0.08} strokeWidth={2} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </Card>
+
+              <div className="grid grid-cols-1 gap-6 xl:grid-cols-[0.8fr_1.2fr]">
               <Card className="border-zinc-200/80 bg-white/95 p-5 shadow-sm shadow-zinc-200/70">
                 <h2 className="text-[15px] font-semibold text-zinc-950">Model vs baseline</h2>
                 <div className="mt-4 space-y-3 text-sm text-zinc-600">
@@ -728,6 +779,7 @@ export default function SolarDashboard() {
                   <p className="mt-3 text-xs text-amber-700">{data.degradation.caveat}</p>
                 </div>
               </Card>
+              </div>
             </div>
           )}
 
