@@ -1,11 +1,9 @@
 import { useMemo, useState, type ElementType } from "react"
 import {
-  AlertTriangle,
   BellRing,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  Gauge,
   Grid3X3,
   LayoutDashboard,
   LineChart as LineChartIcon,
@@ -14,7 +12,7 @@ import {
   Plug,
   Send,
   Settings,
-  Zap,
+  X,
 } from "lucide-react"
 import { FaSlack, FaTelegram } from "react-icons/fa"
 import { SiClaude, SiGmail, SiOpenai } from "react-icons/si"
@@ -46,6 +44,7 @@ type InverterStatus = "Healthy" | "Watch" | "Maintenance Required"
 type AlertSeverity = "Critical" | "Warning"
 type GridFilter = "All" | InverterStatus
 type AlertFilter = "All" | AlertSeverity
+type OverviewRange = "All" | "Year" | "Month"
 
 interface InverterRow {
   id: string
@@ -237,21 +236,18 @@ function MetricCard({
   label,
   value,
   helper,
-  icon: Icon,
   trend,
   trendColor = "#003A70",
 }: {
   label: string
   value: string
   helper: string
-  icon: ElementType
   trend: { v: number }[]
   trendColor?: string
 }) {
   return (
     <Card className="gap-2 border-zinc-200/80 bg-white/95 p-3.5 shadow-sm shadow-zinc-200/70">
       <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-zinc-500">
-        <Icon className="size-3.5 text-zinc-400" />
         {label}
       </div>
       <div className="flex items-end justify-between gap-2">
@@ -269,22 +265,24 @@ function FilterPills<T extends string>({
   options,
   value,
   onChange,
+  compact = false,
 }: {
   options: T[]
   value: T
   onChange: (value: T) => void
+  compact?: boolean
 }) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className={`flex flex-wrap ${compact ? "gap-1 rounded-full border border-zinc-200 bg-zinc-100 p-1" : "gap-2"}`}>
       {options.map((option) => (
         <button
           key={option}
           onClick={() => onChange(option)}
-          className={`rounded-full px-3 py-1 text-xs font-medium transition-all ${
+          className={`rounded-full text-xs font-medium transition-all ${
             value === option
               ? "bg-[#003A70] text-white shadow-sm shadow-[#003A70]/20"
               : "border border-zinc-200 bg-white text-zinc-600 hover:ring-1 hover:ring-[#003A70]"
-          }`}
+          } ${compact ? "h-7 px-3" : "px-3 py-1"}`}
         >
           {option}
         </button>
@@ -350,6 +348,7 @@ interface ChatMessage {
 export default function SolarDashboard() {
   const [collapsed, setCollapsed] = useState(false)
   const [page, setPage] = useState<Page>("Overview")
+  const [overviewRange, setOverviewRange] = useState<OverviewRange>("All")
   const [gridFilter, setGridFilter] = useState<GridFilter>("All")
   const [alertFilter, setAlertFilter] = useState<AlertFilter>("All")
   const [chatInput, setChatInput] = useState("Which inverter should a technician inspect first?")
@@ -358,6 +357,7 @@ export default function SolarDashboard() {
   const [modelSensitivity, setModelSensitivity] = useState(68)
   const [modelWindow, setModelWindow] = useState("Rolling 30 days")
   const [modelSettingsSaved, setModelSettingsSaved] = useState(false)
+  const [showImpactNotice, setShowImpactNotice] = useState(true)
   const [configuredConnector, setConfiguredConnector] = useState<ConnectorId | null>(null)
   const [connectorState, setConnectorState] = useState<
     Record<ConnectorId, { connected: boolean; loading: boolean }>
@@ -404,25 +404,42 @@ export default function SolarDashboard() {
       ),
     []
   )
-  const revenueTrend = useMemo(() => data.monthly.slice(-18), [])
+  const overviewMonthly = useMemo(() => {
+    if (overviewRange === "Month") return data.monthly.slice(-1)
+    if (overviewRange === "Year") return data.monthly.slice(-12)
+    return data.monthly
+  }, [overviewRange])
+  const overviewTotals = useMemo(
+    () =>
+      overviewMonthly.reduce(
+        (totals, month) => ({
+          actualRevenueEUR: totals.actualRevenueEUR + (month.actualRevenueEUR ?? 0),
+          lossEUR: totals.lossEUR + (month.lossEUR ?? 0),
+        }),
+        { actualRevenueEUR: 0, lossEUR: 0 }
+      ),
+    [overviewMonthly]
+  )
+  const overviewPeriodLabel = overviewRange === "All" ? "full period" : overviewRange === "Year" ? "last 12 months" : "latest month"
+  const revenueTrend = useMemo(() => overviewMonthly.slice(-18), [overviewMonthly])
   const prTrend = useMemo(
     () => data.pr.filter((p) => !p.lowCoverage).map((p) => ({ month: p.month, pr: p.pr, lossEUR: p.lossEUR })),
     []
   )
   const revenueSpark = useMemo(
-    () => data.monthly.slice(-12).map((m) => ({ v: m.actualRevenueEUR ?? 0 })),
-    []
+    () => overviewMonthly.slice(-12).map((m) => ({ v: m.actualRevenueEUR ?? 0 })),
+    [overviewMonthly]
   )
   const lossSpark = useMemo(
-    () => data.monthly.slice(-12).map((m) => ({ v: m.lossEUR ?? 0 })),
-    []
+    () => overviewMonthly.slice(-12).map((m) => ({ v: m.lossEUR ?? 0 })),
+    [overviewMonthly]
   )
   const fitSpark = useMemo(
     () =>
-      data.monthly
+      overviewMonthly
         .slice(-12)
         .map((m) => ({ v: m.expectedMWh ? (m.actualMWh ?? 0) / m.expectedMWh : 0 })),
-    []
+    [overviewMonthly]
   )
   const filteredInverters = useMemo(
     () => data.inverters.filter((inv) => gridFilter === "All" || inv.status === gridFilter),
@@ -536,17 +553,52 @@ export default function SolarDashboard() {
         <main className="min-h-0 flex-1 overflow-y-auto p-7">
           {page === "Overview" && (
             <div className="space-y-6">
+              <div className="flex items-center gap-3">
+                <div className="shrink-0">
+                  <FilterPills
+                    compact
+                    options={["All", "Year", "Month"]}
+                    value={overviewRange}
+                    onChange={setOverviewRange}
+                  />
+                </div>
+                {showImpactNotice && (
+                  <div className="flex min-w-0 flex-1 items-center gap-2 rounded-full border border-zinc-200 bg-zinc-100/80 px-3 py-1.5 text-xs text-zinc-500">
+                    <div className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
+                      <span className="font-semibold text-zinc-700">{data.detection.detectedBeforeTicket}/{data.detection.ticketsMatched}</span>
+                      <span> faults before ticket {data.detection.medianLeadDays != null ? `(median ${data.detection.medianLeadDays}d)` : ""}</span>
+                      <span className="mx-2 text-zinc-300">|</span>
+                      <span className="font-semibold text-zinc-700">EUR {metricLabel(data.detection.unticketedLossEUR)}</span>
+                      <span> no-ticket loss</span>
+                      <span className="mx-2 text-zinc-300">|</span>
+                      <span className="font-semibold text-zinc-700">{data.detection.ticketsNotYieldRelevant}</span>
+                      <span> avoidable visits</span>
+                      <span className="mx-2 text-zinc-300">|</span>
+                      <span>Beyond PR impact localized</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowImpactNotice(false)}
+                      className="flex size-5 shrink-0 items-center justify-center rounded-full text-zinc-400 transition-colors hover:bg-zinc-200 hover:text-zinc-700"
+                      aria-label="Dismiss impact notification"
+                    >
+                      <X className="size-3.5" />
+                    </button>
+                  </div>
+                )}
+              </div>
+
               <div className="grid grid-cols-1 gap-4 xl:grid-cols-[1fr_340px]">
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                  <MetricCard label="Revenue" value={`EUR ${metricLabel(data.summary.actualRevenueEUR)}`} helper="Actual generation at real weekly feed-in tariff" icon={Zap} trend={revenueSpark} trendColor="#008060" />
-                  <MetricCard label="Identified losses" value={`EUR ${metricLabel(data.summary.totalLossEUR)}`} helper={`${(data.summary.totalLossEUR / (data.summary.actualRevenueEUR + data.summary.totalLossEUR) * 100).toFixed(1)}% of potential revenue, attributed by cause`} icon={Gauge} trend={lossSpark} trendColor="#ef4444" />
-                  <MetricCard label="Model quality" value={data.summary.medianModelR2 == null ? "n/a" : `${metricLabel(data.summary.medianModelR2 * 100, "%")}`} helper="Median validation R2 across twins" icon={AlertTriangle} trend={fitSpark} trendColor="#003A70" />
+                  <MetricCard label="Revenue" value={`EUR ${metricLabel(overviewTotals.actualRevenueEUR)}`} helper={`Actual generation in ${overviewPeriodLabel}`} trend={revenueSpark} trendColor="#008060" />
+                  <MetricCard label="Identified losses" value={`EUR ${metricLabel(overviewTotals.lossEUR)}`} helper={`${(overviewTotals.lossEUR / Math.max(1, overviewTotals.actualRevenueEUR + overviewTotals.lossEUR) * 100).toFixed(1)}% of potential revenue, attributed by cause`} trend={lossSpark} trendColor="#ef4444" />
+                  <MetricCard label="Model quality" value={data.summary.medianModelR2 == null ? "n/a" : `${metricLabel(data.summary.medianModelR2 * 100, "%")}`} helper="Median validation R2 across twins" trend={fitSpark} trendColor="#003A70" />
                 </div>
                 <Card className="border-zinc-200/80 bg-white/95 p-3.5 shadow-sm shadow-zinc-200/70">
                   <div className="mb-2 flex items-center justify-between">
                     <div>
                       <p className="text-[11px] font-medium uppercase tracking-wide text-zinc-500">Revenue trend</p>
-                      <p className="text-sm font-semibold text-zinc-950">Last 18 months</p>
+                      <p className="text-sm font-semibold text-zinc-950">{overviewRange === "All" ? "Full period" : overviewPeriodLabel}</p>
                     </div>
                     <Badge className="bg-emerald-50 text-emerald-700">EUR</Badge>
                   </div>
@@ -583,24 +635,27 @@ export default function SolarDashboard() {
                 </div>
               </Card>
 
-              <Card className="border-[#003A70]/20 bg-[#003A70]/[0.04] p-4 shadow-sm">
-                <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+              <Card className="border-zinc-200/80 bg-white/95 p-5 shadow-sm shadow-zinc-200/70">
+                <div className="mb-4 flex items-center justify-between">
                   <div>
-                    <p className="text-2xl font-bold text-[#003A70]">{data.detection.detectedBeforeTicket}/{data.detection.ticketsMatched}</p>
-                    <p className="text-xs text-zinc-500">faults caught <span className="font-medium">before</span> the ticket {data.detection.medianLeadDays != null ? `(median ${data.detection.medianLeadDays}d lead)` : ""}</p>
+                    <h2 className="text-[15px] font-semibold text-zinc-950">Expected vs actual generation</h2>
+                    <p className="text-xs text-zinc-400">Monthly energy and abnormality count from the digital twin analysis</p>
                   </div>
-                  <div>
-                    <p className="text-2xl font-bold text-red-600">EUR {metricLabel(data.detection.unticketedLossEUR)}</p>
-                    <p className="text-xs text-zinc-500">fault losses with <span className="font-medium">no ticket</span> on record</p>
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold text-amber-600">{data.detection.ticketsNotYieldRelevant}</p>
-                    <p className="text-xs text-zinc-500">tickets with no yield impact (avoidable visits)</p>
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold text-emerald-600">beyond PR</p>
-                    <p className="text-xs text-zinc-500">localizes, attributes & prices what Performance Ratio cannot</p>
-                  </div>
+                  <Badge className="bg-zinc-100 text-zinc-600">Digital twin</Badge>
+                </div>
+                <div className="h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={overviewMonthly} margin={{ top: 10, right: 16, bottom: 0, left: 0 }}>
+                      <CartesianGrid stroke="#e4e4e7" strokeDasharray="4 4" />
+                      <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#71717a" }} tickMargin={8} />
+                      <YAxis yAxisId="energy" tick={{ fontSize: 11, fill: "#71717a" }} width={42} />
+                      <YAxis yAxisId="events" orientation="right" tick={{ fontSize: 11, fill: "#71717a" }} width={32} />
+                      <RechartsTooltip />
+                      <Area yAxisId="energy" type="monotone" dataKey="expectedMWh" name="Expected MWh" stroke="#003A70" fill="#003A70" fillOpacity={0.1} strokeWidth={2} />
+                      <Area yAxisId="energy" type="monotone" dataKey="actualMWh" name="Actual MWh" stroke="#008060" fill="#008060" fillOpacity={0.12} strokeWidth={2} />
+                      <Area yAxisId="events" type="monotone" dataKey="anomalyEvents" name="Abnormalities" stroke="#ef4444" fill="#ef4444" fillOpacity={0.08} strokeWidth={2} />
+                    </AreaChart>
+                  </ResponsiveContainer>
                 </div>
               </Card>
 
