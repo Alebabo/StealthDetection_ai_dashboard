@@ -15,7 +15,6 @@ import {
   ScrollText,
   Send,
   Settings,
-  ShieldAlert,
   Sun,
   Zap,
 } from "lucide-react"
@@ -35,6 +34,7 @@ import { Card } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Textarea } from "@/components/ui/textarea"
 import dashboardData from "@/data/inverter-dashboard.json"
+import stealthDetectionLogo from "@/assets/stealthdetection-logo.png"
 
 type Page = "Overview" | "Inverter Grid" | "Alerts" | "Analytics" | "Chat" | "Logs" | "Settings"
 type InverterStatus = "Healthy" | "Watch" | "Maintenance Required"
@@ -403,10 +403,10 @@ export default function SolarDashboard() {
         </Button>
 
         <div className={`flex h-14 items-center gap-2 border-b border-zinc-200 px-4 ${collapsed ? "justify-center px-0" : ""}`}>
-          <ShieldAlert className="size-6 shrink-0 text-[#003A70]" />
+          <img src={stealthDetectionLogo} alt="StealthDetection logo" className="h-8 w-9 shrink-0 object-contain" />
           {!collapsed && (
             <div className="min-w-0">
-              <span className="block text-[15px] font-semibold tracking-tight text-zinc-950">stealthdetection.ml</span>
+              <span className="block text-[15px] font-semibold tracking-tight text-zinc-950">StealthDetection</span>
               <span className="block text-[10px] font-medium uppercase tracking-[0.18em] text-[#003A70]">Enerparc intelligence</span>
             </div>
           )}
@@ -433,7 +433,9 @@ export default function SolarDashboard() {
 
         <div className={`border-t border-zinc-200 p-4 ${collapsed ? "px-2" : ""}`}>
           <div className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
-            <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#003A70]/15 text-xs font-bold text-[#002B55]">SD</div>
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-white ring-1 ring-zinc-200">
+              <img src={stealthDetectionLogo} alt="" className="h-6 w-6 object-contain" />
+            </div>
             {!collapsed && (
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium text-zinc-900">Plant A</p>
@@ -454,7 +456,9 @@ export default function SolarDashboard() {
               <BellRing className="size-5" />
               <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-red-500" />
             </button>
-            <div className="flex size-8 items-center justify-center rounded-full bg-[#003A70]/15 text-xs font-bold text-[#002B55]">SD</div>
+            <div className="flex size-8 items-center justify-center rounded-full bg-white ring-1 ring-zinc-200">
+              <img src={stealthDetectionLogo} alt="StealthDetection" className="h-6 w-6 object-contain" />
+            </div>
           </div>
         </header>
 

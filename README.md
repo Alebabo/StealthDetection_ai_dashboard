@@ -1,4 +1,4 @@
-# stealthdetection.ml
+# StealthDetection
 
 Enerparc Digital Twins of Solar Plants dashboard for the Energy x AI Hackathon.
 

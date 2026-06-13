@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react"
 import { Pause, Play, RotateCcw, X, Zap } from "lucide-react"
 
 import dashboardData from "@/data/inverter-dashboard.json"
+import stealthDetectionLogo from "@/assets/stealthdetection-logo.png"
 
 type InverterStatus = "Healthy" | "Watch" | "Maintenance Required"
 
@@ -75,11 +76,11 @@ function DemoScene({ onClose }: { onClose: () => void }) {
   return (
     <div className="flex h-full w-full flex-col bg-[#f4f8fb] text-zinc-900">
       <div className="flex h-16 shrink-0 items-center gap-3 border-b border-zinc-200/80 bg-white/95 px-5 shadow-sm shadow-zinc-200/50">
-        <div className="flex size-9 items-center justify-center rounded-lg bg-[#003A70]/10 text-[#003A70] ring-1 ring-[#003A70]/10">
-          <Zap className="size-5" />
+        <div className="flex size-9 items-center justify-center rounded-lg bg-white ring-1 ring-zinc-200">
+          <img src={stealthDetectionLogo} alt="StealthDetection logo" className="h-7 w-7 object-contain" />
         </div>
         <div>
-          <h2 className="text-[15px] font-semibold tracking-tight text-zinc-950">stealthdetection.ml demo replay</h2>
+          <h2 className="text-[15px] font-semibold tracking-tight text-zinc-950">StealthDetection demo replay</h2>
           <p className="text-xs font-medium text-zinc-400">
             Full-period digital twin events: {data.generatedFrom.periodStart} to {data.generatedFrom.periodEnd}
           </p>
