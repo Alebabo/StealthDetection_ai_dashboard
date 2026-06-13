@@ -27,8 +27,44 @@
     "medianModelMAE": 0.452,
     "baseline": "Beats ASTM E2848 / IEC temp-corrected PR on all 65 inverters (nMAE 1.53 vs 2.53 / 2.58%).",
     "topPriorityInverter": "INV 01.08.058",
-    "actualRevenueEUR": 1959191
+    "actualRevenueEUR": 1959191,
+    "recoverableEUR": 226357,
+    "structuralEUR": 19056,
+    "ongoingCount": 4,
+    "lostPctOfPotential": 11.1,
+    "energyActualGWh": 15.43,
+    "energyPotentialGWh": 17.37
   },
+  "lossByCause": [
+    {
+      "cause": "Downtime",
+      "eur": 169843,
+      "kwh": 1296989,
+      "recoverable": true,
+      "note": "outages \u2014 fixable"
+    },
+    {
+      "cause": "Hidden / partial",
+      "eur": 56514,
+      "kwh": 435688,
+      "recoverable": true,
+      "note": "string outage / derating / soiling \u2014 fixable, invisible to PR"
+    },
+    {
+      "cause": "Curtailment (DV)",
+      "eur": 18988,
+      "kwh": 127232,
+      "recoverable": false,
+      "note": "negative-price shutdowns \u2014 market-driven"
+    },
+    {
+      "cause": "Curtailment (EVU)",
+      "eur": 68,
+      "kwh": 0,
+      "recoverable": false,
+      "note": "grid-ordered \u2014 compensation-eligible"
+    }
+  ],
   "detection": {
     "detectedBeforeTicket": 41,
     "ticketsMatched": 45,
@@ -132,6 +168,8 @@
     {
       "id": "INV 01.01.001",
       "status": "Healthy",
+      "performancePct": 89.3,
+      "lossPct": 9.0,
       "availability": 94.5,
       "energyMWh": 258.7200012207031,
       "expectedMWh": 289.57,
@@ -151,6 +189,8 @@
     {
       "id": "INV 01.01.002",
       "status": "Healthy",
+      "performancePct": 86.1,
+      "lossPct": 12.5,
       "availability": 91.8,
       "energyMWh": 240.4499969482422,
       "expectedMWh": 279.41,
@@ -170,6 +210,8 @@
     {
       "id": "INV 01.01.003",
       "status": "Healthy",
+      "performancePct": 86.9,
+      "lossPct": 11.6,
       "availability": 93.1,
       "energyMWh": 236.77999877929688,
       "expectedMWh": 272.48,
@@ -189,6 +231,8 @@
     {
       "id": "INV 01.01.004",
       "status": "Watch",
+      "performancePct": 82.8,
+      "lossPct": 16.9,
       "availability": 89.3,
       "energyMWh": 197.4499969482422,
       "expectedMWh": 238.41,
@@ -208,6 +252,8 @@
     {
       "id": "INV 01.01.005",
       "status": "Healthy",
+      "performancePct": 91.6,
+      "lossPct": 7.2,
       "availability": 95.8,
       "energyMWh": 243.3800048828125,
       "expectedMWh": 265.68,
@@ -227,6 +273,8 @@
     {
       "id": "INV 01.01.006",
       "status": "Healthy",
+      "performancePct": 87.6,
+      "lossPct": 11.2,
       "availability": 92.7,
       "energyMWh": 252.05999755859375,
       "expectedMWh": 287.67,
@@ -246,6 +294,8 @@
     {
       "id": "INV 01.01.007",
       "status": "Healthy",
+      "performancePct": 86.6,
+      "lossPct": 11.4,
       "availability": 93.7,
       "energyMWh": 215.67999267578125,
       "expectedMWh": 249.08,
@@ -265,6 +315,8 @@
     {
       "id": "INV 01.02.008",
       "status": "Healthy",
+      "performancePct": 85.7,
+      "lossPct": 13.1,
       "availability": 90.3,
       "energyMWh": 248.75,
       "expectedMWh": 290.37,
@@ -284,6 +336,8 @@
     {
       "id": "INV 01.02.009",
       "status": "Healthy",
+      "performancePct": 92.5,
+      "lossPct": 6.9,
       "availability": 95.6,
       "energyMWh": 264.54998779296875,
       "expectedMWh": 286.03,
@@ -303,6 +357,8 @@
     {
       "id": "INV 01.02.010",
       "status": "Healthy",
+      "performancePct": 90.7,
+      "lossPct": 7.7,
       "availability": 95.7,
       "energyMWh": 247.97999572753906,
       "expectedMWh": 273.3,
@@ -322,6 +378,8 @@
     {
       "id": "INV 01.02.011",
       "status": "Healthy",
+      "performancePct": 89.9,
+      "lossPct": 8.2,
       "availability": 95.7,
       "energyMWh": 216.08999633789062,
       "expectedMWh": 240.31,
@@ -341,6 +399,8 @@
     {
       "id": "INV 01.02.012",
       "status": "Watch",
+      "performancePct": 84.5,
+      "lossPct": 13.8,
       "availability": 90.1,
       "energyMWh": 241.02999877929688,
       "expectedMWh": 285.12,
@@ -360,6 +420,8 @@
     {
       "id": "INV 01.02.013",
       "status": "Healthy",
+      "performancePct": 90.6,
+      "lossPct": 8.2,
       "availability": 95.2,
       "energyMWh": 235.0,
       "expectedMWh": 259.36,
@@ -379,6 +441,8 @@
     {
       "id": "INV 01.02.014",
       "status": "Healthy",
+      "performancePct": 88.8,
+      "lossPct": 9.1,
       "availability": 94.5,
       "energyMWh": 232.6999969482422,
       "expectedMWh": 262.01,
@@ -398,6 +462,8 @@
     {
       "id": "INV 01.03.015",
       "status": "Watch",
+      "performancePct": 83.0,
+      "lossPct": 15.0,
       "availability": 87.8,
       "energyMWh": 236.08999633789062,
       "expectedMWh": 284.53,
@@ -417,6 +483,8 @@
     {
       "id": "INV 01.03.016",
       "status": "Watch",
+      "performancePct": 79.9,
+      "lossPct": 18.5,
       "availability": 85.3,
       "energyMWh": 221.88999938964844,
       "expectedMWh": 277.55,
@@ -436,6 +504,8 @@
     {
       "id": "INV 01.03.017",
       "status": "Watch",
+      "performancePct": 81.4,
+      "lossPct": 16.4,
       "availability": 87.4,
       "energyMWh": 216.4199981689453,
       "expectedMWh": 265.86,
@@ -455,6 +525,8 @@
     {
       "id": "INV 01.03.018",
       "status": "Watch",
+      "performancePct": 82.7,
+      "lossPct": 14.8,
       "availability": 89.2,
       "energyMWh": 192.25999450683594,
       "expectedMWh": 232.53,
@@ -474,6 +546,8 @@
     {
       "id": "INV 01.03.019",
       "status": "Watch",
+      "performancePct": 85.4,
+      "lossPct": 13.2,
       "availability": 89.4,
       "energyMWh": 240.14999389648438,
       "expectedMWh": 281.29,
@@ -493,6 +567,8 @@
     {
       "id": "INV 01.03.020",
       "status": "Watch",
+      "performancePct": 83.6,
+      "lossPct": 14.4,
       "availability": 89.4,
       "energyMWh": 210.0500030517578,
       "expectedMWh": 251.2,
@@ -512,6 +588,8 @@
     {
       "id": "INV 01.03.021",
       "status": "Watch",
+      "performancePct": 86.0,
+      "lossPct": 13.2,
       "availability": 89.5,
       "energyMWh": 231.3699951171875,
       "expectedMWh": 269.17,
@@ -531,6 +609,8 @@
     {
       "id": "INV 01.04.022",
       "status": "Healthy",
+      "performancePct": 87.4,
+      "lossPct": 13.2,
       "availability": 88.5,
       "energyMWh": 249.6300048828125,
       "expectedMWh": 285.5,
@@ -550,6 +630,8 @@
     {
       "id": "INV 01.04.023",
       "status": "Maintenance Required",
+      "performancePct": 85.8,
+      "lossPct": 15.1,
       "availability": 86.9,
       "energyMWh": 240.55999755859375,
       "expectedMWh": 280.46,
@@ -569,6 +651,8 @@
     {
       "id": "INV 01.04.024",
       "status": "Healthy",
+      "performancePct": 87.3,
+      "lossPct": 13.2,
       "availability": 89.3,
       "energyMWh": 233.6699981689453,
       "expectedMWh": 267.55,
@@ -588,6 +672,8 @@
     {
       "id": "INV 01.04.025",
       "status": "Maintenance Required",
+      "performancePct": 85.3,
+      "lossPct": 15.0,
       "availability": 88.5,
       "energyMWh": 200.41000366210938,
       "expectedMWh": 235.05,
@@ -607,6 +693,8 @@
     {
       "id": "INV 01.04.026",
       "status": "Watch",
+      "performancePct": 84.4,
+      "lossPct": 14.3,
       "availability": 88.6,
       "energyMWh": 225.38999938964844,
       "expectedMWh": 266.92,
@@ -626,6 +714,8 @@
     {
       "id": "INV 01.04.027",
       "status": "Maintenance Required",
+      "performancePct": 85.5,
+      "lossPct": 14.6,
       "availability": 88.0,
       "energyMWh": 226.25,
       "expectedMWh": 264.65,
@@ -645,6 +735,8 @@
     {
       "id": "INV 01.04.028",
       "status": "Healthy",
+      "performancePct": 88.6,
+      "lossPct": 12.6,
       "availability": 89.5,
       "energyMWh": 238.8300018310547,
       "expectedMWh": 269.63,
@@ -664,6 +756,8 @@
     {
       "id": "INV 01.05.029",
       "status": "Watch",
+      "performancePct": 87.4,
+      "lossPct": 13.4,
       "availability": 88.8,
       "energyMWh": 235.52000427246094,
       "expectedMWh": 269.32,
@@ -683,6 +777,8 @@
     {
       "id": "INV 01.05.030",
       "status": "Watch",
+      "performancePct": 82.2,
+      "lossPct": 17.5,
       "availability": 87.0,
       "energyMWh": 221.4499969482422,
       "expectedMWh": 269.27,
@@ -702,6 +798,8 @@
     {
       "id": "INV 01.05.031",
       "status": "Watch",
+      "performancePct": 86.9,
+      "lossPct": 13.8,
       "availability": 88.5,
       "energyMWh": 228.13999938964844,
       "expectedMWh": 262.66,
@@ -721,6 +819,8 @@
     {
       "id": "INV 01.05.032",
       "status": "Healthy",
+      "performancePct": 85.0,
+      "lossPct": 15.9,
       "availability": 86.2,
       "energyMWh": 170.85000610351562,
       "expectedMWh": 201.03,
@@ -740,6 +840,8 @@
     {
       "id": "INV 01.05.033",
       "status": "Healthy",
+      "performancePct": 85.7,
+      "lossPct": 15.4,
       "availability": 86.6,
       "energyMWh": 224.67999267578125,
       "expectedMWh": 262.15,
@@ -759,6 +861,8 @@
     {
       "id": "INV 01.05.034",
       "status": "Healthy",
+      "performancePct": 87.9,
+      "lossPct": 14.2,
       "availability": 87.6,
       "energyMWh": 254.10000610351562,
       "expectedMWh": 289.09,
@@ -778,6 +882,8 @@
     {
       "id": "INV 01.05.035",
       "status": "Maintenance Required",
+      "performancePct": 84.6,
+      "lossPct": 17.2,
       "availability": 84.9,
       "energyMWh": 226.94000244140625,
       "expectedMWh": 268.27,
@@ -797,6 +903,8 @@
     {
       "id": "INV 01.06.036",
       "status": "Watch",
+      "performancePct": 93.2,
+      "lossPct": 5.7,
       "availability": 96.5,
       "energyMWh": 270.489990234375,
       "expectedMWh": 290.15,
@@ -816,6 +924,8 @@
     {
       "id": "INV 01.06.037",
       "status": "Healthy",
+      "performancePct": 91.9,
+      "lossPct": 6.5,
       "availability": 96.4,
       "energyMWh": 258.6300048828125,
       "expectedMWh": 281.45,
@@ -835,6 +945,8 @@
     {
       "id": "INV 01.06.038",
       "status": "Healthy",
+      "performancePct": 93.6,
+      "lossPct": 4.5,
       "availability": 98.9,
       "energyMWh": 251.8699951171875,
       "expectedMWh": 269.17,
@@ -854,6 +966,8 @@
     {
       "id": "INV 01.06.039",
       "status": "Healthy",
+      "performancePct": 93.3,
+      "lossPct": 5.1,
       "availability": 98.9,
       "energyMWh": 222.72000122070312,
       "expectedMWh": 238.83,
@@ -873,6 +987,8 @@
     {
       "id": "INV 01.06.040",
       "status": "Healthy",
+      "performancePct": 93.8,
+      "lossPct": 5.3,
       "availability": 98.1,
       "energyMWh": 275.6000061035156,
       "expectedMWh": 293.81,
@@ -892,6 +1008,8 @@
     {
       "id": "INV 01.06.041",
       "status": "Healthy",
+      "performancePct": 95.2,
+      "lossPct": 3.8,
       "availability": 99.0,
       "energyMWh": 274.69000244140625,
       "expectedMWh": 288.56,
@@ -911,6 +1029,8 @@
     {
       "id": "INV 01.06.042",
       "status": "Healthy",
+      "performancePct": 93.4,
+      "lossPct": 4.8,
       "availability": 98.9,
       "energyMWh": 246.8699951171875,
       "expectedMWh": 264.3,
@@ -930,6 +1050,8 @@
     {
       "id": "INV 01.06.043",
       "status": "Healthy",
+      "performancePct": 93.3,
+      "lossPct": 4.5,
       "availability": 99.0,
       "energyMWh": 223.5800018310547,
       "expectedMWh": 239.56,
@@ -949,6 +1071,8 @@
     {
       "id": "INV 01.07.044",
       "status": "Healthy",
+      "performancePct": 95.3,
+      "lossPct": 4.7,
       "availability": 99.0,
       "energyMWh": 273.55999755859375,
       "expectedMWh": 286.93,
@@ -968,6 +1092,8 @@
     {
       "id": "INV 01.07.045",
       "status": "Healthy",
+      "performancePct": 87.3,
+      "lossPct": 11.2,
       "availability": 98.8,
       "energyMWh": 245.4499969482422,
       "expectedMWh": 281.21,
@@ -987,6 +1113,8 @@
     {
       "id": "INV 01.07.046",
       "status": "Healthy",
+      "performancePct": 92.5,
+      "lossPct": 6.6,
       "availability": 98.9,
       "energyMWh": 247.47000122070312,
       "expectedMWh": 267.55,
@@ -1006,6 +1134,8 @@
     {
       "id": "INV 01.07.047",
       "status": "Healthy",
+      "performancePct": 89.2,
+      "lossPct": 9.2,
       "availability": 99.0,
       "energyMWh": 208.60000610351562,
       "expectedMWh": 233.75,
@@ -1025,6 +1155,8 @@
     {
       "id": "INV 01.07.048",
       "status": "Watch",
+      "performancePct": 95.4,
+      "lossPct": 5.5,
       "availability": 96.7,
       "energyMWh": 275.1099853515625,
       "expectedMWh": 288.51,
@@ -1044,6 +1176,8 @@
     {
       "id": "INV 01.07.049",
       "status": "Healthy",
+      "performancePct": 97.2,
+      "lossPct": 3.5,
       "availability": 98.5,
       "energyMWh": 277.4599914550781,
       "expectedMWh": 285.32,
@@ -1063,6 +1197,8 @@
     {
       "id": "INV 01.07.050",
       "status": "Healthy",
+      "performancePct": 96.1,
+      "lossPct": 3.9,
       "availability": 98.9,
       "energyMWh": 254.75,
       "expectedMWh": 265.1,
@@ -1082,6 +1218,8 @@
     {
       "id": "INV 01.07.051",
       "status": "Healthy",
+      "performancePct": 95.8,
+      "lossPct": 4.4,
       "availability": 99.0,
       "energyMWh": 228.24000549316406,
       "expectedMWh": 238.23,
@@ -1101,6 +1239,8 @@
     {
       "id": "INV 01.08.052",
       "status": "Watch",
+      "performancePct": 92.8,
+      "lossPct": 7.4,
       "availability": 94.7,
       "energyMWh": 243.99000549316406,
       "expectedMWh": 262.83,
@@ -1120,6 +1260,8 @@
     {
       "id": "INV 01.08.053",
       "status": "Maintenance Required",
+      "performancePct": 88.5,
+      "lossPct": 11.5,
       "availability": 91.0,
       "energyMWh": 230.35000610351562,
       "expectedMWh": 260.19,
@@ -1139,6 +1281,8 @@
     {
       "id": "INV 01.08.054",
       "status": "Watch",
+      "performancePct": 93.6,
+      "lossPct": 7.5,
       "availability": 94.3,
       "energyMWh": 268.7900085449219,
       "expectedMWh": 287.04,
@@ -1158,6 +1302,8 @@
     {
       "id": "INV 01.08.055",
       "status": "Maintenance Required",
+      "performancePct": 91.4,
+      "lossPct": 9.3,
       "availability": 93.3,
       "energyMWh": 258.9700012207031,
       "expectedMWh": 283.25,
@@ -1177,6 +1323,8 @@
     {
       "id": "INV 01.08.056",
       "status": "Maintenance Required",
+      "performancePct": 90.5,
+      "lossPct": 9.0,
       "availability": 94.5,
       "energyMWh": 243.72999572753906,
       "expectedMWh": 269.18,
@@ -1196,6 +1344,8 @@
     {
       "id": "INV 01.08.057",
       "status": "Maintenance Required",
+      "performancePct": 87.1,
+      "lossPct": 12.4,
       "availability": 91.3,
       "energyMWh": 205.32000732421875,
       "expectedMWh": 235.84,
@@ -1215,6 +1365,8 @@
     {
       "id": "INV 01.08.058",
       "status": "Maintenance Required",
+      "performancePct": 82.3,
+      "lossPct": 18.1,
       "availability": 84.5,
       "energyMWh": 219.0500030517578,
       "expectedMWh": 266.08,
@@ -1234,6 +1386,8 @@
     {
       "id": "INV 01.08.059",
       "status": "Maintenance Required",
+      "performancePct": 91.7,
+      "lossPct": 8.1,
       "availability": 94.4,
       "energyMWh": 245.07000732421875,
       "expectedMWh": 267.28,
@@ -1253,6 +1407,8 @@
     {
       "id": "INV 01.09.060",
       "status": "Maintenance Required",
+      "performancePct": 89.8,
+      "lossPct": 10.9,
       "availability": 91.2,
       "energyMWh": 255.1199951171875,
       "expectedMWh": 284.03,
@@ -1272,6 +1428,8 @@
     {
       "id": "INV 01.09.061",
       "status": "Watch",
+      "performancePct": 90.3,
+      "lossPct": 10.9,
       "availability": 91.1,
       "energyMWh": 251.9499969482422,
       "expectedMWh": 278.95,
@@ -1291,6 +1449,8 @@
     {
       "id": "INV 01.09.062",
       "status": "Maintenance Required",
+      "performancePct": 81.0,
+      "lossPct": 18.6,
       "availability": 84.0,
       "energyMWh": 216.07000732421875,
       "expectedMWh": 266.85,
@@ -1310,6 +1470,8 @@
     {
       "id": "INV 01.09.063",
       "status": "Watch",
+      "performancePct": 92.6,
+      "lossPct": 7.9,
       "availability": 94.9,
       "energyMWh": 217.60000610351562,
       "expectedMWh": 235.06,
@@ -1329,6 +1491,8 @@
     {
       "id": "INV 01.09.064",
       "status": "Watch",
+      "performancePct": 92.3,
+      "lossPct": 8.1,
       "availability": 93.9,
       "energyMWh": 259.8800048828125,
       "expectedMWh": 281.47,
@@ -1348,6 +1512,8 @@
     {
       "id": "INV 01.09.065",
       "status": "Maintenance Required",
+      "performancePct": 87.8,
+      "lossPct": 12.2,
       "availability": 91.0,
       "energyMWh": 219.27999877929688,
       "expectedMWh": 249.7,
