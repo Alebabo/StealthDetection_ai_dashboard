@@ -155,6 +155,9 @@ interface ConnectorDef {
   name: string
   description: string
   icon: React.ReactNode
+  protocol?: "MCP"
+  endpoint?: string
+  tools?: string[]
 }
 
 const CONNECTOR_DEFS: ConnectorDef[] = [
@@ -181,12 +184,18 @@ const CONNECTOR_DEFS: ConnectorDef[] = [
     name: "Claude",
     description: "Power analysis chat and report generation via Claude",
     icon: <SiClaude className="size-7 text-[#D97757]" />,
+    protocol: "MCP",
+    endpoint: "mcp://stealthdetection/claude",
+    tools: ["get_fleet_health", "get_top_alerts", "ask_plant_question", "generate_health_report"],
   },
   {
     id: "codex",
     name: "Codex",
     description: "Let agents write and run inverter optimization scripts",
     icon: <SiOpenai className="size-7 text-zinc-900" />,
+    protocol: "MCP",
+    endpoint: "mcp://stealthdetection/codex",
+    tools: ["get_fleet_health", "get_top_alerts", "ask_plant_question", "generate_health_report"],
   },
 ]
 function metricLabel(value: number, suffix = "") {
@@ -346,10 +355,11 @@ export default function SolarDashboard() {
   const [modelSensitivity, setModelSensitivity] = useState(68)
   const [modelWindow, setModelWindow] = useState("Rolling 30 days")
   const [modelSettingsSaved, setModelSettingsSaved] = useState(false)
+  const [configuredConnector, setConfiguredConnector] = useState<ConnectorId | null>(null)
   const [connectorState, setConnectorState] = useState<
     Record<ConnectorId, { connected: boolean; loading: boolean }>
   >({
-    telegram: { connected: false, loading: false },
+    telegram: { connected: true, loading: false },
     gmail: { connected: true, loading: false },
     slack: { connected: false, loading: false },
     claude: { connected: true, loading: false },
@@ -835,9 +845,29 @@ export default function SolarDashboard() {
                         )}
                       </div>
                       <div>
-                        <p className="text-base font-bold text-zinc-900">{c.name}</p>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <p className="text-base font-bold text-zinc-900">{c.name}</p>
+                          {c.protocol === "MCP" && (
+                            <Badge variant="outline" className="border-[#003A70]/20 bg-[#003A70]/5 text-[#003A70]">
+                              MCP Connector
+                            </Badge>
+                          )}
+                        </div>
                         <p className="mt-1 text-sm text-zinc-500">{c.description}</p>
                       </div>
+                      {c.protocol === "MCP" && configuredConnector === c.id && (
+                        <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3">
+                          <p className="text-[11px] font-medium uppercase tracking-wide text-zinc-500">Endpoint</p>
+                          <p className="mt-1 truncate font-mono text-xs text-zinc-800">{c.endpoint}</p>
+                          <div className="mt-3 flex flex-wrap gap-1.5">
+                            {c.tools?.map((tool) => (
+                              <span key={`${c.id}-${tool}`} className="rounded-md bg-white px-2 py-1 font-mono text-[11px] text-zinc-600 ring-1 ring-zinc-200">
+                                {tool}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                       <div className="mt-1 flex items-center justify-between">
                         {state.loading ? (
                           <span className="flex h-[18.4px] items-center">
@@ -851,8 +881,13 @@ export default function SolarDashboard() {
                           />
                         )}
                         {state.connected && (
-                          <Button variant="ghost" size="sm" className="text-[#003A70] hover:text-[#002B55]">
-                            Configure
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-[#003A70] hover:text-[#002B55]"
+                            onClick={() => setConfiguredConnector((current) => (current === c.id ? null : c.id))}
+                          >
+                            {configuredConnector === c.id ? "Hide config" : "Configure"}
                           </Button>
                         )}
                       </div>
